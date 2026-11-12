@@ -34,3 +34,31 @@
 @media (hover: hover) { .sp-open:hover .sp-img { transform: scale(1.04); filter: brightness(.93); } }
 .sp-open:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (max-width: 640px) { .sp-card { flex-basis: 62%; } }
+
+/* ============ Location buttons: never run out of the card (small / 4:3 monitors) ============ */
+.rd-loc .rd-locbtns { flex-wrap: wrap; }
+.rd-loc .rd-locbtns .btn { flex: 1 1 auto; min-width: max-content; white-space: nowrap; padding: 12px 14px; }
+
+/* ============ Other rooms: clean header, tidy grid ============ */
+/* The "Other rooms" heading is a <header> tag, so the site-wide header styling (sticky bar, tinted background, blur,
+   border) leaked into it and showed as a dark box in dark mode. This switches that off for this one header. */
+.rd .rd-similar > header.sim-head {
+  position: static; top: auto; z-index: auto; height: auto; padding: 0 0 18px; margin: 0; border: 0; box-shadow: none;
+  background: none; background-image: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.rd .rd-similar > header.sim-head::before { display: none; }
+.rd .rd-similar .sim-head h2 { font-size: 24px; }
+.rd .rd-similar .sim-head p {
+  margin: 0; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; line-height: 1;
+  color: var(--accent); background: var(--rd-mint-soft); white-space: nowrap;
+}
+.rd .rd-similar { padding: 24px 24px 18px; border-radius: 22px; }
+.rd .rd-similar .sim-list li a { padding: 12px 14px 12px 12px; border-radius: 16px; gap: 14px; }
+.rd .rd-similar .sim-img { width: 64px; height: 64px; border-radius: 12px; }
+.rd .rd-similar .sim-txt b { font-size: 16px; }
+.rd .rd-similar .sim-all { padding: 18px 2px 0; margin-top: 6px; }
+@media (max-width: 900px) {
+  .rd .rd-similar { padding: 18px 16px 14px; }
+  .rd .rd-similar .sim-head h2 { font-size: 20px; }
+}
