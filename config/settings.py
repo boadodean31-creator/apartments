@@ -195,3 +195,6 @@ VIEWING_HOURS = "Every day, 9:00 AM – 6:00 PM"
 # YouTube refuses to play embedded videos (Error 153) unless the page tells it which site it is on.
 # Django's default ("same-origin") hides that, so send the site address to other sites like YouTube.
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
