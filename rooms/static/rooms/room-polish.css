@@ -1,0 +1,36 @@
+/* Room page polish: clean text-only top bar, larger "Why rent this room" heading with plain icons,
+   smaller clickable sleep / restroom photos. Loaded last. To undo: delete this file and its <link> in room_detail.html. */
+
+/* ---------- Top bar: text links, no icons ---------- */
+.rn-links { gap: 4px; }
+.rn-pill {
+  padding: 10px 16px; border: 0; border-radius: 8px; background: none; box-shadow: none;
+  font-size: 15px; font-weight: 500; letter-spacing: .005em; color: color-mix(in srgb, var(--ink) 72%, transparent);
+  position: relative;
+}
+.rn-pill span { display: inline !important; }
+.rn-pill::after { content: ""; position: absolute; left: 16px; right: 16px; bottom: 5px; height: 2px; border-radius: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+@media (hover: hover) { .rn-pill:hover { background: none; color: var(--ink); } .rn-pill:hover::after { transform: scaleX(1); } }
+.rn-pill.on { background: none; border: 0; color: var(--ink); font-weight: 600; }
+.rn-pill.on::after { transform: scaleX(1); }
+.rn-sep { margin: 0 12px 0 8px; height: 22px; }
+.rn-cta { padding: 11px 22px; border-radius: 10px; font-size: 14.5px; font-weight: 600; letter-spacing: .01em; }
+
+/* ---------- "Why rent this room": bigger heading, plain icons ---------- */
+.rd-ct { font-size: 17px; font-weight: 700; letter-spacing: .06em; margin-bottom: 20px; }
+.rd-gl > div { grid-template-columns: 30px 1fr; column-gap: 14px; }
+.gl-ico { width: 30px; height: 30px; border-radius: 0; background: none; color: var(--ink); }
+.gl-ico svg { width: 26px; height: 26px; stroke-width: 1.5; }
+.rd-gl dt { font-size: 13px; }
+.rd-gl dd { font-size: 15.5px; }
+
+/* ---------- Where you'll sleep / Restroom: smaller and clickable ---------- */
+.sp-card { flex-basis: calc((100% - 40px) / 3); }
+.sp-img, .sp-ph { aspect-ratio: 4 / 3; border-radius: 12px; }
+.sp-card h3 { font-size: 15px; margin-top: 10px; }
+.sp-card p { font-size: 13.5px; }
+.sp-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 12px; overflow: hidden; }
+.sp-open .sp-img { transition: transform .35s ease, filter .25s; }
+@media (hover: hover) { .sp-open:hover .sp-img { transform: scale(1.04); filter: brightness(.93); } }
+.sp-open:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 640px) { .sp-card { flex-basis: 62%; } }
