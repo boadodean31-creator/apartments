@@ -180,6 +180,17 @@ def living_photo(rooms):
     return ""
 
 
+# Where each building photo goes. Admins fill these slots in the "View the building" window.
+BUILDING_SLOTS = [
+    {"label": "Front of the building", "hint": "The outside view people see from the street"},
+    {"label": "Entrance & hallway", "hint": "The gate, lobby or the way in"},
+    {"label": "Parking & shared areas", "hint": "Parking, laundry or the common space"},
+    {"label": "Rooftop or view", "hint": "Optional"},
+    {"label": "Extra photo 1", "hint": "Optional"},
+    {"label": "Extra photo 2", "hint": "Optional"},
+]
+
+
 def home(request):
     rooms = list(Room.objects.prefetch_related("photos").order_by("floor", "number"))
     for r in rooms:   # first two highlights (e.g. "Aircon, Private bath") shown on the room card
@@ -210,12 +221,14 @@ def home(request):
     context["banner_url"] = site.banner.url if site.banner else ""
     context["building_title"] = site.building_title or "Cainta, Rizal, Philippines"
     context["building_text"] = site.building_text or "Ribay Apartments: secure, quiet rooms with Wi-Fi, water and 24/7 CCTV."
-    own = list(BuildingPhoto.objects.all())
-    context["building_photos"] = [{"id": b.pk, "url": b.image.url} for b in own]
+    own = {b.position: b for b in BuildingPhoto.objects.all()}
+    context["building_photos"] = [{"id": b.pk, "url": b.image.url, "label": BUILDING_SLOTS[b.position - 1]["label"] if 0 < b.position <= len(BUILDING_SLOTS) else ""}
+                                  for _, b in sorted(own.items())]
     context["building_is_default"] = not own
+    context["building_slots"] = [{**sl, "n": i + 1, "photo": own.get(i + 1)} for i, sl in enumerate(BUILDING_SLOTS)]
     if not own:   # nothing uploaded yet: show a few room photos so the window is never empty
         shots = [r.photos.all()[0].image.url for r in rooms if r.photos.all()][:3]
-        context["building_photos"] = [{"id": 0, "url": u} for u in shots]
+        context["building_photos"] = [{"id": 0, "url": u, "label": ""} for u in shots]
     context["og_image"] = request.build_absolute_uri(site.banner.url) if site.banner else ""
     return render(request, "rooms/home.html", context)
 

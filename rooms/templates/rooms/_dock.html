@@ -13,72 +13,99 @@
 </div>
 
 <dialog class="pg" id="dlg-building" aria-labelledby="bld-title">
-  <div class="pg-card">
+  <div class="pg-card pg-wide">
     <button type="button" class="pg-x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <div class="bld-head">
-      <span class="pg-eyebrow">The building</span>
-      <h2 id="bld-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22.5S4.5 15.4 4.5 9.6a7.5 7.5 0 0 1 15 0c0 5.8-7.5 12.9-7.5 12.9z" fill="#E0382F"/><circle cx="12" cy="9.5" r="2.6" fill="#fff"/></svg><span>{{ building_title }}</span></h2>
-      <p>{{ building_text }}</p>
-    </div>
     <div class="bld-show" data-count="{{ building_photos|length }}">
       <div class="bld-track" tabindex="0" aria-label="Photos of the building">
-        {% for ph in building_photos %}<figure class="bld-slide"><img src="{{ ph.url }}" alt="Ribay Apartments, photo {{ forloop.counter }}" loading="lazy" decoding="async">{% if is_site_admin and ph.id %}<form method="post" action="{% url 'manage_building_photo_delete' ph.id %}" class="bld-del">{% csrf_token %}<button type="submit" title="Remove this photo" aria-label="Remove this photo" onclick="return confirm('Remove this photo?')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></svg></button></form>{% endif %}</figure>{% empty %}<figure class="bld-slide bld-empty"><span>No photos yet</span></figure>{% endfor %}
+        {% for ph in building_photos %}<figure class="bld-slide"><img src="{{ ph.url }}" alt="{% if ph.label %}{{ ph.label }}{% else %}Ribay Apartments, photo {{ forloop.counter }}{% endif %}" {% if not forloop.first %}loading="lazy" {% endif %}decoding="async">{% if ph.label %}<figcaption>{{ ph.label }}</figcaption>{% endif %}</figure>{% empty %}<figure class="bld-slide bld-empty"><span>No photos yet</span></figure>{% endfor %}
+      </div>
+      <div class="bld-title">
+        <span class="pg-eyebrow">The building</span>
+        <h2 id="bld-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22.5S4.5 15.4 4.5 9.6a7.5 7.5 0 0 1 15 0c0 5.8-7.5 12.9-7.5 12.9z" fill="#E0382F"/><circle cx="12" cy="9.5" r="2.6" fill="#fff"/></svg><span>{{ building_title }}</span></h2>
+        <p>{{ building_text }}</p>
       </div>
       {% if building_photos|length > 1 %}
       <button type="button" class="bld-nav prev" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
       <button type="button" class="bld-nav next" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-      <div class="bld-dots" aria-hidden="true">{% for ph in building_photos %}<i{% if forloop.first %} class="on"{% endif %}></i>{% endfor %}</div>
       {% endif %}
     </div>
+    {% if building_photos|length > 1 %}<div class="bld-thumbs" role="tablist" aria-label="Choose a photo">{% for ph in building_photos %}<button type="button" class="bld-th{% if forloop.first %} on{% endif %}" aria-label="Photo {{ forloop.counter }}{% if ph.label %}: {{ ph.label }}{% endif %}"><img src="{{ ph.url }}" alt="" loading="lazy"></button>{% endfor %}</div>{% endif %}
     {% for m in messages %}<p class="pg-msg{% if m.tags == 'error' %} err{% endif %}" role="status">{{ m }}</p>{% endfor %}
     {% if is_site_admin %}
-    <details class="pg-edit" {% if messages %}open{% endif %}>
-      <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Edit this window</summary>
-      <form method="post" action="{% url 'manage_building' %}" enctype="multipart/form-data">{% csrf_token %}
-        <label>Heading<input name="title" maxlength="120" value="{{ building_title }}"></label>
+    <details class="pg-edit" {% if request.GET.building %}open{% endif %}>
+      <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Edit this window <small>(only you, the admin, see this)</small></summary>
+      <div class="ed-step"><b>1</b> Heading and short description</div>
+      <form method="post" action="{% url 'manage_building' %}" class="ed-text">{% csrf_token %}
+        <label>Heading <small>(shown next to the red pin)</small><input name="title" maxlength="120" value="{{ building_title }}"></label>
         <label>Short description<input name="text" maxlength="300" value="{{ building_text }}"></label>
-        <label>Add photos <small>(up to 8, at least 2 looks best{% if building_is_default %}; right now it shows your room photos until you add some{% endif %})</small><input type="file" name="photos" accept="image/*" multiple></label>
-        <button type="submit" class="pg-save">Save changes</button>
+        <button type="submit" class="pg-save">Save text</button>
       </form>
+      <div class="ed-step"><b>2</b> Photos <small>Each box is one photo. Choose a picture and it saves right away. Use Delete to remove it.</small></div>
+      <div class="ed-slots">
+        {% for sl in building_slots %}
+        <div class="ed-slot{% if sl.photo %} has{% endif %}">
+          <div class="ed-pic">{% if sl.photo %}<img src="{{ sl.photo.image.url }}" alt="">{% else %}<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10.5" r="1.6"/><path d="M21 16l-5-4.5-8 7"/></svg>No photo yet</span>{% endif %}</div>
+          <div class="ed-info"><b>Photo {{ sl.n }}: {{ sl.label }}</b><small>{{ sl.hint }}</small></div>
+          <div class="ed-btns">
+            <form method="post" action="{% url 'manage_building_slot' sl.n %}" enctype="multipart/form-data" class="ed-up">{% csrf_token %}
+              <label class="ed-pick"><input type="file" name="photo" accept="image/*" onchange="this.form.submit()">{% if sl.photo %}Replace{% else %}Add photo{% endif %}</label>
+            </form>
+            {% if sl.photo %}<form method="post" action="{% url 'manage_building_photo_delete' sl.photo.pk %}" onsubmit="return confirm('Delete this photo?')">{% csrf_token %}<button type="submit" class="ed-del">Delete</button></form>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if building_is_default %}<p class="ed-note">Until you add photos, visitors see photos of your rooms here.</p>{% endif %}
     </details>
     {% endif %}
   </div>
 </dialog>
 
 <dialog class="pg" id="dlg-contact" aria-labelledby="ct-title">
-  <div class="pg-card pg-narrow">
+  <div class="pg-card pg-narrow pg-ct">
     <button type="button" class="pg-x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    <div class="ct-head">
+    <div class="ct-top">
       <span class="ct-av" aria-hidden="true">{{ contact_initials }}</span>
-      <div><span class="pg-eyebrow">Contact us</span><h2 id="ct-title">{{ contact_staff }}</h2><p>{{ contact_role }} &middot; Ribay Apartments</p></div>
+      <span class="pg-eyebrow">Contact us</span>
+      <h2 id="ct-title">{{ contact_staff }}</h2>
+      <p>{{ contact_role }} &middot; Ribay Apartments</p>
+      <span class="ct-chip"><i></i>Replies {{ contact_reply|lower }}</span>
     </div>
-    <a class="ct-num" href="tel:{{ contact_tel }}"><span>Call or text</span><strong>{{ contact_phone }}</strong></a>
-    <div class="ct-acts">
-      <a class="ct-btn pri" href="tel:{{ contact_tel }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.6l1.8 4.6-2.3 1.5a11.5 11.5 0 0 0 5.8 5.8l1.5-2.3L20 15.4V19a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Call now</a>
-      <a class="ct-btn" href="sms:{{ contact_tel }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.7 7L4 20l1.2-4A8 8 0 1 1 20 12z"/></svg>Send a text</a>
+    <div class="ct-body">
+      <a class="ct-num" href="tel:{{ contact_tel }}" aria-label="Call {{ contact_phone }}">
+        <span class="ct-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.6l1.8 4.6-2.3 1.5a11.5 11.5 0 0 0 5.8 5.8l1.5-2.3L20 15.4V19a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span>
+        <span class="ct-txt"><small>Call or text</small><strong>{{ contact_phone }}</strong></span>
+        <svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="ct-acts">
+        <a class="ct-btn pri" href="tel:{{ contact_tel }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h3.6l1.8 4.6-2.3 1.5a11.5 11.5 0 0 0 5.8 5.8l1.5-2.3L20 15.4V19a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Call now</a>
+        <a class="ct-btn" href="sms:{{ contact_tel }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.7 7L4 20l1.2-4A8 8 0 1 1 20 12z"/></svg>Send a text</a>
+      </div>
+      {% if contact_email %}
+      <p class="ct-or"><span>or</span></p>
+      <a class="ct-mail" href="mailto:{{ contact_email }}?subject=Room%20inquiry"><svg class="gm" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4caf50" d="M45 16.2l-5 2.75-5 4.75L35 40h7a3 3 0 0 0 3-3V16.2z"/><path fill="#1e88e5" d="M3 16.2l3.6 1.71L13 23.7V40H6a3 3 0 0 1-3-3V16.2z"/><path fill="#e53935" d="M35 11.2L24 19.45 13 11.2 12 17l1 6.7 11 8.25 11-8.25 1-6.7z"/><path fill="#c62828" d="M3 12.3v3.9l10 7.5V11.2L9.9 8.86A4.3 4.3 0 0 0 7.3 8 4.3 4.3 0 0 0 3 12.3z"/><path fill="#fbc02d" d="M45 12.3v3.9l-10 7.5V11.2l3.1-2.34A4.3 4.3 0 0 1 40.7 8 4.3 4.3 0 0 1 45 12.3z"/></svg><span class="ct-txt"><small>Email us</small><strong>{{ contact_email }}</strong></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
+      {% endif %}
+      <ul class="ct-facts">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Viewing hours<b>{{ viewing_hours }}</b></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>We reply<b>{{ contact_reply }}</b></span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.6 2.6 14.4 0 17M12 3.5c-2.6 2.6-2.6 14.4 0 17"/></svg><span>Languages<b>{{ contact_languages }}</b></span></li>
+      </ul>
+      {% if is_site_admin %}
+      <details class="pg-edit">
+        <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Edit contact details <small>(only you, the admin, see this)</small></summary>
+        <form id="ct-form" method="post" action="{% url 'manage_contact' %}">{% csrf_token %}
+          <label>Staff name<input name="contact_name" value="{{ contact_staff }}" maxlength="60"></label>
+          <label>Role<input name="contact_role" value="{{ contact_role }}" maxlength="60"></label>
+          <label>Phone number<input name="contact_phone" value="{{ contact_phone }}" maxlength="30"></label>
+          <label>Email <small>(optional, shown as &ldquo;Email us&rdquo;)</small><input type="email" name="contact_email" value="{{ contact_email }}" maxlength="254"></label>
+          <label>Viewing hours<input name="contact_hours" value="{{ viewing_hours }}" maxlength="80"></label>
+          <label>Reply time<input name="contact_reply" value="{{ contact_reply }}" maxlength="80"></label>
+          <label>Languages<input name="contact_languages" value="{{ contact_languages }}" maxlength="80"></label>
+          <p class="pg-msg err" id="ct-err" hidden></p>
+          <button type="submit" class="pg-save">Save changes</button>
+        </form>
+      </details>
+      {% endif %}
     </div>
-    {% if contact_email %}<p class="ct-or"><span>or</span></p>
-    <a class="ct-mail" href="mailto:{{ contact_email }}?subject=Room%20inquiry"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7.5l8 6 8-6"/></svg><span>Or email us at <b>{{ contact_email }}</b></span></a>{% endif %}
-    <ul class="ct-facts">
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Viewing hours<b>{{ viewing_hours }}</b></span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>We reply<b>{{ contact_reply }}</b></span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.6 2.6 14.4 0 17M12 3.5c-2.6 2.6-2.6 14.4 0 17"/></svg><span>Languages<b>{{ contact_languages }}</b></span></li>
-    </ul>
-    {% if is_site_admin %}
-    <details class="pg-edit">
-      <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Edit contact details</summary>
-      <form id="ct-form" method="post" action="{% url 'manage_contact' %}">{% csrf_token %}
-        <label>Staff name<input name="contact_name" value="{{ contact_staff }}" maxlength="60"></label>
-        <label>Role<input name="contact_role" value="{{ contact_role }}" maxlength="60"></label>
-        <label>Phone number<input name="contact_phone" value="{{ contact_phone }}" maxlength="30"></label>
-        <label>Email <small>(optional, shown as &ldquo;Or email us&rdquo;)</small><input type="email" name="contact_email" value="{{ contact_email }}" maxlength="254"></label>
-        <label>Viewing hours<input name="contact_hours" value="{{ viewing_hours }}" maxlength="80"></label>
-        <label>Reply time<input name="contact_reply" value="{{ contact_reply }}" maxlength="80"></label>
-        <label>Languages<input name="contact_languages" value="{{ contact_languages }}" maxlength="80"></label>
-        <p class="pg-msg err" id="ct-err" hidden></p>
-        <button type="submit" class="pg-save">Save changes</button>
-      </form>
-    </details>
-    {% endif %}
   </div>
 </dialog>

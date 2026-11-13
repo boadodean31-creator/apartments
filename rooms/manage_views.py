@@ -15,7 +15,7 @@ from django.views.decorators.http import require_POST
 from .access import site_admin_required
 from .forms import ContactForm, FloorForm, FloorNameForm, RoomForm, check_images, prepare_banner, prepare_site_image
 from .models import BuildingPhoto, Floor, Room, RoomPhoto, RoomSpace, SiteSetting, ViewingRequest
-from .views import contact_details, floor_groups
+from .views import BUILDING_SLOTS, contact_details, floor_groups
 
 
 def _drop_file(fieldfile):
@@ -512,4 +512,23 @@ def building_photo_delete(request, pk):
     _drop_file(photo.image)
     photo.delete()
     messages.success(request, "Photo removed.")
+    return redirect(reverse("home") + "?building=1")
+
+
+@site_admin_required
+@require_POST
+def building_slot(request, slot):
+    """Put a picture into one numbered spot of the building window (replaces what was there)."""
+    if not 1 <= slot <= len(BUILDING_SLOTS):
+        return redirect(reverse("home") + "?building=1")
+    good, errors = check_images(request.FILES.getlist("photo")[:1])
+    if errors or not good:
+        messages.error(request, errors[0] if errors else "Choose a photo first.")
+    else:
+        label = BUILDING_SLOTS[slot - 1]["label"]
+        for old in BuildingPhoto.objects.filter(position=slot):
+            _drop_file(old.image)
+            old.delete()
+        BuildingPhoto.objects.create(image=prepare_site_image(good[0], max_px=2000), position=slot)
+        messages.success(request, f"\u201c{label}\u201d photo saved.")
     return redirect(reverse("home") + "?building=1")

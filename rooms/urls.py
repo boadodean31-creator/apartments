@@ -30,6 +30,7 @@ urlpatterns = [
     path("manage/images/remove/", m.page_image_remove, name="manage_image_remove"),
     path("manage/contact/", m.contact_save, name="manage_contact"),
     path("manage/building/", m.building_save, name="manage_building"),
+    path("manage/building/slot/<int:slot>/", m.building_slot, name="manage_building_slot"),
     path("manage/building/photos/<int:pk>/delete/", m.building_photo_delete, name="manage_building_photo_delete"),
     path("manage/floors/", m.floors, name="manage_floors"),
     path("manage/floors/add/", m.floor_add, name="manage_floor_add"),

@@ -39,13 +39,16 @@
     var show = d.querySelector(".bld-show"), t = d.querySelector(".bld-track"); if (!show || !t) return;
     var n = t.children.length, i = Math.round(t.scrollLeft / Math.max(1, t.clientWidth));
     show.dataset.at = i <= 0 ? "0" : (i >= n - 1 ? "last" : "mid");
-    show.querySelectorAll(".bld-dots i").forEach(function (el, k) { el.classList.toggle("on", k === i); });
+    d.querySelectorAll(".bld-th").forEach(function (el, k) { el.classList.toggle("on", k === i); });
   }
   var bt = dlg.building.querySelector(".bld-track");
   if (bt) {
     bt.addEventListener("scroll", function () { sync(dlg.building); }, { passive: true });
     dlg.building.querySelectorAll(".bld-nav").forEach(function (b) {
       b.addEventListener("click", function () { bt.scrollBy({ left: (b.classList.contains("next") ? 1 : -1) * bt.clientWidth }); });
+    });
+    dlg.building.querySelectorAll(".bld-th").forEach(function (b, k) {
+      b.addEventListener("click", function () { bt.scrollTo({ left: k * bt.clientWidth }); });
     });
     bt.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") bt.scrollBy({ left: bt.clientWidth }); if (e.key === "ArrowLeft") bt.scrollBy({ left: -bt.clientWidth }); });
     sync(dlg.building);
