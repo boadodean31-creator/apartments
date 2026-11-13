@@ -54,6 +54,17 @@
     sync(dlg.building);
   }
 
+  /* "Email us": on a computer open a Gmail compose window (works without a mail app set up);
+     on phones and tablets use the normal mail link, which opens the Gmail / Mail app. */
+  var mail = document.querySelector(".ct-mail");
+  if (mail) mail.addEventListener("click", function (e) {
+    var m = /^mailto:([^?]+)/i.exec(mail.getAttribute("href") || ""); if (!m) return;
+    if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform))) return;
+    e.preventDefault();
+    var url = "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(decodeURIComponent(m[1])) + "&su=" + encodeURIComponent("Room inquiry");
+    var w = window.open(url, "_blank", "noopener"); if (!w) location.href = mail.getAttribute("href");
+  });
+
   /* admins: save contact details without leaving the page, then show the new details */
   var f = document.getElementById("ct-form");
   if (f) f.addEventListener("submit", function (e) {
