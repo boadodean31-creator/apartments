@@ -119,6 +119,7 @@ class SiteSetting(models.Model):
     contact_reply = models.CharField(max_length=80, blank=True)
     contact_languages = models.CharField(max_length=80, blank=True)
     contact_email = models.EmailField(blank=True)
+    contact_image = models.ImageField(upload_to="site/", blank=True)   # picture on the left of the contact window
 
     # "View the building" window on the home page (admins edit it right in the window)
     building_title = models.CharField(max_length=120, blank=True)

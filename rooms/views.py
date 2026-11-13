@@ -225,6 +225,9 @@ def home(request):
     context["building_photos"] = [{"id": b.pk, "url": b.image.url, "label": BUILDING_SLOTS[b.position - 1]["label"] if 0 < b.position <= len(BUILDING_SLOTS) else ""}
                                   for _, b in sorted(own.items())]
     context["building_is_default"] = not own
+    first_own = own[min(own)].image.url if own else ""
+    context["contact_image_set"] = bool(site.contact_image)
+    context["contact_image_url"] = site.contact_image.url if site.contact_image else first_own
     context["building_slots"] = [{**sl, "n": i + 1, "photo": own.get(i + 1)} for i, sl in enumerate(BUILDING_SLOTS)]
     if not own:   # nothing uploaded yet: show a few room photos so the window is never empty
         shots = [r.photos.all()[0].image.url for r in rooms if r.photos.all()][:3]

@@ -532,3 +532,29 @@ def building_slot(request, slot):
         BuildingPhoto.objects.create(image=prepare_site_image(good[0], max_px=2000), position=slot)
         messages.success(request, f"\u201c{label}\u201d photo saved.")
     return redirect(reverse("home") + "?building=1")
+
+
+@site_admin_required
+@require_POST
+def contact_image(request):
+    """Picture on the left of the contact window. Posting a file replaces it; posting remove=1 clears it."""
+    site = SiteSetting.load()
+    back = reverse("home") + "?contact=1"
+    if request.POST.get("remove"):
+        _drop_file(site.contact_image)
+        site.contact_image = ""
+        site.save()
+        messages.success(request, "Picture removed.")
+        return redirect(back)
+    good, errors = check_images(request.FILES.getlist("photo")[:1])
+    if errors or not good:
+        messages.error(request, errors[0] if errors else "Choose a photo first.")
+    else:
+        old = site.contact_image
+        old_name = old.name if old else ""
+        site.contact_image = prepare_site_image(good[0], max_px=1400)
+        site.save()
+        if old_name and old_name != site.contact_image.name:
+            old.storage.delete(old_name)
+        messages.success(request, "Contact window picture saved.")
+    return redirect(back)
