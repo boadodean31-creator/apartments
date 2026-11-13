@@ -52,10 +52,10 @@
     img.src = src; img.alt = title + " photo " + (cur + 1);
     [cur + 1, cur - 1].forEach(function (n) { const u = urls[(n + urls.length) % urls.length]; if (u) { const im = new Image(); im.src = u; } });
   }
-  function go(n) {
+  function go(n, quiet) {
     if (urls.length < 2) return;
     cur = (n + urls.length) % urls.length;
-    render(true);
+    render(!quiet);
     if (thumbs[cur]) thumbs[cur].click();   // keeps the page's own gallery on the same photo
   }
 
@@ -127,11 +127,47 @@
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
   });
-  // swipe on phones
-  let x0 = null;
-  lb.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") x0 = e.clientX; });
-  lb.addEventListener("pointerup", function (e) {
-    if (x0 === null) return; const dx = e.clientX - x0; x0 = null;
-    if (Math.abs(dx) > 50) go(cur + (dx < 0 ? 1 : -1));
+  // swipe on phones: the photo follows your finger; let go past ~18% of the width (or flick) to change photo
+  let drag = null, noClick = false;
+  lb.style.touchAction = "pan-y";
+  strip.style.touchAction = "pan-x";
+  lb.addEventListener("click", function (e) { if (noClick) { e.stopPropagation(); e.preventDefault(); } }, true);
+  lb.addEventListener("pointerdown", function (e) {
+    if (e.pointerType === "mouse" || urls.length < 2 || e.target.closest("button, .lb-strip")) return;
+    drag = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), dx: 0, on: false };
   });
+  lb.addEventListener("pointermove", function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.on) {
+      if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) * 1.2) { drag.on = true; try { lb.setPointerCapture(e.pointerId); } catch (_) {} }
+      else return;
+    }
+    drag.dx = dx;
+    img.style.transform = "translateX(" + dx + "px)";
+    img.style.opacity = String(1 - Math.min(Math.abs(dx) / (innerWidth * 1.4), .45));
+  });
+  function endDrag(cancel) {
+    if (!drag) return;
+    const d = drag; drag = null;
+    if (!d.on) return;
+    noClick = true; setTimeout(function () { noClick = false; }, 60);
+    const fast = Math.abs(d.dx) / Math.max(1, performance.now() - d.t) > 0.5 && Math.abs(d.dx) > 30;
+    const commit = !cancel && (Math.abs(d.dx) > innerWidth * 0.18 || fast);
+    const from = { transform: "translateX(" + d.dx + "px)", opacity: img.style.opacity || "1" };
+    img.style.transform = ""; img.style.opacity = "";
+    if (!commit) {
+      if (!reduce) img.animate([from, { transform: "none", opacity: 1 }], { duration: 240, easing: "cubic-bezier(.2,.8,.2,1)" });
+      return;
+    }
+    const dir = d.dx < 0 ? 1 : -1, out = -dir * innerWidth;
+    if (reduce) { go(cur + dir, true); return; }
+    const leave = img.animate([from, { transform: "translateX(" + out + "px)", opacity: 0 }], { duration: 170, easing: "ease-in", fill: "forwards" });
+    leave.onfinish = function () {
+      go(cur + dir, true); leave.cancel();
+      img.animate([{ transform: "translateX(" + (-out * 0.4) + "px)", opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 260, easing: "cubic-bezier(.2,.8,.2,1)" });
+    };
+  }
+  lb.addEventListener("pointerup", function () { endDrag(false); });
+  lb.addEventListener("pointercancel", function () { endDrag(true); });
 })();

@@ -118,7 +118,23 @@ function follow(el) {
   function flash(el, cls) {
     if (!el) return;
     el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
-    setTimeout(function () { el.classList.remove(cls); }, 2600);
+    setTimeout(function () { el.classList.remove(cls); }, cls === "hl-acc" ? 1700 : 2600);
+  }
+  // exact centring below the sticky header (a card taller than the screen lines up just under the header instead)
+  function centreOnScreen(el) {
+    const hd = document.querySelector("header"), hh = hd ? hd.getBoundingClientRect().bottom : 0;
+    const r = el.getBoundingClientRect(), usable = innerHeight - hh;
+    const y = r.height + 32 <= usable ? scrollY + r.top - hh - (usable - r.height) / 2 : scrollY + r.top - hh - 16;
+    scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
+  }
+  // run cb once the page has stopped scrolling
+  function afterScroll(cb) {
+    let last = scrollY, still = 0; const t0 = performance.now();
+    (function tick() {
+      if (scrollY === last) { if (++still >= 6) { cb(); return; } } else { still = 0; last = scrollY; }
+      if (performance.now() - t0 > 2200) { cb(); return; }
+      requestAnimationFrame(tick);
+    })();
   }
   // scroll so the section sits in the middle of the screen (or at the top, if it is taller than the screen)
   function bring(el) {
@@ -139,8 +155,15 @@ function follow(el) {
       } else if (id === "location") {            // location: go to the map card and flash it
         e.preventDefault(); bring(i.el);
         setTimeout(function () { flash(i.el, "hl-loc"); }, reduce ? 0 : 500);
-      } else if (i.el.classList.contains("acc") && !i.el.classList.contains("open")) {
-        const b = i.el.querySelector(".acc-btn"); if (b) b.click();
+      } else if (i.el.classList.contains("acc")) {   // contact / good to know: open, centre on screen, then highlight
+        e.preventDefault();
+        const el = i.el, b = el.querySelector(".acc-btn"), wasOpen = el.classList.contains("open");
+        if (!wasOpen && b) { b.click(); followId++; }   // open it, but cancel the automatic "follow" scroll
+        const go = function () {
+          centreOnScreen(el);
+          afterScroll(function () { lockY = scrollY; flash(el, "hl-acc"); });
+        };
+        if (wasOpen || reduce) go(); else setTimeout(go, 540);   // wait for the dropdown to finish opening
       }
     });
   });
