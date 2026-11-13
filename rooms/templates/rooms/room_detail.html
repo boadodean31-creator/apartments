@@ -1,7 +1,7 @@
 {% extends "rooms/base.html" %}
 {% block title %}Room {{ room.number }} · Ribay Apartments{% endblock %}
 {% load static %}
-{% block head %}<meta name="format-detection" content="telephone=no"><link rel="stylesheet" href="{% static 'rooms/booking.css' %}"><link rel="stylesheet" href="{% static 'rooms/detail.css' %}"><link rel="stylesheet" href="{% static 'rooms/room-layout.css' %}?v=21"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'rooms/room-top.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-swap.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/location-dialog.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-mobile.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-polish.css' %}?v=6"><link rel="stylesheet" href="{% static 'rooms/room-phone.css' %}?v=2">{% endblock %}
+{% block head %}<meta name="format-detection" content="telephone=no"><link rel="stylesheet" href="{% static 'rooms/booking.css' %}"><link rel="stylesheet" href="{% static 'rooms/detail.css' %}"><link rel="stylesheet" href="{% static 'rooms/room-layout.css' %}?v=21"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'rooms/room-top.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-swap.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/location-dialog.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-mobile.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/room-phone.css' %}?v=2">{% endblock %}
 {% block header %}
 <header class="rn">
   <div class="rn-in">
@@ -15,10 +15,8 @@
       <a class="rn-pill" href="#contact"><span>Contact</span></a>
       <a class="rn-pill" href="#good-to-know"><span>Good to know</span></a>
       <a class="rn-pill" href="#location" data-open-location><span>Location</span></a>
-      <span class="rn-sep" aria-hidden="true"></span>
-      {% if user.is_authenticated %}<form method="post" action="{% url 'logout' %}" style="margin:0">{% csrf_token %}<button class="rn-cta" type="submit">Log out</button></form>
-      {% else %}<a class="rn-cta" href="{% url 'login' %}">Log in</a>{% endif %}
     </nav>
+    {% if user.is_authenticated %}<span class="acct-wrap"><a class="acct" href="{% url 'portal' %}" aria-label="My portal" title="My portal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c.6-3.6 3.4-5.6 7-5.6s6.4 2 7 5.6"/></svg></a><form method="post" action="{% url 'logout' %}" style="margin:0">{% csrf_token %}<button class="acct" type="submit" aria-label="Log out" title="Log out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5H6.5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2H9M15 8l4 4-4 4M19 12H9.5"/></svg></button></form></span>{% else %}<a class="acct" href="{% url 'login' %}" aria-label="Log in" title="Log in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c.6-3.6 3.4-5.6 7-5.6s6.4 2 7 5.6"/></svg></a>{% endif %}
   </div>
 </header>
 {% endblock %}
