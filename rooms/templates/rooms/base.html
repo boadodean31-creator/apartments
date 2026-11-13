@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="{% static 'rooms/style.css' %}?v=6">
 {% block head %}{% endblock %}
 <link rel="stylesheet" href="{% static 'rooms/mobile.css' %}?v=16">
-<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>/* light mode is the default; dark only if the visitor chose it with the toggle (saved in localStorage) */var t="light";try{t=localStorage.getItem("theme")||"light"}catch(e){}document.documentElement.dataset.theme=t;</script>
 </head>
 <body>
 {% block header %}<header><div class="nav-flora" aria-hidden="true"></div><div class="wrap nav">
