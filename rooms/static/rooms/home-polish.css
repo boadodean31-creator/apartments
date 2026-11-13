@@ -97,3 +97,13 @@
   .grid .card .badge { transition: transform .3s, box-shadow .3s; }
   .grid .card:hover .badge { transform: translateY(-1px); box-shadow: 0 6px 14px -6px rgba(0, 0, 0, .35); }
 }
+
+
+/* ============ Room cards: keep the "Available" badge on top while photos slide, and a clearer hover zoom ============ */
+.card .thumb .badge { z-index: 4; }
+@media (hover: hover) and (pointer: fine) {
+  .grid .card .thumb img, .grid .card .thumb .ph { transition: transform .7s cubic-bezier(.65, 0, .2, 1), filter .7s, scale 1s cubic-bezier(.2, .7, .2, 1); }
+  .grid .card:hover .thumb img, .grid .card:hover .thumb .ph { scale: 1.1; }
+  .grid .card:hover .thumb img:not(.sl-in):not(.sl-out), .grid .card:hover .thumb .ph { transform: none; }
+  .grid .card:hover .thumb .badge { scale: 1.04; }
+}

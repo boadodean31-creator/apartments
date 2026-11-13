@@ -161,7 +161,7 @@ function follow(el) {
         if (!wasOpen && b) { b.click(); followId++; }   // open it, but cancel the automatic "follow" scroll
         const go = function () {
           centreOnScreen(el);
-          afterScroll(function () { lockY = scrollY; flash(el, "hl-acc"); });
+          afterScroll(function () { lockY = scrollY; if (el.id !== "contact") flash(el, "hl-acc"); });
         };
         if (wasOpen || reduce) go(); else setTimeout(go, 540);   // wait for the dropdown to finish opening
       }

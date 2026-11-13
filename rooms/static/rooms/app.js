@@ -155,3 +155,34 @@ sync();
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) { set(false); btn.focus(); } });
   window.matchMedia("(min-width: 961px)").addEventListener("change", (m) => { if (m.matches) set(false); });
 })();
+
+
+// "Landmarks" in the top bar: bring "Everything you need is close by" to the exact middle of the screen
+(function () {
+  const reduceM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function target(el, smooth) {
+    const hd = document.querySelector("header"), hh = hd ? hd.getBoundingClientRect().bottom : 0;
+    const r = el.getBoundingClientRect(), usable = innerHeight - hh;
+    const y = r.height + 32 <= usable ? scrollY + r.top - hh - (usable - r.height) / 2 : scrollY + r.top - hh - 16;
+    scrollTo({ top: Math.max(0, y), behavior: smooth && !reduceM ? "smooth" : "auto" });
+  }
+  function bring(smooth) {
+    const el = document.getElementById("nearby"); if (!el) return false;
+    target(el, smooth);
+    // scroll-reveal animations can nudge the section after it lands, so measure once more when it stops
+    let last = scrollY, still = 0; const t0 = performance.now();
+    (function tick() {
+      if (scrollY === last) { if (++still >= 8) { target(el, false); return; } } else { still = 0; last = scrollY; }
+      if (performance.now() - t0 < 2400) requestAnimationFrame(tick);
+    })();
+    return true;
+  }
+  document.addEventListener("click", function (e) {
+    const a = e.target.closest && e.target.closest('a[href$="#nearby"]');
+    if (!a || !document.getElementById("nearby")) return;       // on other pages the link just goes to the home page
+    e.preventDefault();
+    try { history.replaceState(null, "", location.pathname + "#nearby"); } catch (_) {}
+    bring(true);
+  });
+  if (location.hash === "#nearby") addEventListener("load", function () { setTimeout(function () { bring(false); }, 200); });
+})();

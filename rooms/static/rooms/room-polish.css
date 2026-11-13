@@ -91,3 +91,42 @@
 .acc.open .acc-bulb .bulb-glass { fill: #FFC21A; filter: drop-shadow(0 0 5px rgba(255, 193, 26, .75)); }
 :root[data-theme="dark"] .acc-btn .acc-ico.acc-bulb, :root[data-theme="dark"] .acc.open .acc-ico.acc-bulb { background: rgba(247, 181, 0, .16); box-shadow: 0 0 0 1px rgba(247, 181, 0, .35); }
 :root[data-theme="dark"] .acc-bulb .bulb-base { fill: #A8B1BC; }
+
+
+/* ============ Other rooms (bottom of the room page): roomier grid, bigger photos, clear hover, proper button ============ */
+@media (min-width: 901px) {
+  .rd .rd-similar { padding: 30px 30px 26px; border-radius: 26px; }
+  .rd .rd-similar > header.sim-head { padding-bottom: 22px; }
+  .rd .rd-similar .sim-head h2 { font-size: 28px; }
+  .rd .rd-similar .sim-wrap::after { display: none; }
+  .rd .rd-similar .sim-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; max-height: none; overflow: visible; padding: 0; }
+}
+.rd .rd-similar .sim-list li { list-style: none; }
+.rd .rd-similar .sim-list li a {
+  display: grid; grid-template-columns: 78px minmax(0, 1fr) 30px; align-items: center; gap: 16px;
+  padding: 12px 14px 12px 12px; border-radius: 18px; text-decoration: none;
+  transition: translate .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s, border-color .3s;
+}
+.rd .rd-similar .sim-img { width: 78px; height: 78px; border-radius: 14px; overflow: hidden; display: block; background: var(--rd-chip); }
+.rd .rd-similar .sim-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: scale .6s cubic-bezier(.2, .7, .2, 1); }
+.rd .rd-similar .sim-txt b { font-size: 17px; }
+.rd .rd-similar .sim-go {
+  display: block; width: 30px; height: 30px; padding: 7px; border-radius: 50%; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+  color: var(--accent); background: var(--rd-mint-soft); opacity: 0; transform: translateX(-6px); transition: opacity .25s, transform .3s cubic-bezier(.3, 1.3, .5, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rd .rd-similar .sim-list li a:hover, .rd .rd-similar .sim-list li a:focus-visible {
+    translate: 0 -3px; border-color: color-mix(in srgb, var(--accent) 55%, var(--rd-line));
+    box-shadow: 0 16px 28px -18px rgba(15, 23, 42, .4);
+  }
+  .rd .rd-similar .sim-list li a:hover .sim-img img { scale: 1.12; }
+  .rd .rd-similar .sim-list li a:hover .sim-go, .rd .rd-similar .sim-list li a:focus-visible .sim-go { opacity: 1; transform: none; }
+}
+@media (hover: none) { .rd .rd-similar .sim-go { opacity: .7; transform: none; } }
+.rd .rd-similar .sim-all {
+  display: flex; align-items: center; justify-content: center; gap: 10px; margin: 22px 0 0; padding: 15px 20px;
+  border: 1.5px solid var(--rd-line); border-radius: 14px; background: var(--bg); color: var(--ink);
+  font-size: 15px; font-weight: 700; text-decoration: none; transition: background .25s, color .25s, border-color .25s, box-shadow .25s;
+}
+.rd .rd-similar .sim-all svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s cubic-bezier(.3, 1.3, .5, 1); }
+@media (hover: hover) { .rd .rd-similar .sim-all:hover { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); box-shadow: 0 12px 24px -14px var(--accent); } .rd .rd-similar .sim-all:hover svg { transform: translateX(5px); } }
