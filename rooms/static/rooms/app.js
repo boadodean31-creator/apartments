@@ -53,19 +53,30 @@ function setFilter(f) {
 }
 document.querySelectorAll(".chip").forEach(c => c.onclick = () => setFilter(c.dataset.f));
 
-// Building overview: jump to a room card and flash it
+// Building overview: "Show in list" centres the room's card on screen, then highlights it for about a second
+let hlTimer = 0;
+function highlightCard(el) {
+  document.querySelectorAll(".card.hl").forEach(c => c.classList.remove("hl"));
+  void el.offsetWidth;                       // restart the animation if it is clicked again
+  el.classList.add("hl");
+  clearTimeout(hlTimer);
+  hlTimer = setTimeout(() => el.classList.remove("hl"), 1600);
+}
 document.addEventListener("click", e => {
   const g = e.target.closest("[data-go]");
   if (!g) return;
   setFilter("all");
   const el = document.getElementById("room-" + g.dataset.go);
-  if (el) {
-    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
-    el.style.setProperty("--mx", "50%");
-    el.style.setProperty("--my", "50%");
-    el.style.borderColor = "var(--accent)";
-    setTimeout(() => { el.style.borderColor = ""; }, 1400);
-  }
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  const centred = Math.abs((r.top + r.height / 2) - innerHeight / 2) < 6;
+  if (reduce || centred) { el.scrollIntoView({ behavior: "auto", block: "center" }); highlightCard(el); return; }
+  // wait until the smooth scroll has actually stopped, so the highlight plays on screen
+  let done = false;
+  const go = () => { if (done) return; done = true; removeEventListener("scrollend", go); highlightCard(el); };
+  if ("onscrollend" in window) addEventListener("scrollend", go, { once: true });
+  setTimeout(go, 900);                       // fallback for browsers without scrollend
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
 });
 
 // Scroll reveal: elements fade and rise as they enter the screen

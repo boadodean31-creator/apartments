@@ -43,7 +43,7 @@
 
 
 <div class="toast" id="toast" role="status"></div>
-<script src="{% static 'rooms/app.js' %}?v=4"></script>
+<script src="{% static 'rooms/app.js' %}?v=5"></script>
 {% if is_site_admin %}<script src="{% static 'rooms/adminwatch.js' %}" data-poll="{% url 'manage_requests_poll' %}" data-list="{% url 'manage_requests' %}" defer></script>{% endif %}
 {% block scripts %}{% endblock %}
 </body>

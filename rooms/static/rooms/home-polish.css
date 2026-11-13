@@ -1,0 +1,49 @@
+/* Home page polish: solid-black hero text, outlined + checked room tiles, white buttons in the room panel,
+   and the "Show in list" highlight. Loaded after the other home styles. To undo: delete this file and its <link> in home.html. */
+
+/* ---- hero description: clean, full-strength text (was faded grey) ---- */
+.has-banner .hero p:not(.from), .hero p:not(.from) { color: var(--ink); opacity: 1; font-weight: 500; }
+
+/* ---- Pick a room: chosen room is outlined with a check, not filled green ---- */
+.bd .bd-rm[aria-pressed="true"], .bd .bd-rm.busy[aria-pressed="true"] {
+  background: var(--bg); color: var(--ink); transform: none;
+  border: 2px solid var(--ink); box-shadow: 0 6px 16px -8px rgba(15, 23, 42, .35);
+}
+.bd .bd-rm[aria-pressed="true"] .bd-p, .bd .bd-rm.busy[aria-pressed="true"] .bd-p { color: var(--muted); opacity: 1; }
+.bd .bd-rm[aria-pressed="true"]::after {
+  content: ""; position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; border-radius: 50%; z-index: 2;
+  background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5.5 12.5l4.2 4.2 8.8-9.4'/%3E%3C/svg%3E") center / 12px 12px no-repeat;
+  box-shadow: 0 0 0 2px var(--bg);
+  animation: bd-check .28s cubic-bezier(.3, 1.5, .5, 1) both;
+}
+@keyframes bd-check { from { transform: scale(0); } to { transform: scale(1); } }
+
+/* ---- panel buttons: plain white, soft outline and shadow ---- */
+.bd .bd-actions .btn, .bd .bd-actions .btn.pri {
+  background: #fff !important; color: #101828 !important; border: 1px solid rgba(16, 24, 40, .12) !important;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 6px 14px -6px rgba(16, 24, 40, .22) !important;
+  font-weight: 600; transition: transform .18s, box-shadow .18s;
+}
+@media (hover: hover) {
+  .bd .bd-actions .btn:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(16, 24, 40, .1), 0 10px 20px -8px rgba(16, 24, 40, .3) !important; }
+}
+.bd .bd-actions .btn:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(16, 24, 40, .12) !important; }
+.bd .bd-actions .btn .btn-ico { stroke: currentColor; }
+
+/* ---- "Show in list": the room card is centred on screen, then pulses for about a second ---- */
+.card.hl { z-index: 3; animation: card-hl 1.5s cubic-bezier(.22, .8, .3, 1) both; }
+.card.hl::after {
+  opacity: 1; background: color-mix(in srgb, var(--accent) 14%, transparent);
+  animation: card-hl-tint 1.5s ease-out both;
+}
+@keyframes card-hl {
+  0%   { transform: scale(1);     box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent), 0 0 0 0 transparent; border-color: var(--accent); }
+  22%  { transform: scale(1.03);  box-shadow: 0 0 0 4px var(--accent), 0 0 0 14px color-mix(in srgb, var(--accent) 22%, transparent), 0 26px 44px -18px color-mix(in srgb, var(--accent) 60%, transparent); border-color: var(--accent); }
+  65%  { transform: scale(1.03);  box-shadow: 0 0 0 4px var(--accent), 0 0 0 14px color-mix(in srgb, var(--accent) 12%, transparent), 0 26px 44px -18px color-mix(in srgb, var(--accent) 45%, transparent); border-color: var(--accent); }
+  100% { transform: scale(1);     box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent, 0 0 0 0 transparent; }
+}
+@keyframes card-hl-tint { 0% { opacity: 0; } 20% { opacity: 1; } 65% { opacity: .8; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .card.hl { animation: none; box-shadow: 0 0 0 4px var(--accent); transform: none; }
+  .card.hl::after { animation: none; }
+}
