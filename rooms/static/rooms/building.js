@@ -88,7 +88,7 @@
     } else { thumb.classList.remove("has"); img.removeAttribute("src"); }
 
     if (window.RibaySlides) {
-      if (!show) show = RibaySlides.create(thumb, { interval: 3200, dots: true, hoverPause: true });
+      if (!show) show = RibaySlides.create(thumb, { interval: 3200, dots: true, hoverPause: true, swipe: true });
       show.load(d.photos ? d.photos.split("|") : [], d.photo);
     }
 

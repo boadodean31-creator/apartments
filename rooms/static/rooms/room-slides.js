@@ -50,6 +50,57 @@
       nx.src = urls[n];
     }
 
+    /* finger swipe (touch / pen): the photo follows your finger, the next or previous one comes in beside it */
+    if (o.swipe) {
+      box.style.touchAction = "pan-y";
+      var d = null;
+      box.addEventListener("pointerdown", function (e) {
+        if (e.pointerType === "mouse" || urls.length < 2 || busy) return;
+        d = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), dx: 0, on: false, nx: null, n: 0, dir: 0 };
+      });
+      box.addEventListener("pointermove", function (e) {
+        if (!d || e.pointerId !== d.id) return;
+        var dx = e.clientX - d.x, dy = e.clientY - d.y;
+        if (!d.on) {
+          if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) * 1.2) { d.on = true; busy = true; clearTimeout(timer); try { box.setPointerCapture(e.pointerId); } catch (_) {} }
+          else return;
+        }
+        var dir = dx < 0 ? 1 : -1, W = box.clientWidth;
+        if (dir !== d.dir) {
+          if (d.nx) d.nx.remove();
+          d.dir = dir; d.n = (i + dir + urls.length) % urls.length;
+          var nx = new Image(); nx.alt = base.alt; nx.className = "sl-img"; nx.src = urls[d.n]; box.appendChild(nx); d.nx = nx;
+        }
+        d.dx = dx;
+        base.style.transition = "none"; d.nx.style.transition = "none";
+        base.style.transform = "translateX(" + dx + "px)";
+        d.nx.style.transform = "translateX(" + (dx + dir * W) + "px)";
+      });
+      var finish = function (cancel) {
+        if (!d) return;
+        var s = d; d = null;
+        if (!s.on || !s.nx) { busy = false; return; }
+        var W = box.clientWidth, g = gen;
+        var fast = Math.abs(s.dx) / Math.max(1, performance.now() - s.t) > 0.5 && Math.abs(s.dx) > 30;
+        var commit = !cancel && (Math.abs(s.dx) > W * 0.22 || fast);
+        var ease = reduce ? "none" : "transform .32s cubic-bezier(.2,.8,.2,1)";
+        base.style.transition = ease; s.nx.style.transition = ease;
+        base.style.transform = "translateX(" + (commit ? -s.dir * W : 0) + "px)";
+        s.nx.style.transform = "translateX(" + (commit ? 0 : s.dir * W) + "px)";
+        setTimeout(function () {
+          var done = function () {
+            s.nx.remove();
+            base.style.transition = "none"; base.style.transform = ""; void base.offsetWidth; base.style.transition = "";
+            busy = false; paintDots(); schedule();
+          };
+          if (g !== gen) { s.nx.remove(); base.style.transition = ""; base.style.transform = ""; busy = false; return; }
+          if (commit) { i = s.n; base.src = urls[i]; if (base.decode) base.decode().then(done, done); else done(); } else done();
+        }, reduce ? 0 : 340);
+      };
+      box.addEventListener("pointerup", function () { finish(false); });
+      box.addEventListener("pointercancel", function () { finish(true); });
+    }
+
     return {
       load: function (list, first) {
         gen++; clearTimeout(timer); busy = false;
