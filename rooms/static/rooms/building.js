@@ -50,7 +50,7 @@
   var view = root.querySelector(".bd-view");
   var list = root.querySelector(".bd-list");
   var next = root.querySelector(".bd-next");
-  var current = null;
+  var current = null, show = null;
 
   /* 1. Windows switch on from the ground floor up */
   floors.forEach(function (f, fi) {
@@ -86,6 +86,11 @@
       img.src = d.photo; img.alt = "Room " + d.number; thumb.classList.add("has");
       img.classList.remove("swap"); void img.offsetWidth; img.classList.add("swap");
     } else { thumb.classList.remove("has"); img.removeAttribute("src"); }
+
+    if (window.RibaySlides) {
+      if (!show) show = RibaySlides.create(thumb, { interval: 3200, dots: true, hoverPause: true });
+      show.load(d.photos ? d.photos.split("|") : [], d.photo);
+    }
 
     view.hidden = !open;
     view.href = d.url;

@@ -62,3 +62,6 @@
   .rd .rd-similar { padding: 18px 16px 14px; }
   .rd .rd-similar .sim-head h2 { font-size: 20px; }
 }
+
+/* ============ Desktop: the address already lives in the Location card on the right, so don't repeat it under the title ============ */
+@media (min-width: 901px) { .rd .rd-hero-id .rd-where { display: none; } .rd .rd-hero-id .rd-meta { margin-bottom: 4px; } }
