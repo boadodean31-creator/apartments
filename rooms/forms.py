@@ -156,8 +156,8 @@ class ContactForm(forms.ModelForm):
     """Staff contact card on the room page (edited by admins right on the page)."""
     class Meta:
         model = SiteSetting
-        fields = ["contact_name", "contact_role", "contact_phone", "contact_hours", "contact_reply", "contact_languages"]
-        labels = {"contact_name": "Staff name", "contact_role": "Role", "contact_phone": "Contact number",
+        fields = ["contact_name", "contact_role", "contact_phone", "contact_email", "contact_hours", "contact_reply", "contact_languages"]
+        labels = {"contact_name": "Staff name", "contact_role": "Role", "contact_phone": "Contact number", "contact_email": "Email",
                   "contact_hours": "Viewing hours", "contact_reply": "Reply time", "contact_languages": "Languages"}
 
     def clean_contact_phone(self):

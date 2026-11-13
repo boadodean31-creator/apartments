@@ -118,8 +118,22 @@ class SiteSetting(models.Model):
     contact_hours = models.CharField(max_length=80, blank=True)
     contact_reply = models.CharField(max_length=80, blank=True)
     contact_languages = models.CharField(max_length=80, blank=True)
+    contact_email = models.EmailField(blank=True)
+
+    # "View the building" window on the home page (admins edit it right in the window)
+    building_title = models.CharField(max_length=120, blank=True)
+    building_text = models.CharField(max_length=300, blank=True)
 
     @classmethod
     def load(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class BuildingPhoto(models.Model):
+    """Pictures of the building shown in the "View the building" window on the home page."""
+    image = models.ImageField(upload_to="site/")
+    position = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["position", "id"]

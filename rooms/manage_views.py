@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .access import site_admin_required
 from .forms import ContactForm, FloorForm, FloorNameForm, RoomForm, check_images, prepare_banner, prepare_site_image
-from .models import Floor, Room, RoomPhoto, RoomSpace, SiteSetting, ViewingRequest
+from .models import BuildingPhoto, Floor, Room, RoomPhoto, RoomSpace, SiteSetting, ViewingRequest
 from .views import contact_details, floor_groups
 
 
@@ -465,9 +465,51 @@ def page_image_remove(request):
 @require_POST
 def contact_save(request):
     site = SiteSetting.load()
-    form = ContactForm(request.POST, instance=site)
+    data = request.POST.copy()
+    if "contact_email" not in data:   # the room-page card has no email box: keep the saved one
+        data["contact_email"] = site.contact_email
+    form = ContactForm(data, instance=site)
     if not form.is_valid():
         errors = {f: [e["message"] for e in errs] for f, errs in form.errors.get_json_data().items()}
         return JsonResponse({"ok": False, "errors": errors}, status=422)
     form.save()
     return JsonResponse({"ok": True, "contact": contact_details()})
+
+
+# ---------- "View the building" window (edited right in the window on the home page) ----------
+MAX_BUILDING_PHOTOS = 8
+
+
+@site_admin_required
+@require_POST
+def building_save(request):
+    site = SiteSetting.load()
+    site.building_title = request.POST.get("title", "").strip()[:120]
+    site.building_text = request.POST.get("text", "").strip()[:300]
+    site.save()
+    files = request.FILES.getlist("photos")
+    if files:
+        room_left = MAX_BUILDING_PHOTOS - BuildingPhoto.objects.count()
+        good, errors = check_images(files[:max(room_left, 0)])
+        if len(files) > room_left:
+            errors.append(f"Only {MAX_BUILDING_PHOTOS} building photos are allowed. Remove one first.")
+        nxt = (BuildingPhoto.objects.order_by("-position").values_list("position", flat=True).first() or 0) + 1
+        for i, f in enumerate(good):
+            BuildingPhoto.objects.create(image=prepare_site_image(f), position=nxt + i)
+        for e in errors[:2]:
+            messages.error(request, e)
+        if good:
+            messages.success(request, f"{len(good)} photo(s) added to the building window.")
+    else:
+        messages.success(request, "Building window updated.")
+    return redirect(reverse("home") + "?building=1")
+
+
+@site_admin_required
+@require_POST
+def building_photo_delete(request, pk):
+    photo = get_object_or_404(BuildingPhoto, pk=pk)
+    _drop_file(photo.image)
+    photo.delete()
+    messages.success(request, "Photo removed.")
+    return redirect(reverse("home") + "?building=1")

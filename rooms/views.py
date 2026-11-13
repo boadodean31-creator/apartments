@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import ViewingRequestForm
-from .models import Floor, Payment, Room, SiteSetting, Tenancy, ViewingRequest
+from .models import BuildingPhoto, Floor, Payment, Room, SiteSetting, Tenancy, ViewingRequest
 
 # The scrolling strip on the home page. Edit the words or swap the icon names any time.
 AMENITIES = [
@@ -82,6 +82,7 @@ def contact_details():
         "hours": site.contact_hours or settings.VIEWING_HOURS,
         "reply": site.contact_reply or "Within 24 hours",
         "languages": site.contact_languages or "English, Filipino",
+        "email": site.contact_email,
         "initials": "".join(w[0] for w in name.split()[:2]).upper(),
     }
 
@@ -98,6 +99,7 @@ def contact_context():
         "viewing_hours": c["hours"],
         "contact_reply": c["reply"],
         "contact_languages": c["languages"],
+        "contact_email": c["email"],
     }
 
 
@@ -206,6 +208,14 @@ def home(request):
     context["step3_img"] = site.step3_image.url if site.step3_image else ""
     context["decor_photo"] = site.steps_decor_image.url if site.steps_decor_image else ""
     context["banner_url"] = site.banner.url if site.banner else ""
+    context["building_title"] = site.building_title or "Cainta, Rizal, Philippines"
+    context["building_text"] = site.building_text or "Ribay Apartments: secure, quiet rooms with Wi-Fi, water and 24/7 CCTV."
+    own = list(BuildingPhoto.objects.all())
+    context["building_photos"] = [{"id": b.pk, "url": b.image.url} for b in own]
+    context["building_is_default"] = not own
+    if not own:   # nothing uploaded yet: show a few room photos so the window is never empty
+        shots = [r.photos.all()[0].image.url for r in rooms if r.photos.all()][:3]
+        context["building_photos"] = [{"id": 0, "url": u} for u in shots]
     context["og_image"] = request.build_absolute_uri(site.banner.url) if site.banner else ""
     return render(request, "rooms/home.html", context)
 

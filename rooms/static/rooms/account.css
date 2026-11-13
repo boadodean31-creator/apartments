@@ -26,9 +26,9 @@ html body:has(.herowrap.has-banner) header:not(.scrolled) {
 header.rn .rn-pill { color: var(--ink); font-weight: 500; }
 header.rn .rn-pill.on { font-weight: 600; }
 @media (min-width: 901px) {
-  header.rn .rn-in { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; }
+  header.rn .rn-in { display: grid; grid-template-columns: .82fr auto 1.18fr; gap: 16px; }
   header.rn .rn-back { justify-self: start; }
   header.rn .rn-links { justify-self: center; gap: 6px; }
-  header.rn .rn-in > .acct, header.rn .rn-in > .acct-wrap { justify-self: end; }
+  header.rn .rn-in > .acct, header.rn .rn-in > .acct-wrap { justify-self: end; margin-right: clamp(10px, 2.2vw, 40px); }
 }
 @media (max-width: 900px) { header.rn .rn-in > .acct, header.rn .rn-in > .acct-wrap { display: none; } }
