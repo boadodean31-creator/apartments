@@ -20,12 +20,12 @@
 
 /* ---- panel buttons: plain white, soft outline and shadow ---- */
 .bd .bd-actions .btn, .bd .bd-actions .btn.pri {
-  background: #fff !important; color: #101828 !important; border: 1px solid rgba(16, 24, 40, .12) !important;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 6px 14px -6px rgba(16, 24, 40, .22) !important;
+  background: #fff !important; color: #101828 !important; border: 1.5px solid rgba(16, 24, 40, .28) !important;
+  box-shadow: 0 2px 3px rgba(16, 24, 40, .14), 0 10px 20px -8px rgba(16, 24, 40, .38) !important;
   font-weight: 600; transition: transform .18s, box-shadow .18s;
 }
 @media (hover: hover) {
-  .bd .bd-actions .btn:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(16, 24, 40, .1), 0 10px 20px -8px rgba(16, 24, 40, .3) !important; }
+  .bd .bd-actions .btn:hover { transform: translateY(-2px); box-shadow: 0 3px 5px rgba(16, 24, 40, .16), 0 14px 26px -8px rgba(16, 24, 40, .45) !important; }
 }
 .bd .bd-actions .btn:active { transform: translateY(0); box-shadow: 0 1px 2px rgba(16, 24, 40, .12) !important; }
 .bd .bd-actions .btn .btn-ico { stroke: currentColor; }
