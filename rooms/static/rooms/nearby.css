@@ -2,8 +2,8 @@
    Scoped to .nearby-sec so nothing else on the site changes. To undo: delete this file and its <link> in home.html. */
 .nearby-sec .nb { margin-top: clamp(32px, 5vw, 72px); }
 .nearby-sec .nb-head { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 18px clamp(28px, 4vw, 64px); margin-bottom: clamp(22px, 3vw, 36px); }
-.nearby-sec .nb-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; padding: 8px 15px 8px 12px; border-radius: 999px; font: 600 14.5px/1 var(--font, "Instrument Sans", system-ui, sans-serif); letter-spacing: 0; color: var(--accent); background: color-mix(in srgb, var(--accent) 11%, var(--bg)); }
-.nearby-sec .nb-eyebrow svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+.nearby-sec .nb-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 16px; padding: 8px 16px 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: 600 15px/1.2 var(--font, "Instrument Sans", system-ui, sans-serif); letter-spacing: 0; box-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 8px 18px -10px rgba(15, 23, 42, .3); }
+.nearby-sec .nb-eyebrow svg { flex: none; width: 18px; height: 18px; }
 .nearby-sec .nb h2 { font-size: clamp(36px, 4.6vw, 66px); line-height: 1.02; letter-spacing: -.03em; }
 .nearby-sec .nb h2 em { position: relative; font-style: normal; color: var(--accent); white-space: nowrap; }
 .nearby-sec .nb h2 em::after { content: ""; position: absolute; left: 2%; right: 4%; bottom: -.22em; height: .22em; background: no-repeat center / 100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M2 10c40-9 100-9 196-2' fill='none' stroke='%23087a55' stroke-width='3.4' stroke-linecap='round'/%3E%3C/svg%3E"); }
@@ -23,13 +23,15 @@
 .nearby-sec .nb-dist, .nearby-sec .nb-kind { position: absolute; z-index: 3; top: 13px; display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 999px; background: rgba(255, 255, 255, .94); border: 0; color: #14211D; font-size: 14px; font-weight: 700; box-shadow: 0 6px 16px -8px rgba(0, 0, 0, .45); }
 .nearby-sec .nb-dist { left: 13px; }
 .nearby-sec .nb-kind { left: auto; right: 13px; font-weight: 600; padding-left: 11px; }
-.nearby-sec .nb-dist svg, .nearby-sec .nb-kind svg { width: 18px; height: 18px; fill: none; stroke: #14211D; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-.nearby-sec .nb-kind svg { stroke: var(--accent); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nearby-sec .nb-kind svg { stroke: #0B7A5A; } }
+.nearby-sec .nb-dist { gap: 9px; padding: 7px 15px 7px 12px; font-size: 15px; letter-spacing: -.005em; }
+.nearby-sec .nb-dist svg { width: 20px; height: 20px; fill: #1B1F24; stroke: none; }
+.nearby-sec .nb-dist.is-car svg { fill: #0B6B4C; }
+.nearby-sec .nb-sep { width: 1.5px; height: 18px; border-radius: 2px; background: rgba(20, 33, 29, .18); }
+.nearby-sec .nb-kind svg { width: 19px; height: 19px; fill: none; stroke: #0B6B4C; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 .nearby-sec .nb-foot { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px 16px 15px; }
 .nearby-sec .nb-ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
-.nearby-sec .nb-ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.nearby-sec .nb-ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .nearby-sec .nb-meta { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .nearby-sec .nb-name { padding: 0; margin: 0; font-size: clamp(17px, 1.4vw, 19px); font-weight: 800; letter-spacing: -.01em; line-height: 1.15; }
 .nearby-sec .nb-detail { padding: 0; margin: 0; font-size: 13px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
