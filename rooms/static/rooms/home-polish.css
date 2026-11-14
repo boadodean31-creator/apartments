@@ -168,3 +168,15 @@ html[data-theme="dark"] body:has(.herowrap) .callbar .btn:not(.pri) { background
 }
 .grid .card a.btn:active { transform: scale(.96); }
 @media (max-width: 640px) { .grid .card a.btn { box-shadow: 0 0 0 2px rgba(17, 17, 17, .1), 0 8px 14px -7px rgba(17, 17, 17, .5), inset 0 1px 0 rgba(255, 255, 255, .14); } }
+
+
+/* ============ Room cards: soft shadow so each card lifts off the page ============ */
+.grid .card {
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, .04), 0 2px 4px rgba(15, 23, 42, .05), 0 14px 28px -16px rgba(15, 23, 42, .3);
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1), box-shadow .3s;
+}
+:root[data-theme="dark"] .grid .card { box-shadow: 0 0 0 1px rgba(255, 255, 255, .04), 0 14px 30px -14px rgba(0, 0, 0, .7); }
+@media (hover: hover) {
+  .grid .card[data-avail="1"]:hover { box-shadow: 0 0 0 1px rgba(15, 23, 42, .06), 0 4px 8px rgba(15, 23, 42, .06), 0 26px 40px -18px rgba(15, 23, 42, .42); }
+  :root[data-theme="dark"] .grid .card[data-avail="1"]:hover { box-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 26px 44px -16px rgba(0, 0, 0, .85); }
+}
