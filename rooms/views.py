@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from .forms import ViewingRequestForm
-from .models import BuildingPhoto, Floor, Payment, Room, SiteSetting, Tenancy, ViewingRequest
+from .models import BuildingPhoto, Landmark, Floor, Payment, Room, SiteSetting, Tenancy, ViewingRequest
 
 # The scrolling strip on the home page. Edit the words or swap the icon names any time.
 AMENITIES = [
@@ -203,6 +203,7 @@ def home(request):
         "available": sum(1 for r in rooms if r.status == "available"),
         "amenities": AMENITIES,
         "landmarks": nearby_landmarks(),
+        "landmark_kinds": Landmark.KINDS,
         "room_amenities": ROOM_AMENITIES,
         "house_rules": HOUSE_RULES,
         "terms": MOVE_IN_TERMS,
@@ -262,28 +263,21 @@ def room_features(room):
     return out[:6]
 
 
-# Places shown in the "Nearby" section on the room page.
-# To add one, copy a line and change it. "kind" picks the icon: school, church, shop or pin.
-# "image" is optional: put a photo of the place in rooms/static/rooms/places/ and write its file name here.
-# If the photo is missing, the card shows the big red pin instead, so nothing breaks.
-# (Or define NEARBY_LANDMARKS in settings.py to override this list.)
-NEARBY_LANDMARKS = [
-    {"name": "Elementary School", "detail": "Karangalan Village Elementary School", "kind": "school", "image": "rooms/places/school.jpg"},
-    {"name": "Church", "detail": "Our Mother of Perpetual Help Chapel", "kind": "church", "image": "rooms/places/church.jpg"},
-    {"name": "Rizal Auto Zone", "detail": "Rizal Autozone (Honda 3S Shop)", "kind": "shop", "image": "rooms/places/honda.jpg"},
-]
+# The places in "Everything you need is close by" are stored in the database (Landmark). Admins add, edit and delete them on the home page.
 
 
 def nearby_landmarks():
-    from django.contrib.staticfiles import finders
-
+    """The places shown in "Everything you need is close by". They come from the database (admins add them on the home page).
+    The Google Maps button uses the exact link when one was pasted, otherwise it searches the address that was typed."""
     out = []
-    for lm in getattr(settings, "NEARBY_LANDMARKS", NEARBY_LANDMARKS):
-        q = quote_plus(f"{lm['detail']}, Cainta, Rizal, Philippines")
-        item = {**lm, "url": f"https://www.google.com/maps/search/?api=1&query={q}"}
-        if not (item.get("image") and finders.find(item["image"])):
-            item["image"] = ""  # no photo uploaded yet -> the card shows the red pin
-        out.append(item)
+    for lm in Landmark.objects.all():
+        if lm.maps_url:
+            url = lm.maps_url
+        else:
+            place = lm.detail if "cainta" in lm.detail.lower() else f"{lm.detail}, Cainta, Rizal, Philippines"
+            url = f"https://www.google.com/maps/search/?api=1&query={quote_plus(place)}"
+        out.append({"id": lm.pk, "name": lm.name, "kind": lm.kind, "kind_label": lm.get_kind_display(), "detail": lm.detail,
+                    "maps_url": lm.maps_url, "image": lm.image.url if lm.image else "", "url": url})
     return out
 
 

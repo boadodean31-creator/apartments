@@ -138,3 +138,22 @@ class BuildingPhoto(models.Model):
 
     class Meta:
         ordering = ["position", "id"]
+
+
+class Landmark(models.Model):
+    """A place near the apartment, shown in "Everything you need is close by". Admins add these on the home page."""
+    KINDS = [("school", "School"), ("church", "Church"), ("shop", "Shop"), ("hospital", "Hospital"), ("store", "Convenience store"),
+             ("food", "Restaurant"), ("park", "Park"), ("transport", "Transport"), ("bank", "Bank / ATM"), ("other", "Other")]
+
+    name = models.CharField(max_length=80)
+    kind = models.CharField(max_length=12, choices=KINDS, default="other")
+    detail = models.CharField(max_length=160)                      # place name / address, also what Google Maps searches for
+    maps_url = models.URLField(max_length=500, blank=True)         # optional exact Google Maps link
+    image = models.ImageField(upload_to="landmarks/", blank=True)
+    position = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["position", "id"]
+
+    def __str__(self):
+        return self.name

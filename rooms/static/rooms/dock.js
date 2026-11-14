@@ -2,6 +2,7 @@
 (function () {
   var dlg = { building: document.getElementById("dlg-building"), contact: document.getElementById("dlg-contact") };
   if (!dlg.building || !dlg.contact) return;
+  var lmDlg = document.getElementById("dlg-landmark"); if (lmDlg) dlg.landmark = lmDlg;
   var lastFocus = null;
 
   function open(name) {
@@ -29,7 +30,7 @@
   });
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-open]");
-    if (b) { e.preventDefault(); open(b.dataset.open); return; }
+    if (b) { e.preventDefault(); if (b.dataset.open === "landmark") fillLandmark(b); open(b.dataset.open); return; }
     var a = e.target.closest("a[href]");
     if (a && /[?&]contact=1/.test(a.getAttribute("href")) && a.pathname === location.pathname) { e.preventDefault(); open("contact"); }
   });
@@ -63,6 +64,58 @@
     e.preventDefault();
     var url = "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(decodeURIComponent(m[1])) + "&su=" + encodeURIComponent("Room inquiry");
     var w = window.open(url, "_blank", "noopener"); if (!w) location.href = mail.getAttribute("href");
+  });
+
+  /* admins: the Add / Edit landmark window */
+  function fillLandmark(btn) {
+    var f = document.getElementById("lm-form"); if (!f) return;
+    var edit = btn.dataset.id !== undefined, d = btn.dataset;
+    f.reset();
+    f.elements.id.value = edit ? d.id : "";
+    f.elements.name.value = edit ? d.name : "";
+    f.elements.kind.value = edit ? d.kind : "other";
+    f.elements.detail.value = edit ? d.detail : "";
+    f.elements.maps_url.value = edit ? d.maps : "";
+    document.getElementById("lm-title").textContent = edit ? "Edit landmark" : "Add landmark";
+    f.querySelector(".lm-save").textContent = edit ? "Save changes" : "Save landmark";
+    showPrev(f, edit ? d.photo : "", edit && d.photo ? "Change photo" : "Upload landmark photo");
+  }
+  function showPrev(f, src, label) {
+    var img = f.querySelector(".lm-prev"), t = f.querySelector(".lm-file");
+    if (src) { img.src = src; img.hidden = false; } else { img.removeAttribute("src"); img.hidden = true; }
+    t.textContent = label;
+  }
+  var lf = document.getElementById("lm-form");
+  if (lf) lf.elements.photo.addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    if (file) showPrev(lf, URL.createObjectURL(file), file.name); 
+  });
+
+  /* "Call now" / "Send a text": phones dial or open Messages. A computer cannot call, so it copies the number
+     and tells the visitor (same idea as the Gmail button, which opens Gmail on a computer). */
+  var toastEl = null;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement("div"); toastEl.className = "pg-toast"; toastEl.setAttribute("role", "status"); document.body.appendChild(toastEl); }
+    var host = document.querySelector("dialog[open]") || document.body; if (toastEl.parentNode !== host) host.appendChild(toastEl);
+    toastEl.textContent = msg; toastEl.classList.add("on"); clearTimeout(toastEl._t); toastEl._t = setTimeout(function () { toastEl.classList.remove("on"); }, 3600);
+  }
+  function copyText(txt) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt).then(function () { return true; }, function () { return false; });
+    var ta = document.createElement("textarea"); ta.value = txt; ta.style.cssText = "position:fixed;opacity:0"; (document.querySelector("dialog[open]") || document.body).appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand("copy"); } catch (_) {} ta.remove(); return Promise.resolve(ok);
+  }
+  var isPhone = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+  document.querySelectorAll(".ct-acts a.ct-btn").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (isPhone) return;
+      e.preventDefault();
+      var num = (a.getAttribute("href") || "").replace(/^(tel|sms):/i, "");
+      var shown = (document.querySelector(".ct-num strong") || {}).textContent || num;
+      var isCall = /^tel:/i.test(a.getAttribute("href"));
+      copyText(num).then(function (ok) {
+        toast(ok ? (isCall ? "Number copied: " + shown + ". Call it from your phone." : "Number copied: " + shown + ". Send your text from your phone.") : "Call or text " + shown);
+      });
+    });
   });
 
   /* admins: save contact details without leaving the page, then show the new details */

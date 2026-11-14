@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .access import site_admin_required
 from .forms import ContactForm, FloorForm, FloorNameForm, RoomForm, check_images, prepare_banner, prepare_site_image
-from .models import BuildingPhoto, Floor, Room, RoomPhoto, RoomSpace, SiteSetting, ViewingRequest
+from .models import BuildingPhoto, Landmark, Floor, Room, RoomPhoto, RoomSpace, SiteSetting, ViewingRequest
 from .views import BUILDING_SLOTS, contact_details, floor_groups
 
 
@@ -558,3 +558,63 @@ def contact_image(request):
             old.storage.delete(old_name)
         messages.success(request, "Contact window picture saved.")
     return redirect(back)
+
+
+# ---------- "Everything you need is close by" landmarks (added and edited on the home page) ----------
+MAX_LANDMARKS = 24
+
+
+def _maps_link_ok(url):
+    from urllib.parse import urlparse
+    host = (urlparse(url).hostname or "").lower()
+    return urlparse(url).scheme in ("http", "https") and (
+        host.startswith("maps.") or "google." in host or host in ("goo.gl", "maps.app.goo.gl"))
+
+
+@site_admin_required
+@require_POST
+def landmark_save(request):
+    back_ok = reverse("home") + "#nearby"
+    back_err = reverse("home") + "?landmark=1#nearby"
+    pk = request.POST.get("id")
+    lm = get_object_or_404(Landmark, pk=pk) if pk else Landmark(position=(Landmark.objects.order_by("-position").values_list("position", flat=True).first() or 0) + 1)
+    if not pk and Landmark.objects.count() >= MAX_LANDMARKS:
+        messages.error(request, f"You can show up to {MAX_LANDMARKS} landmarks. Delete one first.")
+        return redirect(back_err)
+    name = request.POST.get("name", "").strip()[:80]
+    detail = request.POST.get("detail", "").strip()[:160]
+    kind = request.POST.get("kind", "other")
+    maps_url = request.POST.get("maps_url", "").strip()[:500]
+    if not name or not detail:
+        messages.error(request, "Please fill in the landmark name and its location.")
+        return redirect(back_err)
+    if kind not in dict(Landmark.KINDS):
+        kind = "other"
+    if maps_url and not _maps_link_ok(maps_url):
+        messages.error(request, "That doesn't look like a Google Maps link. Paste the link from Google Maps, or leave it empty.")
+        return redirect(back_err)
+    photo = None
+    files = request.FILES.getlist("photo")
+    if files:
+        good, errors = check_images(files[:1])
+        if errors:
+            messages.error(request, errors[0])
+            return redirect(back_err)
+        photo = prepare_site_image(good[0], max_px=1400)
+    lm.name, lm.kind, lm.detail, lm.maps_url = name, kind, detail, maps_url
+    if photo:
+        if lm.pk and lm.image:
+            _drop_file(lm.image)
+        lm.image = photo
+    lm.save()
+    return redirect(back_ok)
+
+
+@site_admin_required
+@require_POST
+def landmark_delete(request, pk):
+    lm = get_object_or_404(Landmark, pk=pk)
+    if lm.image:
+        _drop_file(lm.image)
+    lm.delete()
+    return redirect(reverse("home") + "#nearby")
