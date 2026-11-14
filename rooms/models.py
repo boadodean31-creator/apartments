@@ -150,6 +150,8 @@ class Landmark(models.Model):
     detail = models.CharField(max_length=160)                      # place name / address, also what Google Maps searches for
     maps_url = models.URLField(max_length=500, blank=True)         # optional exact Google Maps link
     image = models.ImageField(upload_to="landmarks/", blank=True)
+    distance = models.PositiveIntegerField(null=True, blank=True)   # metres from the apartment
+    travel = models.CharField(max_length=4, choices=[("walk", "Walk"), ("car", "Car")], default="walk")
     position = models.PositiveIntegerField(default=0)
 
     class Meta:

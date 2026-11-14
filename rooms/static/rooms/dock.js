@@ -76,6 +76,8 @@
     f.elements.kind.value = edit ? d.kind : "other";
     f.elements.detail.value = edit ? d.detail : "";
     f.elements.maps_url.value = edit ? d.maps : "";
+    f.elements.distance.value = edit ? d.distance : "";
+    f.elements.travel.value = edit && d.travel === "car" ? "car" : "walk";
     document.getElementById("lm-title").textContent = edit ? "Edit landmark" : "Add landmark";
     f.querySelector(".lm-save").textContent = edit ? "Save changes" : "Save landmark";
     showPrev(f, edit ? d.photo : "", edit && d.photo ? "Change photo" : "Upload landmark photo");

@@ -593,6 +593,13 @@ def landmark_save(request):
     if maps_url and not _maps_link_ok(maps_url):
         messages.error(request, "That doesn't look like a Google Maps link. Paste the link from Google Maps, or leave it empty.")
         return redirect(back_err)
+    try:
+        distance = int(request.POST.get("distance", "").strip() or 0) or None
+    except ValueError:
+        distance = None
+    if distance is not None:
+        distance = min(distance, 99000)
+    travel = "car" if request.POST.get("travel") == "car" else "walk"
     photo = None
     files = request.FILES.getlist("photo")
     if files:
@@ -602,6 +609,7 @@ def landmark_save(request):
             return redirect(back_err)
         photo = prepare_site_image(good[0], max_px=1400)
     lm.name, lm.kind, lm.detail, lm.maps_url = name, kind, detail, maps_url
+    lm.distance, lm.travel = distance, travel
     if photo:
         if lm.pk and lm.image:
             _drop_file(lm.image)

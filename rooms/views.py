@@ -202,7 +202,8 @@ def home(request):
         "total": len(rooms),
         "available": sum(1 for r in rooms if r.status == "available"),
         "amenities": AMENITIES,
-        "landmarks": nearby_landmarks(),
+        "landmarks": (lms := nearby_landmarks()),
+        "landmark_range": landmark_range(lms),
         "landmark_kinds": Landmark.KINDS,
         "room_amenities": ROOM_AMENITIES,
         "house_rules": HOUSE_RULES,
@@ -266,6 +267,20 @@ def room_features(room):
 # The places in "Everything you need is close by" are stored in the database (Landmark). Admins add, edit and delete them on the home page.
 
 
+def distance_label(m):
+    if not m:
+        return ""
+    return f"{m} m" if m < 1000 else f"{m / 1000:.1f}".rstrip("0").rstrip(".") + " km"
+
+
+def landmark_range(items):
+    """'150 m – 1.2 km' from the distances admins typed, or '' if none were typed."""
+    ds = sorted(i["distance"] for i in items if i.get("distance"))
+    if not ds:
+        return ""
+    return distance_label(ds[0]) if ds[0] == ds[-1] else f"{distance_label(ds[0])} \u2013 {distance_label(ds[-1])}"
+
+
 def nearby_landmarks():
     """The places shown in "Everything you need is close by". They come from the database (admins add them on the home page).
     The Google Maps button uses the exact link when one was pasted, otherwise it searches the address that was typed."""
@@ -277,7 +292,7 @@ def nearby_landmarks():
             place = lm.detail if "cainta" in lm.detail.lower() else f"{lm.detail}, Cainta, Rizal, Philippines"
             url = f"https://www.google.com/maps/search/?api=1&query={quote_plus(place)}"
         out.append({"id": lm.pk, "name": lm.name, "kind": lm.kind, "kind_label": lm.get_kind_display(), "detail": lm.detail,
-                    "maps_url": lm.maps_url, "image": lm.image.url if lm.image else "", "url": url})
+                    "maps_url": lm.maps_url, "distance": lm.distance or "", "distance_label": distance_label(lm.distance), "travel": lm.travel, "image": lm.image.url if lm.image else "", "url": url})
     return out
 
 
