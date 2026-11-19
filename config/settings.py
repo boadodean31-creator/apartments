@@ -141,11 +141,31 @@ STATIC_URL = 'static/'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+# Django 6.1 replaced EMAIL_BACKEND / EMAIL_HOST / ... with this one MAILERS setting. Do not define both:
+# Django refuses to start if the old EMAIL_* settings are present next to MAILERS.
+# Without EMAIL_HOST_USER, emails are only printed in the server log (nothing is sent).
+# To really send the inquiry alerts, add EMAIL_HOST_USER and EMAIL_HOST_PASSWORD (a Gmail "app password"
+# works) in Render > Environment.
+if os.environ.get("EMAIL_HOST_USER"):
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "OPTIONS": {
+                "host": os.environ.get("EMAIL_HOST", "smtp.gmail.com"),
+                "port": int(os.environ.get("EMAIL_PORT", "587")),
+                "use_tls": True,
+                "username": os.environ["EMAIL_HOST_USER"],
+                "password": os.environ.get("EMAIL_HOST_PASSWORD", ""),
+            },
+        },
+    }
+    DEFAULT_FROM_EMAIL = os.environ["EMAIL_HOST_USER"]
+else:
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        },
+    }
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -212,18 +232,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# --- Email (inquiry alerts). Set EMAIL_HOST_USER + EMAIL_HOST_PASSWORD on Render (a Gmail "app password" works). ---
-if os.environ.get("EMAIL_HOST_USER"):
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
-    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
-    EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
-    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
-    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-else:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # --- Visitor statistics (optional). Plausible: set ANALYTICS_DOMAIN to your site's domain. Google Analytics: set GA_MEASUREMENT_ID (G-XXXX). ---
 ANALYTICS_DOMAIN = os.environ.get("ANALYTICS_DOMAIN", "")
