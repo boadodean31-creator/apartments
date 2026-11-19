@@ -1,0 +1,26 @@
+{% comment %}Public "Send an inquiry" form: no account needed. Pass inquiry_room to attach a room number.{% endcomment %}
+<section class="inq-sec" id="inquiry" aria-labelledby="inq-h"><div class="wrap">
+  <div class="inq-grid">
+    <div class="inq-intro">
+      <span class="tr-eyebrow">Questions?</span>
+      <h2 id="inq-h">Send us an inquiry</h2>
+      <p>No account needed. Tell us what you'd like to know about the rooms, the price or a visit, and we'll reply by phone or email{% if contact_reply %} — usually {{ contact_reply|lower }}{% endif %}.</p>
+      {% include 'rooms/_chat.html' %}
+      <p class="inq-alt">Prefer to talk? Call <a href="tel:{{ contact_tel }}">{{ contact_phone }}</a>{% if viewing_hours %} · {{ viewing_hours }}{% endif %}</p>
+    </div>
+    <form class="inq-form" id="inq-form" method="post" action="{% url 'send_inquiry' %}" novalidate>{% csrf_token %}
+      {% if request.GET.inquiry == 'sent' %}<p class="inq-msg ok" role="status">Thank you! We got your message and will reply as soon as we can.</p>{% elif request.GET.inquiry == 'error' %}<p class="inq-msg err" role="alert">Something was missing. Please fill in your name, a phone or email, and your question.</p>{% endif %}
+      <input type="hidden" name="room" value="{{ inquiry_room|default:'' }}">
+      <div class="inq-trap" aria-hidden="true"><label>Leave this empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label>Your name<input name="name" maxlength="80" autocomplete="name" required></label>
+      <div class="inq-two">
+        <label>Phone<input name="phone" type="tel" inputmode="tel" maxlength="30" autocomplete="tel" placeholder="0917 123 4567"></label>
+        <label>Email <small>(optional if you gave a phone)</small><input name="email" type="email" maxlength="254" autocomplete="email"></label>
+      </div>
+      <label>Your question<textarea name="message" rows="4" maxlength="1000" required placeholder="{% if inquiry_room %}Is Room {{ inquiry_room }} still open? Can I visit this week?{% else %}Which rooms are open? What is the monthly rent?{% endif %}"></textarea></label>
+      <p class="inq-msg" id="inq-msg" role="status" aria-live="polite" hidden></p>
+      <button class="btn pri inq-send" type="submit">Send inquiry</button>
+      <p class="inq-legal">By sending, you agree we may contact you about your question. See our <a href="{% url 'privacy' %}">Privacy Policy</a>.</p>
+    </form>
+  </div>
+</div></section>

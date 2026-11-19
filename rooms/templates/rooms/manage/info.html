@@ -1,0 +1,32 @@
+{% extends "rooms/manage/base.html" %}
+{% block title %}Costs & chat · Ribay Apartments{% endblock %}
+{% block heading %}Costs &amp; chat buttons{% endblock %}
+{% block subheading %}Fill in only what is true. Anything left empty is hidden from visitors.{% endblock %}
+{% block body %}
+<form class="tr-adm" method="post">{% csrf_token %}
+  <h3>What it costs to move in</h3>
+  <div class="tr-adm-grid two">
+    <label>Security deposit<input name="cost_deposit" maxlength="80" value="{{ site.cost_deposit }}" placeholder="e.g. 1 month rent, refundable"></label>
+    <label>Advance rent<input name="cost_advance" maxlength="80" value="{{ site.cost_advance }}" placeholder="e.g. 1 month"></label>
+    <label>Utilities<input name="cost_utilities" maxlength="160" value="{{ site.cost_utilities }}" placeholder="e.g. Wi-Fi and water included; electricity by submeter"></label>
+    <label>Lease length<input name="cost_lease" maxlength="80" value="{{ site.cost_lease }}" placeholder="e.g. 6 months minimum"></label>
+  </div>
+  <label>Extra note <small>(optional)</small><input name="cost_notes" maxlength="300" value="{{ site.cost_notes }}" placeholder="e.g. Pets are not allowed. Visitors until 9 PM."></label>
+
+  <h3 style="margin-top:22px">Chat buttons</h3>
+  <p class="m-muted">Use a mobile number (0917 123 4567) for WhatsApp and Viber. For Messenger use your Facebook page's username (the part after facebook.com/).</p>
+  <div class="tr-adm-grid">
+    <label>WhatsApp number<input name="whatsapp" maxlength="40" value="{{ site.whatsapp }}" inputmode="tel"></label>
+    <label>Viber number<input name="viber" maxlength="40" value="{{ site.viber }}" inputmode="tel"></label>
+    <label>Messenger page username<input name="messenger" maxlength="80" value="{{ site.messenger }}" placeholder="ribayapartments"></label>
+  </div>
+  {% if links %}<p class="m-muted">Test your buttons: {% for c in links %}<a href="{{ c.url }}" target="_blank" rel="noopener">{{ c.label }}</a>{% if not forloop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+  <button class="btn pri" type="submit">Save</button>
+</form>
+
+<div class="tr-adm">
+  <h3>Backup</h3>
+  <p class="m-muted">Download all rooms, requests, inquiries, reviews, settings and uploaded pictures in one file. Do this every week and keep it somewhere safe (email it to yourself or put it in Google Drive).</p>
+  <a class="btn" href="{% url 'manage_backup' %}">Download backup (.zip)</a>
+</div>
+{% endblock %}

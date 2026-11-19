@@ -1,10 +1,16 @@
 from django.urls import path
-from . import manage_views as m, views
+from . import manage_views as m, trust, trust_manage as tm, views
 
 urlpatterns = [
     path("", views.home, name="home"),
     path("rooms/<str:number>/", views.room_detail, name="room_detail"),
     path("rooms/<str:number>/book/", views.book_viewing, name="book_viewing"),
+    path("inquiry/", trust.send_inquiry, name="send_inquiry"),
+    path("privacy/", trust.privacy, name="privacy"),
+    path("terms/", trust.terms, name="terms"),
+    path("robots.txt", trust.robots_txt, name="robots"),
+    path("sitemap.xml", trust.sitemap_xml, name="sitemap"),
+    path("healthz/", trust.healthz, name="healthz"),
     path("portal/", views.portal, name="portal"),
     path("portal/receipt/<int:pk>/", views.receipt, name="receipt"),
 
@@ -24,6 +30,15 @@ urlpatterns = [
     path("manage/requests/poll/", m.requests_poll, name="manage_requests_poll"),
     path("manage/requests/<int:pk>/status/", m.request_status, name="manage_request_status"),
     path("manage/requests/<int:pk>/delete/", m.request_delete, name="manage_request_delete"),
+    path("manage/inquiries/", tm.inquiries, name="manage_inquiries"),
+    path("manage/inquiries/<int:pk>/status/", tm.inquiry_status, name="manage_inquiry_status"),
+    path("manage/inquiries/<int:pk>/delete/", tm.inquiry_delete, name="manage_inquiry_delete"),
+    path("manage/reviews/", tm.reviews, name="manage_reviews"),
+    path("manage/reviews/save/", tm.review_save, name="manage_review_save"),
+    path("manage/reviews/<int:pk>/toggle/", tm.review_toggle, name="manage_review_toggle"),
+    path("manage/reviews/<int:pk>/delete/", tm.review_delete, name="manage_review_delete"),
+    path("manage/info/", tm.info, name="manage_info"),
+    path("manage/backup/", tm.backup, name="manage_backup"),
     path("manage/banner/", m.banner, name="manage_banner"),
     path("manage/banner/remove/", m.banner_remove, name="manage_banner_remove"),
     path("manage/images/", m.page_images, name="manage_images"),

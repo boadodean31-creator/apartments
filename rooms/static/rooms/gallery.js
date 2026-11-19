@@ -33,7 +33,6 @@
     incoming.className = "g-slide";
     incoming.alt = alt;
     incoming.src = src;
-    incoming.style.transform = "translateX(" + dir * 100 + "%)";   // parked outside the frame right away, so it can never flash on top of the current photo
     box.insertBefore(incoming, old.nextSibling);
 
     let a1, a2, done = false;
@@ -41,7 +40,6 @@
       if (done) return;
       done = true; settle = null;
       incoming.className = ""; incoming.id = "mainimg";   // ...and takes over as the main photo
-      incoming.style.transform = "";
       if (a1) a1.cancel();
       if (a2) a2.cancel();
       old.remove();

@@ -7,7 +7,7 @@
 
     <aside class="bk-side">
       <div class="bk-room">
-        {% if photos %}<img src="{{ photos.0.image.url }}" alt="">{% else %}<div class="bk-noimg"></div>{% endif %}
+        {% if photos %}<img src="{{ photos.0.image.url }}" alt="Room {{ room.number }}">{% else %}<div class="bk-noimg"></div>{% endif %}
         <div>
           <strong>Room {{ room.number }}</strong>
           <span>{{ room.get_floor_display }} · {{ room.room_type }}</span>

@@ -1,0 +1,32 @@
+{% extends "rooms/base.html" %}
+{% load static %}
+{% block title %}Terms of Use · Ribay Apartments{% endblock %}
+{% block head %}<meta name="robots" content="index,follow"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=1">{% endblock %}
+{% block content %}
+<article class="doc wrap">
+  <h1>Terms of Use</h1>
+  <p class="doc-date">Last updated: {% now "F j, Y" %}</p>
+  <p>By using this website you agree to these terms. They cover the website only; your room rental is governed by the lease you sign.</p>
+
+  <h2>Rooms, prices and availability</h2>
+  <p>Room details, photos, prices and availability are shown in good faith and may change. A room is reserved only when we confirm it with you directly and agree on the lease terms. Sending an inquiry or booking a viewing does not reserve a room or create a lease.</p>
+
+  <h2>Viewing requests</h2>
+  <p>A viewing request is a request for a time, not a guaranteed appointment. We will confirm by phone or email. Please tell us if you cannot come.</p>
+
+  <h2>Your account and what you send us</h2>
+  <p>Give us true and current information. Do not send anything unlawful, abusive or misleading, and do not attempt to disrupt or break into the website. We may remove messages or block access if this happens.</p>
+
+  <h2>Content</h2>
+  <p>Photos, text and the logo on this website belong to Ribay Apartments or are used with permission. Please ask before reusing them.</p>
+
+  <h2>Liability</h2>
+  <p>We work to keep this website accurate and available, but we provide it “as is”. We are not liable for losses from relying on information here without confirming it with us, or from the website being unavailable.</p>
+
+  <h2>Privacy</h2>
+  <p>How we handle your information is explained in our <a href="{% url 'privacy' %}">Privacy Policy</a>.</p>
+
+  <h2>Changes and contact</h2>
+  <p>We may update these terms; the date above shows the latest version. Questions? Call <a href="tel:{{ contact_tel }}">{{ contact_phone }}</a>{% if policy_email %} or email <a href="mailto:{{ policy_email }}">{{ policy_email }}</a>{% endif %}. These terms follow the laws of the Republic of the Philippines.</p>
+</article>
+{% endblock %}

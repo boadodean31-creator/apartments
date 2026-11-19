@@ -1,12 +1,13 @@
 {% extends "rooms/base.html" %}
 {% load static %}
 {% block title %}Ribay Apartments · Rooms for rent in Cainta, Rizal{% endblock %}
-{% block head %}<link rel="stylesheet" href="{% static 'rooms/building.css' %}"><link rel="stylesheet" href="{% static 'rooms/home.css' %}?v=6"><link rel="stylesheet" href="{% static 'rooms/home-nearby.css' %}"><link rel="stylesheet" href="{% static 'rooms/nearby.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="stylesheet" href="{% static 'rooms/home-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/dock.css' %}?v=6">
+{% block head %}<link rel="stylesheet" href="{% static 'rooms/building.css' %}"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=1"><link rel="stylesheet" href="{% static 'rooms/home.css' %}?v=6"><link rel="stylesheet" href="{% static 'rooms/home-nearby.css' %}"><link rel="stylesheet" href="{% static 'rooms/nearby.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="stylesheet" href="{% static 'rooms/home-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/dock.css' %}?v=7">
 <meta name="description" content="Clean, secure rooms for rent in Cainta, Rizal. Wi-Fi, water and 24/7 CCTV included. See which rooms are open and book a viewing.">
 <link rel="canonical" href="{{ page_url }}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Ribay Apartments"><meta property="og:url" content="{{ page_url }}">
 <meta property="og:title" content="Ribay Apartments · Rooms for rent in Cainta, Rizal">
 <meta property="og:description" content="Clean, secure rooms with Wi-Fi, water and 24/7 CCTV included. See what is open and book a viewing.">
+<script type="application/ld+json">{{ jsonld|safe }}</script>
 {% if og_image %}<meta property="og:image" content="{{ og_image }}"><meta name="twitter:card" content="summary_large_image">{% endif %}
 {% endblock %}
 {% block content %}
@@ -133,14 +134,14 @@
   <h2 id="steps-h">How a viewing works</h2>
   <ol class="steps">
     <li class="st st-photo{% if not step_photo %} st-plain{% endif %}">
-      {% if step_photo %}<img class="st-img" src="{{ step_photo }}" alt="" loading="lazy">{% endif %}
+      {% if step_photo %}<img class="st-img" src="{{ step_photo }}" alt="A room at Ribay Apartments in Cainta, Rizal" loading="lazy">{% endif %}
       <a class="st-link" href="#rooms"><span class="sn">1</span><span class="st-txt"><h3>Pick a room</h3><p>Use the building picker or the list. Open rooms show their photos and rent.</p></span></a>
     </li>
     <li class="st"><span class="sn">2</span><div class="st-txt"><h3>Book a viewing</h3><p>Choose a day and time. You sign in with Google so our staff can reach you.</p></div>
-      {% if step2_img %}<img class="il il-img" src="{{ step2_img }}" alt="" loading="lazy">{% else %}<svg class="il" viewBox="0 0 120 110" aria-hidden="true"><rect class="il-card" x="6" y="12" width="78" height="72" rx="10"/><path class="il-top" d="M6 22a10 10 0 0 1 10-10h58a10 10 0 0 1 10 10v12H6z"/><rect class="il-ring" x="24" y="4" width="6" height="16" rx="3"/><rect class="il-ring" x="60" y="4" width="6" height="16" rx="3"/><g class="il-cell"><rect x="18" y="44" width="12" height="10" rx="2"/><rect x="36" y="44" width="12" height="10" rx="2"/><rect x="54" y="44" width="12" height="10" rx="2"/><rect x="18" y="60" width="12" height="10" rx="2"/><rect x="36" y="60" width="12" height="10" rx="2"/></g><circle class="il-clock" cx="84" cy="78" r="26"/><path class="il-hand" d="M84 62v16l11 7"/></svg>{% endif %}
+      {% if step2_img %}<img class="il il-img" src="{{ step2_img }}" alt="Choose a date and time for your room viewing" loading="lazy">{% else %}<svg class="il" viewBox="0 0 120 110" aria-hidden="true"><rect class="il-card" x="6" y="12" width="78" height="72" rx="10"/><path class="il-top" d="M6 22a10 10 0 0 1 10-10h58a10 10 0 0 1 10 10v12H6z"/><rect class="il-ring" x="24" y="4" width="6" height="16" rx="3"/><rect class="il-ring" x="60" y="4" width="6" height="16" rx="3"/><g class="il-cell"><rect x="18" y="44" width="12" height="10" rx="2"/><rect x="36" y="44" width="12" height="10" rx="2"/><rect x="54" y="44" width="12" height="10" rx="2"/><rect x="18" y="60" width="12" height="10" rx="2"/><rect x="36" y="60" width="12" height="10" rx="2"/></g><circle class="il-clock" cx="84" cy="78" r="26"/><path class="il-hand" d="M84 62v16l11 7"/></svg>{% endif %}
     </li>
     <li class="st"><span class="sn">3</span><div class="st-txt"><h3>Visit the room</h3><p>Our leasing staff contact you to confirm, then show you around.</p></div>
-      {% if step3_img %}<img class="il il-img" src="{{ step3_img }}" alt="" loading="lazy">{% else %}<svg class="il il-people" viewBox="0 0 124 110" aria-hidden="true">
+      {% if step3_img %}<img class="il il-img" src="{{ step3_img }}" alt="Meet the leasing staff and see the room" loading="lazy">{% else %}<svg class="il il-people" viewBox="0 0 124 110" aria-hidden="true">
         <rect class="il-panel" x="46" y="6" width="68" height="88" rx="7"/><g class="il-win"><rect x="56" y="16" width="11" height="10" rx="2"/><rect x="78" y="16" width="11" height="10" rx="2"/><rect x="100" y="16" width="8" height="10" rx="2"/><rect x="56" y="34" width="11" height="10" rx="2"/><rect x="78" y="34" width="11" height="10" rx="2"/><rect x="100" y="34" width="8" height="10" rx="2"/></g>
         <ellipse cx="62" cy="104" rx="52" ry="4" fill="#000" opacity=".08"/>
         <g transform="translate(-14 2)">
@@ -176,12 +177,12 @@
   <h2 id="know-h">What to know before you move in</h2>
   <div class="know">
     <div class="know-card k-green">
-      {% if living_photo %}<img class="know-pic" src="{{ living_photo }}" alt="" loading="lazy">{% endif %}
+      {% if living_photo %}<img class="know-pic" src="{{ living_photo }}" alt="Living area inside a Ribay Apartments room" loading="lazy">{% endif %}
       <h3>At the apartment</h3>
       <ul>{% for a in room_amenities %}<li><span class="kic" aria-hidden="true"><svg class="ico"><use href="#i-{{ a.icon }}"/></svg></span><div><b>{{ a.title }}</b><span>{{ a.text }}</span></div></li>{% endfor %}</ul>
     </div>
     <div class="know-card k-blue">
-      {% if rules_photo %}<img class="know-pic" src="{{ rules_photo }}" alt="" loading="lazy">{% endif %}
+      {% if rules_photo %}<img class="know-pic" src="{{ rules_photo }}" alt="Bedroom at Ribay Apartments" loading="lazy">{% endif %}
       <h3>House rules</h3>
       <ul>{% for a in house_rules %}<li><span class="kic" aria-hidden="true"><svg class="ico"><use href="#i-{{ a.icon }}"/></svg></span><div><b>{{ a.title }}</b><span>{{ a.text }}</span></div></li>{% endfor %}</ul>
     </div>
@@ -226,7 +227,7 @@
     <ul class="nb-grid">
       {% for lm in landmarks %}
       <li class="nb-item"><a class="nb-card" href="{{ lm.url }}" target="_blank" rel="noopener">
-        <span class="nb-view{% if lm.image %} has-photo{% endif %}" aria-hidden="true">{% if lm.image %}<img class="nb-photo" src="{{ lm.image }}" alt="" loading="lazy">{% else %}<svg class="nb-pin" viewBox="0 0 48 66"><ellipse class="nb-shadow" cx="24" cy="62" rx="11" ry="3"/><g class="nb-hop"><path class="nb-body" d="M24 59S4 40 4 23a20 20 0 0 1 40 0c0 17-20 36-20 36z"/><circle class="nb-dot" cx="24" cy="23" r="8"/></g></svg>{% endif %}
+        <span class="nb-view{% if lm.image %} has-photo{% endif %}" aria-hidden="true">{% if lm.image %}<img class="nb-photo" src="{{ lm.image }}" alt="{{ lm.name }}, near Ribay Apartments" loading="lazy">{% else %}<svg class="nb-pin" viewBox="0 0 48 66"><ellipse class="nb-shadow" cx="24" cy="62" rx="11" ry="3"/><g class="nb-hop"><path class="nb-body" d="M24 59S4 40 4 23a20 20 0 0 1 40 0c0 17-20 36-20 36z"/><circle class="nb-dot" cx="24" cy="23" r="8"/></g></svg>{% endif %}
           {% if lm.distance_label %}<span class="nb-dist {% if lm.travel == 'car' %}is-car{% else %}is-walk{% endif %}">{% if lm.travel == 'car' %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.08 3.11H5.77L6.85 7zM19 17H5v-5h14v5z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>{% else %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/></svg>{% endif %}<i class="nb-sep"></i>{{ lm.distance_label }}</span>{% endif %}
           <span class="nb-kind">{% if lm.kind == 'school' %}<svg viewBox="0 0 24 24"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>School{% elif lm.kind == 'church' %}<svg viewBox="0 0 24 24"><path d="m18 7 4 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9l4-2"/><path d="M14 22v-4a2 2 0 0 0-4 0v4"/><path d="M18 22V5l-6-3-6 3v17"/><path d="M12 7v5"/><path d="M10 9h4"/></svg>Church{% elif lm.kind == 'shop' %}<svg viewBox="0 0 24 24"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/></svg>Shop{% elif lm.kind == 'hospital' %}<svg viewBox="0 0 24 24"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/></svg>Hospital{% elif lm.kind == 'store' %}<svg viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>Convenience{% elif lm.kind == 'food' %}<svg viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>Restaurant{% elif lm.kind == 'park' %}<svg viewBox="0 0 24 24"><path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z"/><path d="M7 16v6"/><path d="M13 19v3"/><path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5"/></svg>Park{% elif lm.kind == 'transport' %}<svg viewBox="0 0 24 24"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><path d="M9 18h5"/><circle cx="7" cy="18" r="2"/><circle cx="16" cy="18" r="2"/></svg>Transport{% elif lm.kind == 'bank' %}<svg viewBox="0 0 24 24"><path d="M10 18v-7"/><path d="M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M3 22h18"/><path d="M6 18v-7"/></svg>Bank / ATM{% else %}<svg viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Place{% endif %}</span>
         </span>
@@ -274,6 +275,8 @@
 </dialog>
 {% endif %}
 
+{% include 'rooms/_trust.html' %}
+
 {% if faq %}<section class="faq-sec" aria-labelledby="faq-h"><div class="wrap">
   <h2 id="faq-h">Questions renters ask</h2>
   <div class="faq">{% for q in faq %}<details><summary>{{ q.q }}</summary><p>{{ q.a }}</p></details>{% endfor %}</div>
@@ -282,7 +285,7 @@
 <div class="callbar" role="region" aria-label="Contact us"><a class="btn" href="tel:{{ contact_tel }}"><svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</a><a class="btn pri" href="sms:{{ contact_tel }}"><svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text us</a></div>
 {% include 'rooms/_dock.html' %}
 {% endblock %}
-{% block scripts %}<script src="{% static 'rooms/dock.js' %}?v=5" defer></script><script src="{% static 'rooms/room-slides.js' %}?v=2" defer></script><script src="{% static 'rooms/building.js' %}?v=3" defer></script>
+{% block scripts %}<script src="{% static 'rooms/dock.js' %}?v=5" defer></script><script src="{% static 'rooms/trust.js' %}?v=1" defer></script><script src="{% static 'rooms/room-slides.js' %}?v=2" defer></script><script src="{% static 'rooms/building.js' %}?v=3" defer></script>
 <script>
 document.addEventListener("click", function (e) {
   var b = e.target.closest("[data-copy]"); if (!b) return;

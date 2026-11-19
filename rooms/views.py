@@ -15,6 +15,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import ViewingRequestForm
 from .models import BuildingPhoto, Landmark, Floor, Payment, Room, SiteSetting, Tenancy, ViewingRequest
+from .trust import jsonld, trust_context
 
 # The scrolling strip on the home page. Edit the words or swap the icon names any time.
 AMENITIES = [
@@ -212,6 +213,7 @@ def home(request):
         "page_url": request.build_absolute_uri(reverse("home")),
         **contact_context(),
         **map_context(),
+        **trust_context(),
     }
     site = SiteSetting.load()
     context["step_photo"] = site.step1_image.url if site.step1_image else step_photo(rooms)
@@ -221,6 +223,7 @@ def home(request):
     context["step3_img"] = site.step3_image.url if site.step3_image else ""
     context["decor_photo"] = site.steps_decor_image.url if site.steps_decor_image else ""
     context["banner_url"] = site.banner.url if site.banner else ""
+    context["jsonld"] = jsonld(request, context)
     context["building_title"] = site.building_title or "Cainta, Rizal, Philippines"
     context["building_text"] = site.building_text or "Ribay Apartments: secure, quiet rooms with Wi-Fi, water and 24/7 CCTV."
     own = {b.position: b for b in BuildingPhoto.objects.all()}
@@ -351,6 +354,7 @@ def room_detail(request, number):
         "book_max": (timezone.localdate() + timedelta(days=60)).isoformat(),
         **contact_context(),
         **map_context(),
+        **trust_context(),
     }
     if request.user.is_authenticated:
         last = request.user.viewing_requests.order_by("-id").first()

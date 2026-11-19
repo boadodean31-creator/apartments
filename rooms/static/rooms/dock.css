@@ -247,3 +247,7 @@ dialog.pg, dialog.pg:focus, dialog.pg:focus-visible, .pg-card:focus-visible { ou
 /* small message at the bottom (Call / Text on a computer) */
 .pg-toast { position: fixed; left: 50%; bottom: 28px; z-index: 100; max-width: min(92vw, 460px); padding: 13px 20px; border-radius: 14px; background: var(--ink); color: var(--bg); font-size: 14.5px; font-weight: 600; text-align: center; box-shadow: 0 16px 34px -14px rgba(0, 0, 0, .6); opacity: 0; transform: translate(-50%, 14px); pointer-events: none; transition: opacity .25s, transform .3s cubic-bezier(.2, .9, .3, 1.2); }
 .pg-toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* chat buttons inside the contact window */
+.pg .chat-row { margin: 12px 0 4px; }
+.pg .chat-btn { padding: 9px 15px 9px 12px; font-size: 13.5px; }

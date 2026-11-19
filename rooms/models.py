@@ -125,6 +125,18 @@ class SiteSetting(models.Model):
     building_title = models.CharField(max_length=120, blank=True)
     building_text = models.CharField(max_length=300, blank=True)
 
+    # Chat buttons (a number or a username; the website builds the links)
+    whatsapp = models.CharField(max_length=40, blank=True)
+    viber = models.CharField(max_length=40, blank=True)
+    messenger = models.CharField(max_length=80, blank=True)   # facebook page username or m.me link
+
+    # Clear costs shown to visitors (blank = not shown)
+    cost_deposit = models.CharField(max_length=80, blank=True)
+    cost_advance = models.CharField(max_length=80, blank=True)
+    cost_utilities = models.CharField(max_length=160, blank=True)
+    cost_lease = models.CharField(max_length=80, blank=True)
+    cost_notes = models.CharField(max_length=300, blank=True)
+
     @classmethod
     def load(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
@@ -159,3 +171,41 @@ class Landmark(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+class Inquiry(models.Model):
+    """A question sent from the public "Send an inquiry" form. No account needed."""
+    STATUS = [("new", "New"), ("replied", "Replied"), ("closed", "Closed")]
+
+    name = models.CharField(max_length=80)
+    phone = models.CharField(max_length=30, blank=True)
+    email = models.EmailField(blank=True)
+    message = models.TextField(max_length=1000)
+    room_number = models.CharField(max_length=10, blank=True)
+    status = models.CharField(max_length=8, choices=STATUS, default="new")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-id"]
+        verbose_name_plural = "inquiries"
+
+    def __str__(self):
+        return f"{self.name} ({self.created_at:%Y-%m-%d})"
+
+
+class Review(models.Model):
+    """A real tenant review. Admins add these from Manage > Reviews; only visible ones show on the website."""
+    name = models.CharField(max_length=60)
+    detail = models.CharField(max_length=80, blank=True)     # e.g. "Tenant since 2024, Room 3A"
+    rating = models.PositiveSmallIntegerField(default=5)
+    text = models.TextField(max_length=600)
+    visible = models.BooleanField(default=True)
+    position = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["position", "-id"]
+
+    def __str__(self):
+        return f"{self.name} ({self.rating}★)"

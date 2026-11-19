@@ -24,9 +24,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set the DEBUG environment variable to 0 on Render to turn debug mode off (do this once SECRET_KEY is set there too).
+DEBUG = os.environ.get("DEBUG", "1").strip().lower() not in ("0", "false", "no", "off")
 
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1'] + [h.strip() for h in os.environ.get("EXTRA_HOSTS", "").split(",") if h.strip()]
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com'] + [o.strip() for o in os.environ.get("EXTRA_ORIGINS", "").split(",") if o.strip()]
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+
 
 
 # Application definition
@@ -202,3 +212,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# --- Email (inquiry alerts). Set EMAIL_HOST_USER + EMAIL_HOST_PASSWORD on Render (a Gmail "app password" works). ---
+if os.environ.get("EMAIL_HOST_USER"):
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# --- Visitor statistics (optional). Plausible: set ANALYTICS_DOMAIN to your site's domain. Google Analytics: set GA_MEASUREMENT_ID (G-XXXX). ---
+ANALYTICS_DOMAIN = os.environ.get("ANALYTICS_DOMAIN", "")
+GA_MEASUREMENT_ID = os.environ.get("GA_MEASUREMENT_ID", "")

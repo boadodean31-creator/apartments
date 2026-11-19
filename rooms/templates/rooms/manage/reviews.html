@@ -1,0 +1,28 @@
+{% extends "rooms/manage/base.html" %}
+{% block title %}Reviews · Ribay Apartments{% endblock %}
+{% block heading %}Tenant reviews{% endblock %}
+{% block subheading %}Only add real reviews, with the tenant's permission. They appear in “What tenants say” on the home page.{% endblock %}
+{% block body %}
+<form class="tr-adm" method="post" action="{% url 'manage_review_save' %}">{% csrf_token %}
+  <h3>Add a review</h3>
+  <div class="tr-adm-grid">
+    <label>Tenant's name<input name="name" maxlength="60" required placeholder="Maria S."></label>
+    <label>Details <small>(optional)</small><input name="detail" maxlength="80" placeholder="Tenant since 2024 · Room 3A"></label>
+    <label>Stars<select name="rating">{% for n in "54321" %}<option value="{{ n }}">{{ n }} ★</option>{% endfor %}</select></label>
+  </div>
+  <label>What they said<textarea name="text" rows="3" maxlength="600" required placeholder="Quiet, clean, and the staff answer right away."></textarea></label>
+  <button class="btn pri" type="submit">Add review</button>
+</form>
+<div class="tr-list">
+  {% for r in items %}
+  <article class="tr-item {% if not r.visible %}is-off{% endif %}">
+    <div class="tr-item-top"><b>{{ r.name }}</b> <span class="m-muted">{{ r.detail }}</span> <span class="tr-stars">{{ r.rating }} ★</span>{% if not r.visible %}<span class="m-st closed">Hidden</span>{% endif %}</div>
+    <p>{{ r.text }}</p>
+    <div class="m-req-actions">
+      <form method="post" action="{% url 'manage_review_toggle' r.pk %}">{% csrf_token %}<button class="btn sm" type="submit">{% if r.visible %}Hide{% else %}Show{% endif %}</button></form>
+      <form method="post" action="{% url 'manage_review_delete' r.pk %}" onsubmit="return confirm('Delete this review?')">{% csrf_token %}<button class="btn sm" type="submit">Delete</button></form>
+    </div>
+  </article>
+  {% empty %}<p class="m-empty">No reviews yet. Ask two or three current tenants for a sentence and add them above.</p>{% endfor %}
+</div>
+{% endblock %}

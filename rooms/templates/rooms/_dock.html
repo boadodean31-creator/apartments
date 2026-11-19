@@ -86,6 +86,7 @@
       {% if contact_email %}
       <a class="ct-mail" href="mailto:{{ contact_email }}?subject=Room%20inquiry"><svg class="gm" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4caf50" d="M45 16.2l-5 2.75-5 4.75L35 40h7a3 3 0 0 0 3-3V16.2z"/><path fill="#1e88e5" d="M3 16.2l3.6 1.71L13 23.7V40H6a3 3 0 0 1-3-3V16.2z"/><path fill="#e53935" d="M35 11.2L24 19.45 13 11.2 12 17l1 6.7 11 8.25 11-8.25 1-6.7z"/><path fill="#c62828" d="M3 12.3v3.9l10 7.5V11.2L9.9 8.86A4.3 4.3 0 0 0 7.3 8 4.3 4.3 0 0 0 3 12.3z"/><path fill="#fbc02d" d="M45 12.3v3.9l-10 7.5V11.2l3.1-2.34A4.3 4.3 0 0 1 40.7 8 4.3 4.3 0 0 1 45 12.3z"/></svg><span class="ct-txt"><small>Email us</small><strong>{{ contact_email }}</strong></span><svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
       {% endif %}
+      {% include 'rooms/_chat.html' %}
       <ul class="ct-facts">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Viewing hours<b>{{ viewing_hours }}</b></span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>We reply<b>{{ contact_reply }}</b></span></li>
@@ -97,7 +98,7 @@
         <summary><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>Edit contact details <small>(only you, the admin, see this)</small></summary>
         <div class="ed-step"><b>1</b> Picture on the left <small>The building or any photo you like. It shows behind the name.</small></div>
         <div class="ed-slot ed-one{% if contact_image_set %} has{% endif %}">
-          <div class="ed-pic">{% if contact_image_url %}<img src="{{ contact_image_url }}" alt="">{% else %}<span>No picture yet</span>{% endif %}</div>
+          <div class="ed-pic">{% if contact_image_url %}<img src="{{ contact_image_url }}" alt="{{ contact_staff }}, {{ contact_role }}">{% else %}<span>No picture yet</span>{% endif %}</div>
           <div class="ed-btns">
             <form method="post" action="{% url 'manage_contact_image' %}" enctype="multipart/form-data" class="ed-up">{% csrf_token %}<label class="ed-pick"><input type="file" name="photo" accept="image/*" onchange="this.form.submit()">{% if contact_image_set %}Replace picture{% else %}Add picture{% endif %}</label></form>
             {% if contact_image_set %}<form method="post" action="{% url 'manage_contact_image' %}" onsubmit="return confirm('Remove this picture?')">{% csrf_token %}<input type="hidden" name="remove" value="1"><button type="submit" class="ed-del">Delete</button></form>{% endif %}

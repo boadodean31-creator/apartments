@@ -1,0 +1,34 @@
+{% extends "rooms/base.html" %}
+{% load static %}
+{% block title %}Privacy Policy · Ribay Apartments{% endblock %}
+{% block head %}<meta name="robots" content="index,follow"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=1">{% endblock %}
+{% block content %}
+<article class="doc wrap">
+  <h1>Privacy Policy</h1>
+  <p class="doc-date">Last updated: {% now "F j, Y" %}</p>
+  <p>Ribay Apartments (“we”, “us”) rents rooms in Cainta, Rizal, Philippines. This page explains what personal information this website collects, why, and what you can do about it. We follow the Philippine Data Privacy Act of 2012 (Republic Act No. 10173).</p>
+
+  <h2>What we collect</h2>
+  <ul>
+    <li><b>Inquiry form:</b> your name, phone number, email (optional) and your message.</li>
+    <li><b>Viewing requests:</b> your name, phone, preferred date and time, and the email on the Google or Facebook account you signed in with.</li>
+    <li><b>Sign-in:</b> if you sign in with Google or Facebook we receive your name and email address from them. We never see your password.</li>
+    <li><b>Visitor statistics:</b> if switched on, a privacy-friendly counter that records page visits (no advertising profile).</li>
+  </ul>
+
+  <h2>Why we use it</h2>
+  <p>Only to answer your question, arrange a viewing, and manage a tenancy if you rent a room. We do not sell your information and we do not use it for advertising.</p>
+
+  <h2>Who sees it</h2>
+  <p>Our leasing staff and the website administrators. Service providers that run the website (hosting, email, sign-in) process data for us only to operate it.</p>
+
+  <h2>How long we keep it</h2>
+  <p>Inquiries and viewing requests are kept only as long as needed to answer you and for our records, then deleted. Tenant records are kept for as long as the law and our lease records require.</p>
+
+  <h2>Your rights</h2>
+  <p>You may ask to see, correct or delete the information we hold about you, or object to how we use it. You may also complain to the National Privacy Commission (privacy.gov.ph).</p>
+
+  <h2>Contact</h2>
+  <p>Questions about your data? Call <a href="tel:{{ contact_tel }}">{{ contact_phone }}</a>{% if policy_email %} or email <a href="mailto:{{ policy_email }}">{{ policy_email }}</a>{% endif %}.</p>
+</article>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "rooms/manage/base.html" %}
+{% block title %}Inquiries · Ribay Apartments{% endblock %}
+{% block heading %}Inquiries{% endblock %}
+{% block subheading %}Questions sent from the “Send us an inquiry” form. Visitors don't need an account.{% endblock %}
+{% block body %}
+<div class="m-filter" role="tablist" aria-label="Filter inquiries">
+  {% for t in tabs %}<a class="m-pill {% if t.key == status %}on{% endif %}" href="?status={{ t.key }}" {% if t.key == status %}aria-current="true"{% endif %}>{{ t.label }} <b>{{ t.count }}</b></a>{% endfor %}
+</div>
+<div class="m-reqs">
+  {% for i in items %}
+  <article class="m-req st-{{ i.status }}">
+    <div class="m-req-top">
+      <i class="m-av" aria-hidden="true">{{ i.name|slice:":1"|upper }}</i>
+      <div class="m-req-who"><strong>{{ i.name }}</strong><span class="m-muted">sent {{ i.created_at|timesince }} ago{% if i.room_number %} · about Room {{ i.room_number }}{% endif %}</span></div>
+      <span class="m-st {{ i.status }}">{{ i.get_status_display }}</span>
+    </div>
+    <div class="m-req-grid">
+      <div><span class="m-k">Phone</span>{% if i.phone %}<a href="tel:{{ i.tel }}">{{ i.phone }}</a>{% else %}<span class="m-muted">Not given</span>{% endif %}</div>
+      <div><span class="m-k">Email</span>{% if i.email %}<a href="mailto:{{ i.email }}">{{ i.email }}</a>{% else %}<span class="m-muted">Not given</span>{% endif %}</div>
+    </div>
+    <blockquote class="m-quote">{{ i.message }}</blockquote>
+    <div class="m-req-actions">
+      {% if i.email %}<a class="btn sm pri" href="{{ i.gmail_url }}" target="_blank" rel="noopener">Reply in Gmail</a>{% endif %}
+      {% if i.phone %}<a class="btn sm" href="tel:{{ i.tel }}">Call</a><a class="btn sm" href="sms:{{ i.tel }}">Text</a>{% endif %}
+      <form class="m-statusform" method="post" action="{% url 'manage_inquiry_status' i.pk %}">{% csrf_token %}
+        <select name="status" aria-label="Status">{% for k, l in status_choices %}<option value="{{ k }}" {% if k == i.status %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+        <button class="btn sm" type="submit">Save</button>
+      </form>
+      <form method="post" action="{% url 'manage_inquiry_delete' i.pk %}" onsubmit="return confirm('Delete this inquiry?')">{% csrf_token %}<button class="btn sm" type="submit">Delete</button></form>
+    </div>
+  </article>
+  {% empty %}<p class="m-empty">No inquiries here yet. They show up as soon as a visitor sends one.</p>{% endfor %}
+</div>
+{% endblock %}

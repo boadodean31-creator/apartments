@@ -43,7 +43,7 @@
   <div class="grid">
     {% for r in open_rooms %}
     <a class="card linkcard" href="{% url 'room_detail' r.number %}">
-      {% with photo=r.photos.all.0 %}{% if photo %}<img src="{{ photo.image.url }}" alt="" loading="lazy">{% else %}<div class="ph"></div>{% endif %}{% endwith %}
+      {% with photo=r.photos.all.0 %}{% if photo %}<img src="{{ photo.image.url }}" alt="Room {{ r.number }}" loading="lazy">{% else %}<div class="ph"></div>{% endif %}{% endwith %}
       <div class="body"><div class="row"><h3>Room {{ r.number }}</h3><span class="price">₱{{ r.rent|floatformat:"0g" }}</span></div><div class="meta">{{ r.get_floor_display }} · {{ r.room_type }}</div></div>
     </a>
     {% endfor %}

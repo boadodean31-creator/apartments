@@ -1,6 +1,6 @@
 {% extends "rooms/base.html" %}
 {% load static %}
-{% block head %}<link rel="stylesheet" href="{% static 'rooms/manage.css' %}">{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'rooms/manage.css' %}"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=1">{% endblock %}
 {% block content %}
 <div class="m-wrap">
   <div class="m-top">
@@ -14,6 +14,9 @@
   <nav class="m-tabs" aria-label="Manage sections">
     <a href="{% url 'manage_home' %}" {% if tab == 'rooms' %}aria-current="page"{% endif %}>Rooms</a>
     <a href="{% url 'manage_requests' %}" {% if tab == 'requests' %}aria-current="page"{% endif %}>Viewing requests<span class="m-tabbadge" data-aw-count {% if not new_requests %}hidden{% endif %}>{{ new_requests }}</span></a>
+    <a href="{% url 'manage_inquiries' %}" {% if tab == 'inquiries' %}aria-current="page"{% endif %}>Inquiries{% if new_inquiries %}<span class="m-tabbadge">{{ new_inquiries }}</span>{% endif %}</a>
+    <a href="{% url 'manage_reviews' %}" {% if tab == 'reviews' %}aria-current="page"{% endif %}>Reviews</a>
+    <a href="{% url 'manage_info' %}" {% if tab == 'info' %}aria-current="page"{% endif %}>Costs &amp; chat</a>
     <a href="{% url 'manage_floors' %}" {% if tab == 'floors' %}aria-current="page"{% endif %}>Floors</a>
     <a href="{% url 'manage_banner' %}" {% if tab == 'banner' %}aria-current="page"{% endif %}>Banner</a>
     <a href="{% url 'manage_images' %}" {% if tab == 'images' %}aria-current="page"{% endif %}>Page images</a>

@@ -1,7 +1,7 @@
 {% extends "rooms/base.html" %}
 {% block title %}Room {{ room.number }} · Ribay Apartments{% endblock %}
 {% load static %}
-{% block head %}<meta name="format-detection" content="telephone=no"><link rel="stylesheet" href="{% static 'rooms/booking.css' %}"><link rel="stylesheet" href="{% static 'rooms/detail.css' %}"><link rel="stylesheet" href="{% static 'rooms/room-layout.css' %}?v=21"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'rooms/room-top.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-swap.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/location-dialog.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-mobile.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/room-phone.css' %}?v=2">{% endblock %}
+{% block head %}<meta name="format-detection" content="telephone=no"><link rel="stylesheet" href="{% static 'rooms/booking.css' %}"><link rel="stylesheet" href="{% static 'rooms/detail.css' %}"><link rel="stylesheet" href="{% static 'rooms/room-layout.css' %}?v=21"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'rooms/room-top.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-swap.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/location-dialog.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-mobile.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/room-phone.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=1">{% endblock %}
 {% block header %}
 <header class="rn">
   <div class="rn-in">
@@ -86,7 +86,7 @@
         </div>
         {% if photos|length > 1 %}
         <div class="thumbs">
-          {% for p in photos %}<button type="button" data-src="{{ p.image.url }}" aria-label="Show photo {{ forloop.counter }}"><img src="{{ p.image.url }}" alt=""></button>{% endfor %}
+          {% for p in photos %}<button type="button" data-src="{{ p.image.url }}" aria-label="Show photo {{ forloop.counter }}"><img src="{{ p.image.url }}" alt="Room {{ room.number }} photo {{ forloop.counter }}"></button>{% endfor %}
         </div>
         {% endif %}
       {% else %}
@@ -227,7 +227,7 @@
           <ul class="sim-list" tabindex="0" aria-label="Other rooms, scroll to see more">
             {% for r in other_rooms %}
             <li><a href="{% url 'room_detail' r.number %}"{% if r.status != 'available' %} class="is-taken"{% endif %}>
-              <span class="sim-img">{% if r.cover_url %}<img src="{{ r.cover_url }}" alt="" loading="lazy">{% endif %}</span>
+              <span class="sim-img">{% if r.cover_url %}<img src="{{ r.cover_url }}" alt="Room {{ r.number }}" loading="lazy">{% endif %}</span>
               <span class="sim-txt">
                 <b>Room {{ r.number }}</b>
                 <small>{{ r.get_floor_display }} &middot; {{ r.room_type }}</small>
@@ -249,6 +249,7 @@
 
 </div>
 
+{% include 'rooms/_inquiry.html' with inquiry_room=room.number %}
 {% if room.status == 'available' %}
 <div class="rd-bar" role="region" aria-label="Book a viewing">
   <div class="rd-bar-price"><span class="rd-bar-l">Price</span><strong>₱{{ room.rent|floatformat:"0g" }}<small>/month</small></strong></div>
@@ -277,7 +278,7 @@
       <ul class="loc-near">
         {% for p in landmarks %}
         <li><a href="{{ p.url }}" target="_blank" rel="noopener">
-          <span class="loc-thumb">{% if p.image %}<img src="{{ p.image }}" alt="" loading="lazy">{% else %}<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 22.5S4.5 15.4 4.5 9.6a7.5 7.5 0 0 1 15 0c0 5.8-7.5 12.9-7.5 12.9z"/><circle cx="12" cy="9.6" r="2.7" fill="#fff"/></svg>{% endif %}</span>
+          <span class="loc-thumb">{% if p.image %}<img src="{{ p.image }}" alt="{{ p.name }}" loading="lazy">{% else %}<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 22.5S4.5 15.4 4.5 9.6a7.5 7.5 0 0 1 15 0c0 5.8-7.5 12.9-7.5 12.9z"/><circle cx="12" cy="9.6" r="2.7" fill="#fff"/></svg>{% endif %}</span>
           <span class="loc-nt"><b>{{ p.name }}</b><small>{{ p.detail }}</small></span>
           <svg class="loc-out" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
         </a></li>
@@ -294,4 +295,4 @@
   </div>
 </dialog>
 <script src="{% static 'rooms/location-dialog.js' %}?v=2" defer></script>
-<script src="{% static 'rooms/room-layout.js' %}?v=15" defer></script><script src="{% static 'rooms/gallery.js' %}?v=5" defer></script><script src="{% static 'rooms/room-actions.js' %}?v=2" defer></script><script src="{% static 'rooms/spaces.js' %}?v=2" defer></script><script src="{% static 'rooms/mosaic.js' %}?v=1" defer></script><script src="{% static 'rooms/room-tabs.js' %}?v=1" defer></script><script src="{% static 'rooms/lightbox.js' %}?v=99" defer></script>{% if embed %}<script src="{% static 'rooms/video-autoplay.js' %}" defer></script>{% endif %}{% if room.status == 'available' %}{% include "rooms/book_dialog.html" %}<script src="{% static 'rooms/book.js' %}" defer></script>{% endif %}{% endblock %}
+<script src="{% static 'rooms/room-layout.js' %}?v=15" defer></script><script src="{% static 'rooms/gallery.js' %}?v=5" defer></script><script src="{% static 'rooms/room-actions.js' %}?v=2" defer></script><script src="{% static 'rooms/spaces.js' %}?v=2" defer></script><script src="{% static 'rooms/mosaic.js' %}?v=1" defer></script><script src="{% static 'rooms/room-tabs.js' %}?v=1" defer></script><script src="{% static 'rooms/lightbox.js' %}?v=99" defer></script><script src="{% static 'rooms/trust.js' %}?v=1" defer></script>{% if embed %}<script src="{% static 'rooms/video-autoplay.js' %}" defer></script>{% endif %}{% if room.status == 'available' %}{% include "rooms/book_dialog.html" %}<script src="{% static 'rooms/book.js' %}" defer></script>{% endif %}{% endblock %}
