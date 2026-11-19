@@ -83,3 +83,7 @@
 .tr-item p { margin: 8px 0 12px; }
 .tr-stars { color: #C98F00; font-weight: 800; margin-left: 6px; }
 .m-empty { padding: 26px; text-align: center; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 16px; }
+
+/* shown under the chat buttons when the Viber app does not open */
+.chat-note { margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; background: color-mix(in srgb, #7360F2 10%, transparent); color: var(--ink); font-size: 13.5px; line-height: 1.5; }
+.chat-note b { white-space: nowrap; }
