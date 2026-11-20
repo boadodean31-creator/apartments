@@ -21,13 +21,13 @@
 
   <form class="m-card" method="post" enctype="multipart/form-data" id="bannerform">{% csrf_token %}
     <h2>{% if site.banner %}Replace the photo{% else %}Add a photo{% endif %}</h2>
-    <div class="m-field">
-      <label for="banner">Choose a photo</label>
-      <input id="banner" type="file" name="banner" accept="image/*" required>
-      <small>Best: a wide, bright photo of the building or a nice room, at least 1600 px wide. We shrink it automatically so the page stays fast. A soft fade in your site's colours is added on the left, so the headline stays easy to read in light and dark mode.</small>
-    </div>
+    <label class="m-drop" data-auto>
+      <input id="banner" type="file" name="banner" accept="image/*" required aria-label="Choose a banner photo">
+      <span class="dz-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V5M7.500 9.500 12 5l4.500 4.500M4 16v3h16v-3"/></svg></span>
+      <b><u>Click to choose a photo</u> or drag it here</b>
+      <small>It uploads and goes live as soon as you pick it. Best: a wide, bright photo, at least 1600 px wide. We shrink it so the page stays fast.</small>
+    </label>
     <div class="m-preview" id="bpreview"></div>
-    <div class="m-save"><button class="btn pri" type="submit">Upload banner</button></div>
   </form>
 </div>
 <script>

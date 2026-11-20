@@ -1,6 +1,7 @@
 {% extends "rooms/manage/base.html" %}
 {% block title %}Manage rooms · Ribay Apartments{% endblock %}
 {% block heading %}Rooms{% endblock %}
+{% block subheading %}Switch a room between available and occupied, or open it to edit the details and photos.{% endblock %}
 {% block actions %}<a class="btn pri" href="{% url 'manage_room_new' %}">+ Add room</a>{% endblock %}
 {% block body %}
 {% if new_requests %}
@@ -10,11 +11,17 @@
   <span class="m-alert-go" aria-hidden="true">→</span>
 </a>
 {% endif %}
-<div class="m-stats">
-  <div class="m-stat"><b>{{ total }}</b><span>Total rooms</span></div>
-  <div class="m-stat"><b>{{ available }}</b><span>Available</span></div>
-  <div class="m-stat"><b>{{ occupied }}</b><span>Occupied</span></div>
+<div class="adm-stats">
+  <div class="adm-stat"><span class="si"><svg viewBox="0 0 24 24"><path d="M5 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M15 10h3a1 1 0 0 1 1 1v10M3 21h18M9 8h2M9 12h2M9 16h2"/></svg></span><div><b>{{ total }}</b><span>Total rooms</span></div></div>
+  <div class="adm-stat ok"><span class="si"><svg viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg></span><div><b>{{ available }}</b><span>Available now</span></div></div>
+  <div class="adm-stat busy"><span class="si"><svg viewBox="0 0 24 24"><path d="M12 11a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7zM5 20c0-3.500 3-6 7-6s7 2.500 7 6"/></svg></span><div><b>{{ occupied }}</b><span>Occupied</span></div></div>
 </div>
+
+<div class="adm-tools">
+  <label class="adm-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.500"/><path d="m16 16 4 4"/></svg><input id="roomSearch" type="search" placeholder="Search a room number or type" aria-label="Search rooms" autocomplete="off"></label>
+  <div class="adm-seg" id="roomSeg" role="group" aria-label="Filter rooms"><button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="available" aria-pressed="false">Available</button><button type="button" data-f="occupied" aria-pressed="false">Occupied</button></div>
+</div>
+<div class="m-empty big" id="roomNone" hidden>No rooms match your search.</div>
 
 {% for g in groups %}
 <section class="m-floor">
@@ -24,17 +31,17 @@
   </div>
   <div class="m-list">
     {% for r in g.rooms %}
-    <div class="m-row">
-      {% with photo=r.photos.all.0 %}{% if photo %}<img class="m-thumb" src="{{ photo.image.url }}" alt="">{% else %}<div class="m-thumb"></div>{% endif %}{% endwith %}
+    <div class="m-row" data-num="{{ r.number }}" data-status="{{ r.status }}" data-type="{{ r.room_type }}">
+      {% with photo=r.photos.all.0 %}{% if photo %}<img class="m-thumb" src="{{ photo.image.url }}" alt="" loading="lazy">{% else %}<div class="m-thumb"></div>{% endif %}{% endwith %}
       <div class="m-main">
         <strong>Room {{ r.number }}</strong>
         <span class="m-muted">{{ r.room_type }} · ₱{{ r.rent|floatformat:"0g" }} / month · {{ r.photos.all|length }} photo{{ r.photos.all|length|pluralize }}</span>
       </div>
-      <span class="badge {% if r.status != 'available' %}busy{% endif %}">{{ r.get_status_display }}</span>
+      <form method="post" action="{% url 'manage_room_status' r.pk %}">{% csrf_token %}
+        <button class="adm-sw" type="submit" role="switch" aria-checked="{% if r.status == 'available' %}true{% else %}false{% endif %}" title="Click to mark this room {% if r.status == 'available' %}occupied{% else %}available{% endif %}"><i></i><span>{{ r.get_status_display }}</span></button>
+      </form>
       <div class="m-btns">
-        <form method="post" action="{% url 'manage_room_status' r.pk %}">{% csrf_token %}
-          <button class="btn sm" type="submit">{% if r.status == 'available' %}Mark occupied{% else %}Mark available{% endif %}</button>
-        </form>
+        <a class="btn sm" href="{% url 'room_detail' r.number %}" target="_blank" rel="noopener">View</a>
         <a class="btn sm pri" href="{% url 'manage_room_edit' r.pk %}">Edit</a>
       </div>
     </div>

@@ -142,8 +142,42 @@ def photo_delete(request, pk):
     room_id = photo.room_id
     _drop_file(photo.image)
     photo.delete()
+    if request.headers.get("X-Requested-With") == "fetch":      # sent by the photo manager, no page reload
+        return JsonResponse({"ok": True})
     messages.success(request, "Photo deleted.")
     return redirect("manage_room_edit", pk=room_id)
+
+
+@site_admin_required
+@require_POST
+def photos_upload(request, pk):
+    """Instant upload from the photo manager: saves the pictures and answers with their ids and addresses."""
+    room = get_object_or_404(Room, pk=pk)
+    good, errors = check_images(request.FILES.getlist("photos"))
+    made = []
+    with transaction.atomic():
+        last = max(room.photos.values_list("position", flat=True), default=0)
+        for i, f in enumerate(good, start=1):
+            p = RoomPhoto.objects.create(room=room, image=f, position=last + i)
+            made.append({"id": p.pk, "url": p.image.url})
+    return JsonResponse({"photos": made, "errors": errors}, status=200 if made or not errors else 400)
+
+
+@site_admin_required
+@require_POST
+def photos_reorder(request, pk):
+    """Saves the order the admin dragged the photos into. The first one becomes the cover."""
+    room = get_object_or_404(Room, pk=pk)
+    ids = [int(x) for x in request.POST.get("order", "").split(",") if x.strip().isdigit()]
+    mine = {p.pk: p for p in room.photos.all()}
+    pos = 0
+    for pid in ids:
+        if pid in mine:
+            if mine[pid].position != pos:
+                mine[pid].position = pos
+                mine[pid].save(update_fields=["position"])
+            pos += 1
+    return JsonResponse({"ok": True})
 
 
 @site_admin_required

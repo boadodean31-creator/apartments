@@ -24,13 +24,6 @@
     <h3 class="m-sec"><span>3</span> Extras</h3>
     <div class="m-full">{% include "rooms/manage/_field.html" with f=form.video_url %}</div>
 
-    <div class="m-field">
-      <label for="photos">{% if room %}Add more photos{% else %}Photos{% endif %}</label>
-      <input id="photos" type="file" name="photos" accept="image/*" multiple>
-      <small>You can pick several at once. JPG or PNG, up to 8 MB each.</small>
-      <div class="m-preview" id="preview"></div>
-    </div>
-
     <div class="m-save">
       <button class="btn pri" type="submit">{% if room %}Save changes{% else %}Add room{% endif %}</button>
       <a class="btn" href="{% url 'manage_home' %}">Cancel</a>
@@ -51,32 +44,19 @@
         </div>
       </article>
     </div>
-    <div class="m-card">
-      <h2>Photos {% if photos %}<small>{{ photos|length }}</small>{% endif %}</h2>
-      {% if not room %}
-        <p class="m-muted">Choose photos on the left and they will be saved with the room. You can reorder or replace them afterwards.</p>
-      {% elif not photos %}
-        <p class="m-muted">No photos yet. Use “Add more photos” on the left.</p>
-      {% else %}
-        <p class="m-muted">The first photo is the cover shown on the website.</p>
-        <div class="m-photos">
-          {% for p in photos %}
-          <figure class="m-photo">
-            <img src="{{ p.image.url }}" alt="Photo {{ forloop.counter }}">
-            {% if forloop.first %}<span class="m-cover">Cover</span>{% endif %}
-            <figcaption>
-              {% if not forloop.first %}
-              <form method="post" action="{% url 'manage_photo_cover' p.pk %}">{% csrf_token %}<button class="btn sm" type="submit">Make cover</button></form>
-              {% endif %}
-              <form method="post" action="{% url 'manage_photo_replace' p.pk %}" enctype="multipart/form-data">{% csrf_token %}
-                <label class="btn sm">Replace<input type="file" name="image" accept="image/*" hidden onchange="this.form.submit()"></label>
-              </form>
-              <form method="post" action="{% url 'manage_photo_delete' p.pk %}" onsubmit="return confirm('Delete this photo?')">{% csrf_token %}<button class="btn sm danger" type="submit">Delete</button></form>
-            </figcaption>
-          </figure>
-          {% endfor %}
-        </div>
-      {% endif %}
+    <div class="m-card" id="photomgr"{% if room %} data-upload="{% url 'manage_photos_upload' room.pk %}" data-order="{% url 'manage_photos_order' room.pk %}" data-delete="{% url 'manage_photo_delete' 0 %}"{% endif %}>
+      {% csrf_token %}
+      <h2>Photos <small id="pmCount">{% if photos %}{{ photos|length }}{% endif %}</small></h2>
+      <label class="m-drop" data-manual="1">
+        <input type="file" accept="image/*" multiple aria-label="Add photos">
+        <span class="dz-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V5M7.500 9.500 12 5l4.500 4.500M4 16v3h16v-3"/></svg></span>
+        <b><u>Click to add photos</u> or drag them here</b>
+        <small>JPG or PNG, up to 8 MB each. {% if room %}They go live on the website right away.{% else %}They are saved together with the room.{% endif %}</small>
+      </label>
+      {% if not room %}<input type="file" name="photos" id="photos" form="roomform" multiple hidden>{% endif %}
+      <p class="pm-err" id="pmErr" role="alert" hidden></p>
+      <div class="pm" id="pm">{% for p in photos %}<div class="pm-item" draggable="true" data-id="{{ p.pk }}"><img src="{{ p.image.url }}" alt="Photo {{ forloop.counter }}"><span class="pm-tag">Cover</span><div class="pm-bar"><button type="button" class="mk" title="Make cover" aria-label="Make this the cover photo"><svg viewBox="0 0 24 24"><path d="m12 3 2.700 5.600 6.100.9-4.400 4.300 1 6.100L12 17l-5.400 2.900 1-6.100L3.200 9.500l6.100-.9z"/></svg></button><button type="button" class="del" title="Delete" aria-label="Delete photo"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3"/></svg></button></div></div>{% endfor %}</div>
+      <p class="pm-hint" id="pmHint" hidden>Drag photos to put them in order, or tap the star to make one the cover. The first photo is the one shown on the home page.</p>
     </div>
 
     {% if room %}

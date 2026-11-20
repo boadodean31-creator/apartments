@@ -13,8 +13,12 @@
     </div>
     <form method="post" enctype="multipart/form-data" class="m-slot-form">{% csrf_token %}
       <input type="hidden" name="slot" value="{{ s.field }}">
-      <input type="file" name="image" accept="image/*" required aria-label="Choose a picture for {{ s.title }}">
-      <button class="btn pri sm" type="submit">{% if s.image %}Replace{% else %}Upload{% endif %}</button>
+      <label class="m-drop" data-auto>
+        <input type="file" name="image" accept="image/*" required aria-label="Choose a picture for {{ s.title }}">
+        <span class="dz-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 16V5M7.500 9.500 12 5l4.500 4.500M4 16v3h16v-3"/></svg></span>
+        <b><u>{% if s.image %}Replace the picture{% else %}Upload a picture{% endif %}</u> or drag it here</b>
+        <small>Goes live as soon as you pick it.</small>
+      </label>
     </form>
     {% if s.image %}
     <form method="post" action="{% url 'manage_image_remove' %}" onsubmit="return confirm('Remove this picture and go back to the default?')" style="margin-top:10px">{% csrf_token %}
