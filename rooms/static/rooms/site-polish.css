@@ -32,9 +32,10 @@
 
   /* one heading size for every section title */
   main #rooms .ht h2, main .cost-sec h2, main .know-sec h2, main .steps-sec h2, main .rev-sec h2, main .faq-sec h2,
-  main #location .addr h2, main .nearby-sec .nb h2, main .inq-sec h2 {
+  main #location .addr h2, main .inq-sec h2 {
     font-size: clamp(28px, 2.5vw, 34px); line-height: 1.12; letter-spacing: -.02em; font-weight: 800; margin: 0 0 20px;
   }
+  /* "Everything you need is close by" keeps its own larger heading (nearby.css) */
   main .nearby-sec .nb { margin-top: 0; }
   main .nearby-sec .nb-view { aspect-ratio: 16 / 5.6; }
   main .nearby-sec .nb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
