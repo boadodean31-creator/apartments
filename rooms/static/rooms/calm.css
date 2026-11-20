@@ -1,13 +1,8 @@
-/* Calm, consistent look across the whole site. Loaded last, so it only refines: one typeface (Inter),
-   quieter headings, a balanced "What to know" block, and the "Your leasing contact" section.
-   To undo: delete this file and its <link> in base.html (and put the old font link back). */
+/* Calm, consistent look across the whole site. Loaded last, so it only refines: a balanced "What to know" block, and the "Your leasing contact" section.
+   To undo: delete this file and its <link> in base.html. */
 
-:root { --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-body *:not(svg):not(svg *) { font-family: var(--font) !important; }
-h1 { font-weight: 700; letter-spacing: -.03em; }
-h2 { font-weight: 700; letter-spacing: -.02em; }
-h3 { font-weight: 600; letter-spacing: -.01em; }
-body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+/* Fonts are back to the original headline font (Bricolage Grotesque) and body font (Instrument Sans).
+   The room page still uses its own simple font, set in room-top.css. */
 
 /* ---------- What to know: no empty space in the cards ---------- */
 .know { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: stretch; }
