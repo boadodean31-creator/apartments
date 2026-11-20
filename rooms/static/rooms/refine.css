@@ -86,8 +86,8 @@ footer.site-foot .foot-note { grid-column: 1 / -1; display: flex; justify-conten
       linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 9%),
       linear-gradient(90deg,
         color-mix(in srgb, var(--bg) 80%, transparent) 0%,
-        color-mix(in srgb, var(--bg) 60%, transparent) 16%,
-        color-mix(in srgb, var(--bg) 24%, transparent) 32%,
+        color-mix(in srgb, var(--bg) 66%, transparent) 16%,
+        color-mix(in srgb, var(--bg) 34%, transparent) 33%,
         color-mix(in srgb, var(--bg) 0%, transparent) 46%);
   }
   html body .has-banner .hero > div:first-child { text-shadow: 0 0 22px color-mix(in srgb, var(--bg) 80%, transparent), 0 0 4px color-mix(in srgb, var(--bg) 70%, transparent); }
@@ -116,6 +116,8 @@ footer.site-foot .foot-note { grid-column: 1 / -1; display: flex; justify-conten
   html body .has-banner .hero .bd .bd-detail { background: var(--surface); border-radius: 18px; }
   html body .has-banner .hero .bd .bd-actions .btn.bd-view { background: var(--accent) !important; color: #fff !important; border: 1.5px solid var(--accent) !important; box-shadow: 0 12px 20px -12px var(--accent) !important; }
   html body .has-banner .hero .bd .bd-actions .btn.bd-view:hover { filter: brightness(1.1); }
-  html body .has-banner .hero .bd .bd-actions .btn.bd-list { background: transparent !important; border: 1.5px solid transparent !important; box-shadow: none !important; color: var(--muted) !important; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-  html body .has-banner .hero .bd .bd-actions .btn.bd-list:hover { color: var(--accent) !important; transform: none; }
+  html body .has-banner .hero .bd .bd-actions .btn.bd-list { background: transparent !important; border: 1.5px solid transparent !important; box-shadow: none !important; color: var(--accent) !important; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  html body .has-banner .hero .bd .bd-actions .btn.bd-list::after { content: "↓"; transition: transform .2s; }
+  html body .has-banner .hero .bd .bd-actions .btn.bd-list:hover::after { transform: translateY(3px); }
+  html body .has-banner .hero .bd .bd-actions .btn.bd-list:hover { color: var(--accent) !important; transform: none; background: color-mix(in srgb, var(--accent) 8%, transparent) !important; }
 }
