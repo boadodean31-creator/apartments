@@ -1,0 +1,11 @@
+{% comment %}"Ready to see your room?" band above the footer (home page and room pages).{% endcomment %}
+<section class="cta-band" aria-labelledby="cta-h"><div class="wrap cta-in">
+  <div class="cta-txt">
+    <h2 id="cta-h">Ready to see your room?</h2>
+    <p>Visiting is free and there is no obligation. Pick a room, choose a time, and meet our leasing staff.</p>
+  </div>
+  <div class="cta-acts">
+    <a class="btn cta-main" href="{% url 'home' %}#rooms">View available rooms</a>
+    <a class="btn cta-ghost" href="tel:{{ contact_tel }}">Call {{ contact_phone }}</a>
+  </div>
+</div></section>

@@ -196,6 +196,8 @@ def home(request):
     rooms = list(Room.objects.prefetch_related("photos").order_by("floor", "number"))
     for r in rooms:   # first two highlights (e.g. "Aircon, Private bath") shown on the room card
         r.card_feats = ", ".join(f["label"] for f in room_features(r)[:2])
+        if not r.card_feats:   # no highlights typed in for this room: show what the whole building includes
+            r.card_feats = "Wi-Fi, water and CCTV included"
     floors = floor_groups(rooms)
     context = {
         "rooms": rooms,

@@ -6,6 +6,11 @@
       <h2 id="inq-h">Send us an inquiry</h2>
       <p>No account needed. Tell us what you'd like to know about the rooms, the price or a visit, and we'll reply by phone or email{% if contact_reply %} — usually {{ contact_reply|lower }}{% endif %}.</p>
       {% include 'rooms/_chat.html' %}
+      <ol class="inq-next" aria-label="What happens next">
+        <li><b>You send your question</b><span>It takes about a minute. No account needed.</span></li>
+        <li><b>We reply</b><span>By phone or email{% if contact_reply %}, usually {{ contact_reply|lower }}{% endif %}.</span></li>
+        <li><b>Visit if you like it</b><span>Viewing is free, with no obligation.</span></li>
+      </ol>
       <p class="inq-alt">Prefer to talk? Call <a href="tel:{{ contact_tel }}">{{ contact_phone }}</a>{% if viewing_hours %} · {{ viewing_hours }}{% endif %}</p>
     </div>
     <form class="inq-form" id="inq-form" method="post" action="{% url 'send_inquiry' %}" novalidate>{% csrf_token %}
@@ -15,7 +20,7 @@
       <label>Your name<input name="name" maxlength="80" autocomplete="name" required></label>
       <div class="inq-two">
         <label>Phone<input name="phone" type="tel" inputmode="tel" maxlength="30" autocomplete="tel" placeholder="0917 123 4567"></label>
-        <label>Email <small>(optional if you gave a phone)</small><input name="email" type="email" maxlength="254" autocomplete="email"></label>
+        <label>Email<input name="email" placeholder="Optional if you gave a phone" type="email" maxlength="254" autocomplete="email"></label>
       </div>
       <label>Your question<textarea name="message" rows="4" maxlength="1000" required placeholder="{% if inquiry_room %}Is Room {{ inquiry_room }} still open? Can I visit this week?{% else %}Which rooms are open? What is the monthly rent?{% endif %}"></textarea></label>
       <p class="inq-msg" id="inq-msg" role="status" aria-live="polite" hidden></p>

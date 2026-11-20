@@ -12,7 +12,7 @@
 {% block head %}{% endblock %}
 <link rel="stylesheet" href="{% static 'rooms/mobile.css' %}?v=16">
 <link rel="stylesheet" href="{% static 'rooms/account.css' %}?v=2">
-<link rel="stylesheet" href="{% static 'rooms/site-polish.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'rooms/site-polish.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/refine.css' %}?v=1">
 <script>/* light mode is the default; dark only if the visitor chose it with the toggle (saved in localStorage) */var t="light";try{t=localStorage.getItem("theme")||"light"}catch(e){}document.documentElement.dataset.theme=t;</script>
 </head>
 <body>
@@ -38,16 +38,21 @@
 
 <main id="top">{% block content %}{% endblock %}</main>
 
-<footer><div class="wrap foot">
-  <div class="foot-brand"><span class="logo-mark" aria-hidden="true"><img src="{% static 'rooms/logo.svg' %}" alt="" width="38" height="38"></span>Ribay Apartments</div>
+{% block prefooter %}{% endblock %}
+<footer class="site-foot"><div class="wrap foot">
+  <div class="foot-brand-col">
+    <div class="foot-brand"><span class="logo-mark" aria-hidden="true"><img src="{% static 'rooms/logo.svg' %}" alt="" width="38" height="38"></span>Ribay Apartments</div>
+    <p class="foot-blurb">Clean, secure rooms for rent in Cainta, Rizal. Wi-Fi, water and 24/7 CCTV included.</p>
+  </div>
   {% if foot %}<div class="foot-info">
     <p class="fi-h">Visit or call</p>
     {% if foot.address %}<p>{{ foot.address }}</p>{% endif %}
     {% if foot.hours %}<p>{{ foot.hours }}</p>{% endif %}
     <p><a href="tel:{{ foot.tel }}">{{ foot.phone }}</a>{% if foot.email %}<br><a href="mailto:{{ foot.email }}">{{ foot.email }}</a>{% endif %}</p>
   </div>{% endif %}
-  <nav class="foot-links" aria-label="Footer"><a href="{% url 'home' %}#rooms">Rooms</a><a href="{% url 'home' %}#location">Location</a><a href="{% url 'privacy' %}">Privacy</a><a href="{% url 'terms' %}">Terms</a><a href="#top">Back to top</a></nav>
-  <div class="foot-note">Cainta, Rizal &middot; &copy; {% now "Y" %} Ribay Apartments</div>
+  <nav class="foot-links" aria-label="Explore"><p class="fi-h">Explore</p><a href="{% url 'home' %}#rooms">Rooms</a><a href="{% url 'home' %}#location">Location</a><a href="{% url 'home' %}#nearby">Landmarks</a><a href="{% url 'home' %}#inquiry">Send an inquiry</a></nav>
+  <nav class="foot-links" aria-label="Legal"><p class="fi-h">Good to know</p><a href="{% url 'privacy' %}">Privacy Policy</a><a href="{% url 'terms' %}">Terms of Use</a><a href="#top">Back to top</a></nav>
+  <div class="foot-note"><span>&copy; {% now "Y" %} Ribay Apartments &middot; Cainta, Rizal, Philippines</span><span>Rooms, prices and availability are confirmed directly with our leasing staff.</span></div>
 </div></footer>
 
 

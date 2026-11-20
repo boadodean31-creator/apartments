@@ -1,0 +1,70 @@
+/* ===== Refine: room cards, section headers, landmarks, inquiry, call-to-action band, footer =====
+   To undo: delete this file and its <link> in base.html. */
+
+/* ---- room cards: bigger type, clearer hierarchy ---- */
+@media (min-width: 961px) {
+  #rooms .ht h2 { font-size: clamp(30px, 2.8vw, 38px); }
+  #rooms .ht p, #rooms .ht .sub { font-size: 15.5px; }
+  .grid .card { border: 1px solid var(--line); box-shadow: 0 2px 6px rgba(15, 23, 42, .05), 0 10px 24px -16px rgba(15, 23, 42, .18); }
+  .grid .card .body { padding: 18px 20px 20px; }
+  .grid .card h3 { font-size: 21px; }
+  .grid .card .meta { font-size: 15.5px; gap: 9px; margin: 12px 0 20px; }
+  .grid .card .meta span.m-feat { color: var(--accent); font-weight: 600; }
+  .grid .card .row .price { font-size: 25px; font-weight: 800; letter-spacing: -.02em; }
+  .grid .card .row .price small { font-size: 14px; font-weight: 500; color: var(--muted); }
+  .grid .card .row .btn { padding: 11px 18px; font-size: 14.5px; border-radius: 999px; }
+  .grid .card .thumb img, .grid .card .thumb .ph { aspect-ratio: 3 / 2; }
+  .grid .card .badge { font-size: 13px; padding: 5px 12px 5px 10px; }
+}
+
+/* ---- landmarks: roomier cards and text ---- */
+@media (min-width: 961px) {
+  main .nearby-sec .nb-grid { gap: 22px; }
+  main .nearby-sec .nb-view { aspect-ratio: 16 / 7; }
+}
+
+/* ---- inquiry ---- */
+.inq-grid { padding: clamp(24px, 3.4vw, 44px); }
+.inq-intro p { font-size: 16px; }
+.inq-form label { font-size: 14.5px; }
+.inq-form input, .inq-form textarea { font-size: 16px; padding: 13px 15px; }
+.inq-send { font-size: 17px; padding: 15px; border-radius: 999px; }
+.inq-legal { font-size: 13px; }
+.inq-next { list-style: none; counter-reset: s; margin: 22px 0 18px; padding: 0; display: grid; gap: 16px; }
+.inq-next li { counter-increment: s; position: relative; display: grid; gap: 2px; padding-left: 48px; }
+.inq-next li::before { content: counter(s); position: absolute; left: 0; top: 1px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); font-weight: 800; }
+.inq-next b { font-size: 15.5px; }
+.inq-next span { font-size: 14.5px; color: var(--muted); }
+
+/* ---- call-to-action band ---- */
+.cta-band { margin-top: 24px; background: var(--accent); color: #fff; }
+.cta-in { display: flex; align-items: center; justify-content: space-between; gap: 22px 40px; flex-wrap: wrap; padding-top: 48px; padding-bottom: 48px; }
+.cta-txt h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 800; color: #fff; }
+.cta-txt p { margin: 10px 0 0; max-width: 52ch; font-size: 16.5px; color: rgba(255, 255, 255, .86); }
+.cta-acts { display: flex; gap: 12px; flex-wrap: wrap; }
+.cta-band .btn { padding: 14px 24px; font-size: 16px; border-radius: 999px; font-weight: 700; text-decoration: none; }
+.cta-band .cta-main { background: #fff; color: var(--accent); border-color: #fff; }
+.cta-band .cta-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, .6); }
+@media (hover: hover) { .cta-band .cta-main:hover { filter: brightness(.95); } .cta-band .cta-ghost:hover { background: rgba(255, 255, 255, .12); } }
+:root[data-theme="dark"] .cta-band { background: #0B3B2E; }
+:root[data-theme="dark"] .cta-band .cta-main { color: #0B3B2E; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .cta-band { background: #0B3B2E; } :root:not([data-theme="light"]) .cta-band .cta-main { color: #0B3B2E; } }
+@media (max-width: 560px) { .cta-acts, .cta-acts .btn { width: 100%; text-align: center; justify-content: center; } }
+
+/* ---- footer ---- */
+footer.site-foot { padding: 0; border-top: 0; }
+footer.site-foot .wrap.foot { display: grid; grid-template-columns: 1.3fr 1.5fr .8fr .9fr; gap: 32px 48px; align-items: start; padding-top: 56px; padding-bottom: 28px; }
+footer.site-foot .foot-brand { font-size: 20px; }
+footer.site-foot .foot-blurb { margin: 14px 0 0; max-width: 34ch; font-size: 15px; line-height: 1.6; color: var(--muted); }
+footer.site-foot .foot-info { display: block; font-size: 15px; line-height: 1.6; }
+footer.site-foot .fi-h { margin: 0 0 12px; font-size: 12.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--ink); }
+footer.site-foot .foot-links { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-size: 15px; }
+footer.site-foot .foot-links a { color: var(--muted); }
+footer.site-foot .foot-links a:hover { color: var(--accent); }
+footer.site-foot .foot-note { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid var(--line); font-size: 13.5px; }
+@media (max-width: 960px) {
+  footer.site-foot .wrap.foot { grid-template-columns: 1fr 1fr; gap: 28px 24px; padding-top: 40px; }
+  footer.site-foot .foot-brand-col { grid-column: 1 / -1; }
+  footer.site-foot .foot-info { display: block; }   /* overrides the earlier "hide on phones" rule */
+}
+@media (max-width: 520px) { footer.site-foot .wrap.foot { grid-template-columns: 1fr; } footer.site-foot .foot-note { flex-direction: column; } }

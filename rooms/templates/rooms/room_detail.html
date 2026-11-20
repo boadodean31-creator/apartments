@@ -257,6 +257,7 @@
 </div>
 {% endif %}
 {% endblock %}
+{% block prefooter %}{% include 'rooms/_cta.html' %}{% endblock %}
 {% block scripts %}<dialog class="loc-dlg" id="locdlg" aria-labelledby="loc-title">
   <div class="loc-card">
     <button class="loc-x" type="button" data-loc-close aria-label="Close location"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
