@@ -1,0 +1,11 @@
+{% comment %}Home page: what it costs to move in (hidden until the admin fills it in).{% endcomment %}
+{% if cost_rows or is_site_admin %}
+<section class="cost-sec" id="costs" aria-labelledby="cost-h"><div class="wrap">
+  <span class="tr-eyebrow">No surprises</span>
+  <h2 id="cost-h">What it costs to move in</h2>
+  {% if cost_rows %}
+  <div class="cost-grid">{% for c in cost_rows %}<div class="cost-card cost-{{ c.key }}"><span class="cost-k">{{ c.label }}</span><strong>{{ c.value }}</strong></div>{% endfor %}</div>
+  {% if cost_notes %}<p class="cost-note">{{ cost_notes }}</p>{% endif %}
+  {% else %}<p class="cost-empty">Visitors can't see this section yet. <a href="{% url 'manage_info' %}">Add your deposit, advance, utilities and lease length</a>.</p>{% endif %}
+</div></section>
+{% endif %}

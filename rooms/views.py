@@ -202,6 +202,7 @@ def home(request):
         "floors": floors,
         "total": len(rooms),
         "available": sum(1 for r in rooms if r.status == "available"),
+        "grid_cols": 3 if (len(rooms) % 4 and len(rooms) % 3 == 0) else 4,   # 9 rooms -> 3 x 3, 8 -> 2 x 4, so no lone card on the last row
         "amenities": AMENITIES,
         "landmarks": (lms := nearby_landmarks()),
         "landmark_range": landmark_range(lms),

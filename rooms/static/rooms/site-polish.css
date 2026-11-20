@@ -1,0 +1,68 @@
+/* ===== Site polish =====
+   One button colour, one section rhythm and heading size, a fixed fact strip, a fuller footer.
+   Desktop only (961px and wider): phones keep their current layout until the phone pass.
+   To undo everything here: delete this file and its <link> in base.html. */
+
+.facts { display: none; }
+
+@media (min-width: 961px) {
+
+  /* every solid button (View room, Book, ...) uses the one brand green */
+  :root[data-theme="light"] { --solid: var(--accent); --solid-ink: #fff; }
+
+  /* the scrolling strip is for phones; desktop gets a calm fixed strip with real facts */
+  .marquee { display: none; }
+  .facts { display: block; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .facts ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .facts li { display: flex; align-items: center; gap: 14px; padding: 22px 24px; border-left: 1px solid var(--line); }
+  .facts li:first-child { border-left: 0; padding-left: 0; }
+  .facts .f-ico { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 10%, transparent); color: var(--accent); }
+  .facts .f-ico svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .facts li > div b { display: block; font-size: 16px; font-weight: 700; line-height: 1.25; color: var(--ink); }
+  .facts li > div span { display: block; margin-top: 1px; font-size: 13.5px; color: var(--muted); }
+
+  /* same vertical rhythm for every home section, separated by a hairline instead of coloured bands */
+  main #rooms, main .cost-sec, main .know-sec, main .steps-sec, main .rev-sec, main .faq-sec, main .inq-sec { padding: 76px 0; }
+  main #location { padding: 76px 0 36px; }
+  main .nearby-sec { padding: 0 0 76px; }
+  main .know-sec, main .steps-sec, main .rev-sec, main .faq-sec, main #location { border-top: 1px solid var(--line); }
+  main .steps-sec, main .know-sec { background: var(--bg); }
+  main .cost-sec, main .rev-sec { background: color-mix(in srgb, var(--accent) 4%, var(--bg)); }
+  main .inq-sec { border-top: 1px solid var(--line); }
+
+  /* one heading size for every section title */
+  main #rooms .ht h2, main .cost-sec h2, main .know-sec h2, main .steps-sec h2, main .rev-sec h2, main .faq-sec h2,
+  main #location .addr h2, main .nearby-sec .nb h2, main .inq-sec h2 {
+    font-size: clamp(28px, 2.5vw, 34px); line-height: 1.12; letter-spacing: -.02em; font-weight: 800; margin: 0 0 20px;
+  }
+  main .nearby-sec .nb { margin-top: 0; }
+  main .nearby-sec .nb-view { aspect-ratio: 16 / 5.6; }
+  main .nearby-sec .nb-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  /* room grid: 3 x 3 when there are 9 rooms (set by the home view), otherwise 4 across */
+  #grid.grid[data-cols="3"] { --cols: 3; }
+
+  /* footer: brand, how to reach us, links */
+  footer { border-top: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 3%, var(--bg)); }
+  footer .wrap.foot { display: grid; grid-template-columns: 1.1fr 1.4fr .9fr; gap: 24px 56px; align-items: start; padding-top: 48px; padding-bottom: 28px; }
+  footer .foot-info { font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+  footer .foot-info p { margin: 0 0 8px; }
+  footer .foot-info .fi-h { margin-bottom: 10px; font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+  footer .foot-info a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  footer .foot-info a:hover { text-decoration: underline; }
+  footer .foot-links { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 14.5px; }
+  footer .foot-note { grid-column: 1 / -1; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; }
+}
+@media (max-width: 960px) { footer .foot-info { display: none; } }   /* phones: footer unchanged for now */
+
+@media (min-width: 961px) {
+  /* a shorter hero so the fact strip is visible without scrolling */
+  .has-banner .hero { min-height: clamp(520px, calc(100svh - 240px), 720px); }
+
+  /* "Get directions" uses the brand green like every other main button */
+  main .addr .cta .btn.pri { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 12px 20px -14px var(--accent); }
+  main .addr .cta .btn.pri:hover { filter: brightness(.92); background: var(--accent); border-color: var(--accent); }
+}
+
+/* inquiry form: the "(optional...)" hint sits beside the Email label so Phone and Email labels line up */
+.inq-two label small { display: inline; margin-left: 6px; font-size: 12.5px; }

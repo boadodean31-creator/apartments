@@ -1,0 +1,15 @@
+{% comment %}Home page: tenant reviews (hidden until the admin adds one).{% endcomment %}
+{% if reviews or is_site_admin %}
+<section class="rev-sec" id="reviews" aria-labelledby="rev-h"><div class="wrap">
+  <span class="tr-eyebrow">From our tenants</span>
+  <h2 id="rev-h">What tenants say{% if review_avg %} <span class="rev-avg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m12 2.500 2.900 6 6.600.9-4.800 4.600 1.200 6.500L12 17.300 6.100 20.500l1.200-6.500L2.500 9.400l6.600-.9z"/></svg>{{ review_avg }} <small>({{ review_count }})</small></span>{% endif %}</h2>
+  {% if reviews %}
+  <div class="rev-grid">{% for r in reviews %}
+    <figure class="rev-card"><div class="rev-stars" role="img" aria-label="{{ r.rating }} out of 5 stars">{% for i in "12345" %}<svg viewBox="0 0 24 24" class="{% if forloop.counter > r.rating %}off{% endif %}" aria-hidden="true"><path fill="currentColor" d="m12 2.500 2.900 6 6.600.9-4.800 4.600 1.200 6.500L12 17.300 6.100 20.500l1.200-6.500L2.500 9.400l6.600-.9z"/></svg>{% endfor %}</div>
+      <blockquote>{{ r.text }}</blockquote>
+      <figcaption><i class="rev-av" aria-hidden="true">{{ r.name|slice:":1"|upper }}</i><span><b>{{ r.name }}</b>{% if r.detail %}<small>{{ r.detail }}</small>{% endif %}</span></figcaption>
+    </figure>{% endfor %}
+  </div>
+  {% else %}<p class="cost-empty">Visitors can't see this section yet. <a href="{% url 'manage_reviews' %}">Add a real review from a tenant</a>.</p>{% endif %}
+</div></section>
+{% endif %}
