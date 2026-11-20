@@ -1,0 +1,56 @@
+/* Home hero, round 5 (desktop only, from 1100px wide; phones and small laptops keep their own layout):
+   1. top bar: a solid, full-width bar (no more floating capsule). Logo at the far left; Rooms, Location, Landmarks and Contact sit on the
+      right, next to the profile icon, which is always the last item. After the banner scrolls away it shrinks to the slim bar.
+   2. buttons on the photo: "View available rooms" is solid white with dark text, "See location" is an outline.
+   The shade over the left of the photo, the "Pick a room" card and the strip are unchanged (see hero-v3.css / hero-v4.css).
+   To undo: delete this file and its <link> in templates/rooms/base.html. */
+
+@media (min-width: 1100px) {
+
+  /* ---------- 1. Top bar: solid white, full width ---------- */
+  /* the bar keeps one fixed height box, so the page never jumps when it shrinks */
+  html body:has(.herowrap.has-banner) header,
+  html body:has(.herowrap.has-banner) header:not(.scrolled),
+  html:root[data-theme="dark"] body:has(.herowrap.has-banner) header { height: 72px; padding: 0; pointer-events: none; }
+  html body:has(.herowrap.has-banner) header .wrap.nav,
+  html body:has(.herowrap.has-banner) header .m-panel { pointer-events: auto; }
+
+  html body:has(.herowrap.has-banner) header .wrap.nav,
+  html body:has(.herowrap.has-banner) header.scrolled .wrap.nav {
+    width: 100%; max-width: none; height: 72px; margin: 0; padding: 0 32px; border-radius: 0;
+    background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none;
+    border: 0; border-bottom: 1px solid var(--line); box-shadow: none;
+  }
+  html body:has(.herowrap.has-banner) header.scrolled .wrap.nav { box-shadow: 0 12px 30px -26px rgba(15, 30, 25, .5); }
+
+  /* links on the right, next to the theme switch and the profile icon */
+  html body:has(.herowrap.has-banner) header .nav nav { margin-left: auto; margin-right: 12px; }
+
+  /* slim bar after the banner has scrolled away: same far-left logo and far-right profile */
+  html body:has(.herowrap.has-banner) header.compact .wrap.nav {
+    height: 58px; padding: 0 32px; background: var(--bg); box-shadow: 0 12px 30px -26px rgba(15, 30, 25, .5);
+  }
+
+  /* the bar is solid now, so the photo starts right under it (it used to run behind the floating bar) */
+  html body:has(.herowrap.has-banner) .herowrap.has-banner { margin-top: 0 !important; }
+  html body .has-banner .hero {
+    padding-top: clamp(84px, 10vh, 104px);
+    min-height: clamp(540px, calc(100svh - 150px), 760px);
+  }
+}
+
+/* ---------- 2. Buttons on the photo ---------- */
+@media (min-width: 1000px) {
+  html body .has-banner .hero .cta .btn.pri {
+    background: #fff; color: #10201a; border: 1.5px solid #fff;
+    box-shadow: 0 12px 26px -16px rgba(0, 0, 0, .55);
+  }
+  html body .has-banner .hero .cta .btn:not(.pri) {
+    background: transparent; color: #fff; border: 1.5px solid rgba(255, 255, 255, .72); box-shadow: none;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  @media (hover: hover) {
+    html body .has-banner .hero .cta .btn.pri:hover { background: #f3f3ef; color: #10201a; transform: translateY(-1px); }
+    html body .has-banner .hero .cta .btn:not(.pri):hover { background: rgba(255, 255, 255, .16); border-color: #fff; color: #fff; transform: translateY(-1px); }
+  }
+}
