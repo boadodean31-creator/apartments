@@ -22,7 +22,7 @@
       <span><span class="l1">Book a room that’s</span><span class="l2">easy to reach.</span></span>
       <span><span class="l1">Rent a room that’s</span><span class="l2">priced fairly.</span></span>
     </span></span></h1>
-    <p>Clean, secure rooms with Wi-Fi, water, and 24/7 CCTV included. See what’s open on each floor, then book a viewing.</p>
+    <p>Clean, secure rooms with Wi-Fi, water, and 24/7&nbsp;CCTV included. See what’s open on each floor, then book a viewing.</p>
     <div class="cta"><a class="btn pri" href="#rooms">View available rooms<svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn" href="#location"><svg class="btn-pin" viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 22.5S4.5 15.4 4.5 9.6a7.5 7.5 0 0 1 15 0c0 5.8-7.5 12.9-7.5 12.9z"/><circle cx="12" cy="9.6" r="2.9" fill="#fff"/></svg>See location</a></div>
     {% if rooms %}{% with cheapest=rooms|dictsort:"rent"|first %}<p class="from">Rent from <strong>₱{{ cheapest.rent|floatformat:"0g" }}</strong> per month</p>{% endwith %}{% endif %}
   </div>

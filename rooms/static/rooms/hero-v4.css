@@ -1,0 +1,65 @@
+/* Home hero, round 4 (desktop only):
+   1. menu: a clear "Log in" capsule for visitors who are not signed in, and the link of the section you are in is highlighted
+   2. banner: a lighter shade (still enough for the white text)
+   3. "Pick a room": a firmer card, evenly spaced floors, a capsule "See in list below"
+   4. hero paragraph: balanced line breaks
+   To undo: delete this file and its <link> in base.html. */
+
+.acct-lbl { display: none; }
+
+/* ---------- 1. Menu ---------- */
+@media (min-width: 1100px) {
+  html body header .nav > a.acct.acct-login {
+    width: auto; height: 42px; padding: 0 22px; gap: 8px; border: 0; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent); color: var(--accent-ink, #fff); font-size: 15px; font-weight: 600; letter-spacing: .005em;
+    box-shadow: 0 10px 20px -14px var(--accent);
+  }
+  html body header .nav > a.acct.acct-login .acct-lbl { display: inline; }
+  html body header .nav > a.acct.acct-login svg { display: none; }
+  @media (hover: hover) { html body header .nav > a.acct.acct-login:hover { color: var(--accent-ink, #fff); transform: translateY(-1px); box-shadow: 0 14px 24px -14px var(--accent); } }
+
+  /* the link of the section you are reading */
+  html body header .nav nav a.btn.navpill.on { color: var(--accent) !important; background: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+}
+
+/* ---------- 2. Banner shade: lighter ---------- */
+@media (min-width: 1000px) {
+  html body .herowrap.has-banner { --scrim: 42%; }
+  html body .herowrap.has-banner .herotint {
+    background:
+      linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 8%),
+      linear-gradient(90deg,
+        color-mix(in srgb, #08160f var(--scrim), transparent) 0%,
+        color-mix(in srgb, #08160f calc(var(--scrim) * .8), transparent) 28%,
+        color-mix(in srgb, #08160f calc(var(--scrim) * .3), transparent) 50%,
+        color-mix(in srgb, #08160f 0%, transparent) 68%);
+  }
+  /* a firmer shadow on the letters keeps the white text readable with the lighter shade */
+  html body .has-banner .hero > div:first-child { text-shadow: 0 1px 2px rgba(4, 14, 9, .45), 0 2px 20px rgba(4, 14, 9, .38); }
+  html body .has-banner .hero .cta .btn, html body .has-banner .hero .locpill { text-shadow: none; }
+}
+
+/* ---------- 3. "Pick a room" ---------- */
+@media (min-width: 1000px) {
+  html body .has-banner .hero .bd { background: color-mix(in srgb, var(--bg) 90%, transparent); }
+  html body .has-banner .hero .bd .bd-rm:not(.busy) { background: var(--bg); }
+  html body .has-banner .hero .bd .bd-rm.busy { background: var(--surface); }
+  html body .hero .bd .bd-legend { color: color-mix(in srgb, var(--ink) 80%, transparent); }
+
+  /* floors: the same space above, between and below the three rows */
+  html body .has-banner .hero .bd .bd-building { justify-content: space-evenly; gap: 0; margin-top: -13px; margin-bottom: -13px; }   /* cancels the card's own row gap, so top, between and bottom match */
+  html body .hero .bd .bd-floor { max-height: 92px; }
+
+  /* "See in list below" is a capsule, like the other buttons */
+  html body .has-banner .hero .bd .bd-actions .btn.bd-list {
+    background: transparent !important; border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent) !important; box-shadow: none;
+    border-radius: 999px; min-height: 42px; padding: 9px 18px; color: var(--accent); font-size: 14px; font-weight: 600;
+  }
+  html body .has-banner .hero .bd .bd-actions .btn.bd-list:hover { background: color-mix(in srgb, var(--accent) 8%, transparent) !important; text-decoration: none; }
+}
+
+/* ---------- 4. Hero paragraph: balanced lines ---------- */
+@media (min-width: 1000px) {
+  html body .hero > div:first-child p:not(.from) { text-wrap: balance; }
+}
