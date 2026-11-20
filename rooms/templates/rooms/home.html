@@ -112,6 +112,7 @@
     <div class="filters" role="group" aria-label="Filter rooms">
       <button class="chip" data-f="all" aria-pressed="true">All rooms<span class="n">{{ total }}</span></button>
       <button class="chip" data-f="avail" aria-pressed="false">Available<span class="n">{{ available }}</span></button>
+      <button class="chip chip-saved" data-f="saved" aria-pressed="false" hidden>Saved<span class="n">0</span></button>
       {% for f in floors reversed %}<button class="chip" data-f="{{ f.number }}" aria-pressed="false">{{ f.name }}<span class="n">{{ f.rooms|length }}</span></button>{% endfor %}
     </div>
   </div>
@@ -123,6 +124,10 @@
         {% with photo=r.photos.all.0 %}{% if photo %}<img src="{{ photo.image.url }}" alt="Room {{ r.number }}" loading="lazy">{% else %}<div class="ph"></div>{% endif %}{% endwith %}
         <span class="badge {% if r.status != 'available' %}busy{% endif %}">{{ r.get_status_display }}</span>
         {% with n=r.photos.all|length %}{% if n > 1 %}<span class="rc-count">{{ n }} photos</span>{% endif %}{% endwith %}
+        <div class="rc-act">
+          <button type="button" class="rc-btn rc-share" data-share data-url="{% url 'room_detail' r.number %}" data-title="Room {{ r.number }} · Ribay Apartments" aria-label="Share Room {{ r.number }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v6.5A2.5 2.5 0 0 0 7.500 21h9a2.500 2.500 0 0 0 2.500-2.500V12"/></svg></button>
+          <button type="button" class="rc-btn rc-save" data-save="{{ r.number }}" aria-pressed="false" aria-label="Save Room {{ r.number }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.350-9.500-8.900C.9 9 2.600 5.500 6 5.500c2.100 0 3.600 1.100 6 3.500 2.400-2.400 3.900-3.500 6-3.500 3.400 0 5.100 3.500 3.500 6.600C19 16.650 12 21 12 21z"/></svg></button>
+        </div>
       </div>
       <div class="body">
         <h3>Room {{ r.number }}</h3>
@@ -303,7 +308,7 @@
 <div class="callbar" role="region" aria-label="Contact us"><a class="btn" href="tel:{{ contact_tel }}"><svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call</a><a class="btn pri" href="sms:{{ contact_tel }}"><svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text us</a></div>
 {% include 'rooms/_dock.html' %}
 {% endblock %}
-{% block scripts %}<script src="{% static 'rooms/dock.js' %}?v=5" defer></script><script src="{% static 'rooms/trust.js' %}?v=2" defer></script><script src="{% static 'rooms/room-slides.js' %}?v=2" defer></script><script src="{% static 'rooms/building.js' %}?v=3b" defer></script>
+{% block scripts %}<script src="{% static 'rooms/save.js' %}?v=1" defer></script><script src="{% static 'rooms/dock.js' %}?v=5" defer></script><script src="{% static 'rooms/trust.js' %}?v=2" defer></script><script src="{% static 'rooms/room-slides.js' %}?v=2" defer></script><script src="{% static 'rooms/building.js' %}?v=3b" defer></script>
 <script>
 document.addEventListener("click", function (e) {
   var b = e.target.closest("[data-copy]"); if (!b) return;

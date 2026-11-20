@@ -27,7 +27,7 @@ let filt = "all";
 function applyFilter() {
   let shown = 0;
   document.querySelectorAll("#grid .card").forEach(c => {
-    const ok = filt === "all" || (filt === "avail" && c.dataset.avail === "1") || filt === c.dataset.floor;
+    const ok = filt === "all" || (filt === "avail" && c.dataset.avail === "1") || (filt === "saved" && c.classList.contains("is-saved")) || filt === c.dataset.floor;
     c.hidden = !ok;
     if (ok) replay(c, shown++ % 6);
   });
@@ -39,7 +39,7 @@ function applyFilter() {
     const chip = [...document.querySelectorAll(".chip")].find(x => x.dataset.f === filt);
     const name = chip ? chip.childNodes[0].textContent.trim() : "";
     const n = shown + (shown === 1 ? " room" : " rooms");
-    res.textContent = filt === "all" ? "Showing all " + n : filt === "avail" ? "Showing " + shown + " available " + (shown === 1 ? "room" : "rooms") : "Showing " + n + " on " + name;
+    res.textContent = filt === "all" ? "Showing all " + n : filt === "saved" ? "Showing " + n + " you saved" : filt === "avail" ? "Showing " + shown + " available " + (shown === 1 ? "room" : "rooms") : "Showing " + n + " on " + name;
   }
 }
 function setFilter(f) {
