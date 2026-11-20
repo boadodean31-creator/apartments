@@ -11,3 +11,11 @@
   }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
   els.forEach(function (el) { io.observe(el); });
 })();
+
+/* Clicking anywhere on an available room card opens that room (the "View room" button still works as before). */
+document.addEventListener('click', function (e) {
+  var card = e.target.closest && e.target.closest('#grid .card[data-avail="1"]');
+  if (!card || e.target.closest('a, button')) return;
+  var link = card.querySelector('a.btn');
+  if (link) location.href = link.href;
+});
