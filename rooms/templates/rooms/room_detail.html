@@ -1,7 +1,7 @@
 {% extends "rooms/base.html" %}
 {% block title %}Room {{ room.number }} · Ribay Apartments{% endblock %}
 {% load static %}
-{% block head %}<meta name="format-detection" content="telephone=no"><link rel="stylesheet" href="{% static 'rooms/booking.css' %}"><link rel="stylesheet" href="{% static 'rooms/detail.css' %}"><link rel="stylesheet" href="{% static 'rooms/room-layout.css' %}?v=21"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'rooms/room-top.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-swap.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/location-dialog.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-mobile.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/room-phone.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=2">{% endblock %}
+{% block head %}<meta name="format-detection" content="telephone=no"><link rel="stylesheet" href="{% static 'rooms/booking.css' %}"><link rel="stylesheet" href="{% static 'rooms/detail.css' %}"><link rel="stylesheet" href="{% static 'rooms/room-layout.css' %}?v=21"><link rel="stylesheet" href="{% static 'rooms/room-extras.css' %}?v=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="{% static 'rooms/room-top.css' %}?v=3"><link rel="stylesheet" href="{% static 'rooms/room-swap.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/location-dialog.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-mobile.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-polish.css' %}?v=7"><link rel="stylesheet" href="{% static 'rooms/room-phone.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/trust.css' %}?v=2"><link rel="stylesheet" href="{% static 'rooms/room-refine.css' %}?v=1">{% endblock %}
 {% block header %}
 <header class="rn">
   <div class="rn-in">
@@ -37,6 +37,12 @@
         <p class="rd-meta" aria-hidden="true">{{ room.get_floor_display }} · {{ room.room_type }}</p>
         <p class="rd-where"><svg class="rd-where-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><span class="rd-where-txt"><b>{{ short_address }}</b>{% if landmark %}<span class="rd-where-lm">{{ landmark }}</span>{% endif %}</span><a class="rd-where-go" href="#location" data-loc-link>Show map</a></p>
         {% if room.description %}<p class="rd-desc">{{ room.description }}</p>{% endif %}
+        <ul class="rd-facts" aria-label="Room facts">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg><b>{{ room.get_floor_display }}</b><span>Floor</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.6"/></svg><b>{{ room.room_type }}</b><span>Room type</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 9a14 14 0 0 1 19 0M5.8 12.4a9.3 9.3 0 0 1 12.4 0M9 15.7a4.7 4.7 0 0 1 6 0M12 19.2v.01"/></svg><b>Wi-Fi and water</b><span>Included</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.3-7 10-4-1.7-7-5.4-7-10V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/></svg><b>24/7 CCTV</b><span>Security</span></li>
+        </ul>
         </div>
         <div class="rd-acts rd-acts-hero" data-room="{{ room.number }}">
       <button class="rd-act rd-act-share" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
@@ -251,6 +257,7 @@
 
 </div>
 
+{% include 'rooms/_reviews.html' %}
 {% include 'rooms/_inquiry.html' with inquiry_room=room.number %}
 {% if room.status == 'available' %}
 <div class="rd-bar" role="region" aria-label="Book a viewing">
