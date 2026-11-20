@@ -172,3 +172,10 @@ footer.site-foot .foot-note { grid-column: 1 / -1; display: flex; justify-conten
   html body .facts .f-ico { width: 46px; height: 46px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); }
   html body .facts .f-ico svg { width: 22px; height: 22px; stroke-width: 1.7; }
 }
+
+/* illustrated glance icons (no tile) */
+@media (min-width: 761px) {
+  html body .facts .f-ico { width: 54px; height: 54px; background: none; border-radius: 0; color: inherit; }
+  html body .facts .f-ico svg { width: 52px; height: 52px; stroke: none; fill: none; overflow: visible; filter: drop-shadow(0 2px 2px rgba(15,23,42,.12)); transition: transform .3s cubic-bezier(.3,1.4,.5,1); }
+  html body .facts li:hover .f-ico svg { transform: translateY(-3px) rotate(-4deg) scale(1.06); }
+}
