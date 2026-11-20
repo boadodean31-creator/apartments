@@ -13,7 +13,10 @@
 .rd-card .rd-cta[disabled] svg { display: none; }
 @media (hover: hover) { .rd-card .rd-cta:hover svg { transform: rotate(-8deg) scale(1.06); } }
 
-/* location card: no mystery space above the title */
+/* location card: the home page's "#location" section rule (76px top, 0 sides) was leaking into this card */
+main .rd #location.rd-loc { padding: 24px; border-top: 1px solid var(--line); }
+
+/* (old note) location card: no mystery space above the title */
 .rd-loc { display: block; }
 .rd-loc > h2 { margin-top: 0; padding-top: 0; line-height: 1.2; }
 .rd-loc > *:first-child { margin-top: 0; }
@@ -26,3 +29,24 @@
   .rd-mosaic { border-radius: 22px; }
   .rd-card { border-radius: 22px; }
 }
+
+@media (min-width: 901px) {
+  /* compact title row, so the photos start high on the screen and are bigger */
+  .rd-hero-head { align-items: center; margin-bottom: 16px; }
+  .rd-hero-id { display: grid; grid-template-columns: auto 1fr; column-gap: 16px; row-gap: 4px; align-items: center; }
+  .rd-hero-id .rd-ttl { grid-column: 1; grid-row: 1; font-size: clamp(32px, 3vw, 44px); }
+  .rd-hero-id .rd-status { grid-column: 2; grid-row: 1; justify-self: start; margin: 0; }
+  .rd-hero-id .rd-meta { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: 17px; color: var(--muted); }
+  .rd-acts-hero { padding-top: 0; align-self: center; }
+  .rd-mosaic { height: clamp(420px, 38vw, 580px); }
+  .rd-sidemain { margin-top: 0; }
+  .rd-hero-info { margin-top: 28px; }
+  .rd-hero-info .rd-desc { margin: 0; max-width: 64ch; font-size: 17px; line-height: 1.65; color: var(--ink); opacity: .86; }
+  .rd-hero-info .rd-facts { margin-top: 24px; }
+}
+@media (max-width: 900px) {
+  .rd-hero-info .rd-desc { display: none; }
+  .rd-hero-info .rd-facts { margin-top: 16px; gap: 14px 24px; }
+}
+/* Share / Save: same line icons as the rest, clearer size */
+.rd-act svg { width: 19px; height: 19px; stroke-width: 1.7; }
