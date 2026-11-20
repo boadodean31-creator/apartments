@@ -198,3 +198,11 @@ label.btn{cursor:pointer;display:inline-block}
 .m-sp-pick input:focus-visible + img{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent)}
 
 .m-field textarea{resize:vertical;min-height:84px;line-height:1.45}
+
+/* Viewing requests: numbers at the top and the spreadsheet download */
+.m-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 12px; align-items: stretch; margin: 0 0 20px; }
+.m-stat { border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; background: var(--bg); }
+.m-stat b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+.m-stat span { color: var(--muted); font-size: 13.5px; }
+.m-stat-dl { align-self: center; white-space: nowrap; }
+@media (max-width: 900px) { .m-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .m-stat-dl { grid-column: 1 / -1; text-align: center; } }

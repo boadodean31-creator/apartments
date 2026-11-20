@@ -27,6 +27,7 @@ urlpatterns = [
     path("manage/photos/<int:pk>/replace/", m.photo_replace, name="manage_photo_replace"),
     path("manage/photos/<int:pk>/delete/", m.photo_delete, name="manage_photo_delete"),
     path("manage/requests/", m.requests_list, name="manage_requests"),
+    path("manage/requests/export.csv", m.requests_csv, name="manage_requests_csv"),
     path("manage/requests/poll/", m.requests_poll, name="manage_requests_poll"),
     path("manage/requests/<int:pk>/status/", m.request_status, name="manage_request_status"),
     path("manage/requests/<int:pk>/delete/", m.request_delete, name="manage_request_delete"),

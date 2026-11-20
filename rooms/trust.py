@@ -5,7 +5,7 @@ from urllib.parse import quote
 
 from django.conf import settings
 from django.core.cache import cache
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage, send_mail
 from django.db import connection
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -93,6 +93,89 @@ def _notify(inq):
         send_mail(f"New inquiry from {inq.name}", body, getattr(settings, "DEFAULT_FROM_EMAIL", None), to, fail_silently=True)
     except Exception:
         pass   # the inquiry is already saved; never fail the visitor because email is down
+
+
+# ---------- viewing requests: alert the staff, answer the renter, send a calendar file once confirmed ----------
+SLOT_TIMES = {"morning": ((9, 0), (12, 0)), "afternoon": ((13, 0), (16, 0)), "late": ((16, 0), (18, 0))}
+
+
+def _staff_recipients():
+    site = SiteSetting.load()
+    if site.contact_email:
+        return [site.contact_email]
+    if getattr(settings, "ADMIN_EMAILS", None):
+        return [settings.ADMIN_EMAILS[0]]
+    return []
+
+
+def _ics_text(s):
+    return str(s).replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,").replace("\n", "\\n")
+
+
+def viewing_ics(vr):
+    """A small calendar file for the renter's phone. Times are Philippine time (UTC+8), written as UTC."""
+    import datetime as dt
+
+    (sh, sm), (eh, em) = SLOT_TIMES.get(vr.preferred_slot, SLOT_TIMES["morning"])
+    start = dt.datetime.combine(vr.preferred_date, dt.time(sh, sm)) - dt.timedelta(hours=8)
+    end = dt.datetime.combine(vr.preferred_date, dt.time(eh, em)) - dt.timedelta(hours=8)
+    stamp = dt.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    where = getattr(settings, "APARTMENT_ADDRESS", "")
+    lines = [
+        "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Ribay Apartments//Viewing//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+        "BEGIN:VEVENT", f"UID:viewing-{vr.pk}@ribay-apartments", f"DTSTAMP:{stamp}",
+        f"DTSTART:{start:%Y%m%dT%H%M%SZ}", f"DTEND:{end:%Y%m%dT%H%M%SZ}",
+        "SUMMARY:" + _ics_text(f"Room {vr.room_number} viewing at Ribay Apartments"),
+        "LOCATION:" + _ics_text(where),
+        "DESCRIPTION:" + _ics_text("Free viewing, no obligation. Please call our staff if you need to change the time."),
+        "END:VEVENT", "END:VCALENDAR",
+    ]
+    return "\r\n".join(lines) + "\r\n"
+
+
+def _viewing_when(vr):
+    return f"{vr.preferred_date:%A, %B %d, %Y} ({vr.get_preferred_slot_display()})"
+
+
+def _send(subject, body, to, attach=None):
+    if not to:
+        return
+    try:
+        msg = EmailMessage(subject, body, getattr(settings, "DEFAULT_FROM_EMAIL", None), to)
+        if attach:
+            msg.attach(*attach)
+        msg.send(fail_silently=True)
+    except Exception:
+        pass   # the request is already saved; never fail the visitor because email is down
+
+
+def notify_viewing(vr):
+    """New viewing request: tell the staff, and tell the renter we got it."""
+    _send(f"New viewing request: Room {vr.room_number} ({vr.name})",
+          f"A new viewing request came in on the Ribay Apartments website.\n\nName: {vr.name}\nPhone: {vr.phone}\n"
+          f"Email: {vr.email or '-'}\nRoom: {vr.room_number}\nWants to visit: {_viewing_when(vr)}\n\n"
+          f"Message: {vr.message or '-'}\n\nOpen Manage > Viewing requests to reply.\n", _staff_recipients())
+    if vr.email:
+        from .views import contact_details
+        c = contact_details()
+        _send(f"We got your viewing request for Room {vr.room_number}",
+              f"Hi {vr.name},\n\nThank you for your interest in Room {vr.room_number} at Ribay Apartments.\n"
+              f"We received your request to visit on {_viewing_when(vr)}.\n\n"
+              f"{c['name']} will contact you at {vr.phone} to confirm. You can also call or text {c['phone']}.\n"
+              f"Viewing is free and there is no obligation.\n\nRibay Apartments\n", [vr.email])
+
+
+def email_viewing_confirmed(vr):
+    """Staff marked the request as confirmed: email the renter with a calendar file."""
+    if not vr.email:
+        return
+    from .views import contact_details
+    c = contact_details()
+    _send(f"Your viewing is confirmed: Room {vr.room_number}",
+          f"Hi {vr.name},\n\nYour viewing of Room {vr.room_number} is confirmed for {_viewing_when(vr)}.\n\n"
+          f"Address: {getattr(settings, 'APARTMENT_ADDRESS', '')}\n"
+          f"Need to change it? Call or text {c['name']} at {c['phone']}.\n\nSee you soon,\nRibay Apartments\n",
+          [vr.email], attach=("viewing.ics", viewing_ics(vr), "text/calendar"))
 
 
 @require_POST

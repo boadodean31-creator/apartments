@@ -1,13 +1,15 @@
 """Website administrator pages (/manage/). Every view needs @site_admin_required."""
+from datetime import timedelta
 from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Count, Min
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
@@ -238,10 +240,42 @@ def requests_list(request):
             _reply_links(r)
 
     tabs = [{"key": k, "label": label, "count": total if k == "all" else counts.get(k, 0)} for k, label in REQUEST_TABS]
+    now = timezone.now()
+    busiest = ViewingRequest.objects.exclude(room_number="").values("room_number").annotate(c=Count("id")).order_by("-c").first()
+    stats = {
+        "week": ViewingRequest.objects.filter(created_at__gte=now - timedelta(days=7)).count(),
+        "month": ViewingRequest.objects.filter(created_at__gte=now - timedelta(days=30)).count(),
+        "total": total,
+        "visited": counts.get("confirmed", 0) + counts.get("done", 0),
+        "busiest": busiest["room_number"] if busiest else "",
+    }
     return render(request, "rooms/manage/requests.html", {
-        "items": items, "tabs": tabs, "status": status, "tab": "requests",
+        "stats": stats, "items": items, "tabs": tabs, "status": status, "tab": "requests",
         "status_choices": ViewingRequest.STATUS, "newest_id": items[0].pk if items else 0,
     })
+
+
+def _csv_safe(value):
+    """Stop spreadsheet programs from running text that starts with = + - or @ as a formula."""
+    text = "" if value is None else str(value)
+    return "'" + text if text[:1] in ("=", "+", "-", "@") else text
+
+
+@site_admin_required
+def requests_csv(request):
+    """Download every viewing request as a spreadsheet file (opens in Excel or Google Sheets)."""
+    import csv
+
+    resp = HttpResponse(content_type="text/csv; charset=utf-8")
+    resp["Content-Disposition"] = 'attachment; filename="viewing-requests.csv"'
+    resp.write("\ufeff")   # so Excel reads accents and the peso sign correctly
+    w = csv.writer(resp)
+    w.writerow(["Sent", "Room", "Name", "Phone", "Email", "Wants to visit", "Time slot", "Status", "Message"])
+    for r in ViewingRequest.objects.select_related("room").order_by("-created_at"):
+        w.writerow([_csv_safe(x) for x in (
+            timezone.localtime(r.created_at).strftime("%Y-%m-%d %H:%M"), r.room_number, r.name, r.phone, r.email,
+            r.preferred_date, r.get_preferred_slot_display(), r.get_status_display(), r.message)])
+    return resp
 
 
 @never_cache
@@ -261,8 +295,15 @@ def request_status(request, pk):
     vr = get_object_or_404(ViewingRequest, pk=pk)
     new_status = request.POST.get("status")
     if new_status in dict(ViewingRequest.STATUS):
+        was = vr.status
         vr.status = new_status
         vr.save(update_fields=["status"])
+        if new_status == "confirmed" and was != "confirmed":
+            try:
+                from .trust import email_viewing_confirmed
+                email_viewing_confirmed(vr)
+            except Exception:
+                pass   # the status is saved; email trouble must not block the admin
         messages.success(request, f"{vr.name}'s request is now marked {vr.get_status_display().lower()}.")
     nxt = request.POST.get("next", "")
     if not url_has_allowed_host_and_scheme(nxt, allowed_hosts={request.get_host()}):

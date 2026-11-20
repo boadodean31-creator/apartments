@@ -3,6 +3,14 @@
 {% block heading %}Viewing requests{% endblock %}
 {% block subheading %}People who pressed “Book a viewing”. Contact them by phone or by the email they signed in with.{% endblock %}
 {% block body %}
+<div class="m-stats" aria-label="Viewing request numbers">
+  <div class="m-stat"><b>{{ stats.week }}</b><span>This week</span></div>
+  <div class="m-stat"><b>{{ stats.month }}</b><span>Last 30 days</span></div>
+  <div class="m-stat"><b>{{ stats.visited }}</b><span>Confirmed or done</span></div>
+  <div class="m-stat"><b>{% if stats.busiest %}Room {{ stats.busiest }}{% else %}-{% endif %}</b><span>Most asked about</span></div>
+  <a class="btn m-stat-dl" href="{% url 'manage_requests_csv' %}" download>Download all as spreadsheet</a>
+</div>
+
 <div class="m-filter" role="tablist" aria-label="Filter requests">
   {% for t in tabs %}
   <a class="m-pill {% if t.key == status %}on{% endif %}" href="?status={{ t.key }}" {% if t.key == status %}aria-current="true"{% endif %}>{{ t.label }} <b>{{ t.count }}</b></a>

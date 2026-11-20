@@ -1,0 +1,23 @@
+{% comment %}"Your leasing contact": who answers, when, and how to reach them. Uses the contact card details you edit on the room page.{% endcomment %}
+<section class="meet-sec" aria-labelledby="meet-h"><div class="wrap">
+  <div class="meet">
+    <div class="meet-who">
+      {% if contact_image_set %}<img class="meet-ph" src="{{ contact_image_url }}" alt="{{ contact_staff }}" loading="lazy">{% else %}<span class="meet-ph meet-ini" aria-hidden="true">{{ contact_initials }}</span>{% endif %}
+      <div>
+        <p class="meet-k">Your leasing contact</p>
+        <h2 id="meet-h">{{ contact_staff }}</h2>
+        <p class="meet-role">{{ contact_role }}, Ribay Apartments</p>
+      </div>
+    </div>
+    <p class="meet-txt">Questions about a room, the price or a visit? Call or text and we will help. Viewing is free and there is no obligation.</p>
+    <dl class="meet-facts">
+      <div><dt>Viewing hours</dt><dd>{{ viewing_hours }}</dd></div>
+      <div><dt>We reply</dt><dd>{{ contact_reply }}</dd></div>
+      <div><dt>Languages</dt><dd>{{ contact_languages }}</dd></div>
+    </dl>
+    <div class="meet-cta">
+      <a class="btn pri" href="tel:{{ contact_tel }}">Call {{ contact_phone }}</a>
+      <a class="btn" href="sms:{{ contact_tel }}">Send a text</a>
+    </div>
+  </div>
+</div></section>

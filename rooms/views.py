@@ -391,6 +391,11 @@ def book_viewing(request, number):
     vr.room_number = room.number
     vr.email = request.user.email or form.cleaned_data.get("email", "")
     vr.save()
+    try:
+        from .trust import notify_viewing
+        notify_viewing(vr)
+    except Exception:
+        pass   # emails must never break a booking
     return JsonResponse({"ok": True, "id": vr.pk})
 
 
