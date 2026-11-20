@@ -122,14 +122,16 @@
       <div class="thumb">
         {% with photo=r.photos.all.0 %}{% if photo %}<img src="{{ photo.image.url }}" alt="Room {{ r.number }}" loading="lazy">{% else %}<div class="ph"></div>{% endif %}{% endwith %}
         <span class="badge {% if r.status != 'available' %}busy{% endif %}">{{ r.get_status_display }}</span>
+        {% with n=r.photos.all|length %}{% if n > 1 %}<span class="rc-count">{{ n }} photos</span>{% endif %}{% endwith %}
       </div>
-      <div class="body">
-        <h3>Room {{ r.number }}</h3>
+      <div class="rc-body">
+        <p class="rc-price"><b>₱{{ r.rent|floatformat:"0g" }}</b> <span>per month</span></p>
+        <h3 class="rc-title">Room {{ r.number }}</h3>
         {% if r.description %}<p class="rc-desc">{{ r.description }}</p>{% endif %}
-        <ul class="rc-meta"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></svg>{{ r.get_floor_display }}</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.6"/></svg>{{ r.room_type }}</li>{% if r.card_feats %}<li class="rc-feat"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.3 2.4 2.4 4.6-5"/></svg>{{ r.card_feats }}</li>{% endif %}</ul>
-        <div class="row">
-          <div class="price">₱{{ r.rent|floatformat:"0g" }} <small>/ month</small></div>
-          {% if r.status == 'available' %}<a class="btn" href="{% url 'room_detail' r.number %}">View room<svg class="btn-ico arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>{% else %}<button class="btn" disabled>Not open</button>{% endif %}
+        <p class="rc-specs"><span>{{ r.get_floor_display }}</span>{% for f in r.card_feat_list %}<span>{{ f }}</span>{% empty %}<span>Wi-Fi and water included</span>{% endfor %}</p>
+        <div class="rc-foot">
+          <div class="rc-tags"><span class="rc-tag">{{ r.room_type }}</span>{% if r.status == 'available' %}<span class="rc-tag ok">Available now</span>{% else %}<span class="rc-tag off">Not open</span>{% endif %}</div>
+          {% if r.status == 'available' %}<a class="rc-go" href="{% url 'room_detail' r.number %}">View room<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a>{% endif %}
         </div>
       </div>
     </article>

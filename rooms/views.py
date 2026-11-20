@@ -195,7 +195,8 @@ BUILDING_SLOTS = [
 def home(request):
     rooms = list(Room.objects.prefetch_related("photos").order_by("floor", "number"))
     for r in rooms:   # first two highlights (e.g. "Aircon, Private bath") shown on the room card
-        r.card_feats = ", ".join(f["label"] for f in room_features(r)[:2])
+        r.card_feat_list = [f["label"] for f in room_features(r)[:2]]
+        r.card_feats = ", ".join(r.card_feat_list)
     floors = floor_groups(rooms)
     context = {
         "rooms": rooms,
