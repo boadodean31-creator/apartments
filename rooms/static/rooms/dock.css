@@ -15,7 +15,7 @@
   box-shadow: 0 10px 24px -10px rgba(15, 23, 42, .45), 0 2px 6px rgba(15, 23, 42, .08);
   transition: transform .25s cubic-bezier(.3, 1.4, .5, 1), box-shadow .25s, background .25s, color .25s;
 }
-.dock-ico svg { width: 52px; height: 52px; overflow: visible; filter: drop-shadow(0 3px 3px rgba(15,23,42,.18)); }
+.dock-ico svg { width: 50px; height: 50px; overflow: visible; filter: drop-shadow(0 3px 3px rgba(15,23,42,.18)); }
 .dock-ct .dock-ico { background: #fff; }
 .dock-tip {
   order: -1; margin-right: -34px; padding: 0 46px 0 0; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; height: 44px; line-height: 44px; border-radius: 999px 0 0 999px;
@@ -28,7 +28,7 @@
 .dock-btn:active .dock-ico { transform: scale(.94); }
 .dock-btn:focus-visible { outline: none; }
 .dock-btn:focus-visible .dock-ico { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 3px; }
-.dock-ct .dock-ico::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; animation: dock-ping 3.4s ease-out 1.5s infinite; pointer-events: none; }
+.dock-ct .dock-ico::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 2px solid #a8a29e; opacity: 0; animation: dock-ping 3.4s ease-out 1.5s infinite; pointer-events: none; }
 @keyframes dock-ping { 0% { opacity: .55; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.55); } }
 @media (max-width: 960px) { .dock { display: none; } }
 @media (prefers-reduced-motion: reduce) { .dock-btn, .dock-ct .dock-ico::after { animation: none; } .dock-tip, .dock-ico { transition: none; } }

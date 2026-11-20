@@ -161,3 +161,14 @@ footer.site-foot .foot-note { grid-column: 1 / -1; display: flex; justify-conten
   .grid .card .badge { top: 12px; left: 12px; }
 }
 @media (max-width: 960px) { .rc-meta { font-size: 13.5px; gap: 4px 12px; } .rc-meta .rc-feat { display: none; } }
+
+/* "At a glance" strip: one raised card that overlaps the hero edge, neutral icon tiles */
+@media (min-width: 761px) {
+  html body .facts { background: transparent; border-bottom: 0; padding: 0 0 56px; position: relative; z-index: 2; }
+  html body .facts ul { margin-top: -44px; background: var(--bg); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 18px 40px -22px rgba(15, 23, 42, .28), 0 2px 6px rgba(15, 23, 42, .05); overflow: hidden; }
+  html body .facts li { padding: 26px 28px; border-left: 1px solid var(--line); transition: background .2s; }
+  html body .facts li:first-child { padding-left: 28px; border-left: 0; }
+  html body .facts li:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+  html body .facts .f-ico { width: 46px; height: 46px; border-radius: 50%; background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink); }
+  html body .facts .f-ico svg { width: 22px; height: 22px; stroke-width: 1.7; }
+}
