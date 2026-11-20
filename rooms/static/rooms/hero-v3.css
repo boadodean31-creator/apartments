@@ -1,7 +1,9 @@
 /* Home hero, round 3 (desktop only), two small things:
    1. a wider "Pick a room" card (text column a little narrower, headline sized to still fit on two lines)
    2. the detail photo is a little shorter and the tiles a little taller (never taller than wide), so both sides end together
-   3. dark mode: the slim menu bar that appears after scrolling no longer leaves a gap above it
+   3. readable text: a soft dark shade over the LEFT of the banner photo and white headline/text on top of it
+      (the right side, behind the "Pick a room" card, stays bright). Tune the shade with --scrim below: 0% = none, 100% = black.
+   4. dark mode: the slim menu bar that appears after scrolling no longer leaves a gap above it
    To undo: delete this file and its <link> in base.html. */
 
 @media (min-width: 1000px) {
@@ -14,6 +16,27 @@
   html body .hero .bd .bd-rooms { align-self: stretch; }
   html body .hero .bd .bd-thumb { height: clamp(150px, 19vh, 200px); }   /* a slightly shorter photo, so the card and the grid end together */
   html body .hero .bd .bd-rm { min-height: 68px; border-radius: 14px; }
+}
+
+/* ---------- readable text over the banner photo (desktop) ---------- */
+@media (min-width: 1000px) {
+  html body .herowrap.has-banner { --scrim: 60%; }
+  html body .herowrap.has-banner .herotint {
+    background:
+      linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 8%),
+      linear-gradient(90deg,
+        color-mix(in srgb, #08160f var(--scrim), transparent) 0%,
+        color-mix(in srgb, #08160f calc(var(--scrim) * .82), transparent) 34%,
+        color-mix(in srgb, #08160f calc(var(--scrim) * .35), transparent) 58%,
+        color-mix(in srgb, #08160f 0%, transparent) 78%);
+  }
+  html body .has-banner .hero > div:first-child { text-shadow: 0 1px 16px rgba(4, 14, 9, .35); }
+  html body .has-banner .hero .roll,
+  html body .has-banner .hero .roll-track .l1 { color: #fff; }
+  html body .has-banner .hero .roll-track .l2 { color: #8ee6b4; }
+  html body .has-banner .hero > div:first-child p:not(.from) { color: rgba(255, 255, 255, .94); font-weight: 500; }
+  html body .has-banner .hero p.from { color: rgba(255, 255, 255, .86); border-top-color: rgba(255, 255, 255, .28); }
+  html body .has-banner .hero p.from strong { color: #fff; }
 }
 
 /* dark mode used a more specific rule that kept the 12px top gap on the slim bar */
