@@ -36,6 +36,7 @@
         <p class="rd-ttl" aria-hidden="true">Room {{ room.number }}</p>
         <p class="rd-meta" aria-hidden="true">{{ room.get_floor_display }} · {{ room.room_type }}</p>
         <p class="rd-where"><svg class="rd-where-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><span class="rd-where-txt"><b>{{ short_address }}</b>{% if landmark %}<span class="rd-where-lm">{{ landmark }}</span>{% endif %}</span><a class="rd-where-go" href="#location" data-loc-link>Show map</a></p>
+        {% if room.description %}<p class="rd-desc">{{ room.description }}</p>{% endif %}
         </div>
         <div class="rd-acts rd-acts-hero" data-room="{{ room.number }}">
       <button class="rd-act rd-act-share" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7.5 7.5L12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
@@ -191,6 +192,7 @@
           <span class="rd-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v3"/><path d="M3 13a2 2 0 0 1 4 0v1h10v-1a2 2 0 0 1 4 0v5H3z"/><path d="M5 18v2M19 18v2"/></svg>{{ room.room_type }}</span>
         </div>
         <p class="rd-where rd-where-card"><svg class="rd-where-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg><span class="rd-where-txt"><b>{{ short_address }}</b>{% if landmark %}<span class="rd-where-lm">{{ landmark }}</span>{% endif %}</span><a class="rd-where-go" href="#location" data-loc-link>Show map</a></p>
+        {% if room.description %}<p class="rd-desc rd-desc-card">{{ room.description }}</p>{% endif %}
         {% if room_features %}<ul class="rd-feats" aria-label="Room highlights">{% for f in room_features %}<li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="{{ f.path }}"/></svg><span>{{ f.label }}</span></li>{% endfor %}</ul>{% endif %}
         <div class="rd-price" id="pricing"><span class="rd-plabel">Monthly rental</span><span class="price big">₱{{ room.rent|floatformat:"0g" }} <small>/ month</small></span></div>
         {% if room.status == 'available' %}

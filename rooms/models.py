@@ -23,6 +23,7 @@ class Room(models.Model):
     status = models.CharField(max_length=10, choices=STATUS, default="available")
     video_url = models.URLField(blank=True)
     features = models.CharField(max_length=120, blank=True)  # comma-separated highlights, e.g. "Aircon, Private bath, Submeter"
+    description = models.CharField(max_length=160, blank=True)  # one or two short sentences shown under the room name
 
     def __str__(self):
         return f"Room {self.number}"

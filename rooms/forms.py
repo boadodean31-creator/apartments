@@ -16,12 +16,14 @@ class RoomForm(forms.ModelForm):
 
     class Meta:
         model = Room
-        fields = ["number", "floor", "room_type", "rent", "status", "video_url", "features"]
+        fields = ["number", "floor", "room_type", "rent", "status", "description", "video_url", "features"]
         labels = {"number": "Room number", "room_type": "Room type", "status": "Availability",
-                  "video_url": "Video tour link", "features": "Room highlights"}
-        help_texts = {"video_url": "Optional. Paste a YouTube link.",
+                  "video_url": "Video tour link", "features": "Room highlights", "description": "Short description"}
+        help_texts = {"description": "Optional. One or two short sentences (up to 160 characters). Shows under the room name on the rooms list and on the room page.",
+                      "video_url": "Optional. Paste a YouTube link.",
                       "features": "Optional. Up to 6 short tags, separated by commas. They show as small tiles on the room page."}
-        widgets = {"room_type": forms.TextInput(attrs={"placeholder": "e.g. Studio, Bedspace, 1-bedroom"}),
+        widgets = {"description": forms.Textarea(attrs={"rows": 3, "maxlength": 160, "placeholder": "e.g. Bright studio with a comfy bed and lots of natural light."}),
+                   "room_type": forms.TextInput(attrs={"placeholder": "e.g. Studio, Bedspace, 1-bedroom"}),
                    "video_url": forms.URLInput(attrs={"placeholder": "https://www.youtube.com/watch?v=..."}),
                    "features": forms.TextInput(attrs={"placeholder": "e.g. Aircon, Private bath, Submeter"})}
 

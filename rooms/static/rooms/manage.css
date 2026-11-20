@@ -56,9 +56,9 @@ label.btn{cursor:pointer;display:inline-block}
 .m-grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .m-field{margin-bottom:16px;min-width:0}
 .m-field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
-.m-field input,.m-field select,.m-inline input[type="text"]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.m-field input,.m-field select,.m-field textarea,.m-inline input[type="text"]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
 .m-field input[type="file"]{padding:9px 10px;background:var(--surface)}
-.m-field input:focus,.m-field select:focus,.m-inline input:focus{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);border-color:var(--accent)}
+.m-field input:focus,.m-field select:focus,.m-field textarea:focus,.m-inline input:focus{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent);border-color:var(--accent)}
 .m-field small{display:block;color:var(--muted);font-size:13px;margin-top:5px}
 .m-err{color:var(--busy);font-size:14px;margin:6px 0 0}
 .m-save{display:flex;gap:10px;margin-top:6px}
@@ -196,3 +196,5 @@ label.btn{cursor:pointer;display:inline-block}
 .m-sp-pick img{display:block;width:64px;height:48px;object-fit:cover;border-radius:8px;border:2px solid transparent;opacity:.75}
 .m-sp-pick input:checked + img{border-color:var(--accent);opacity:1}
 .m-sp-pick input:focus-visible + img{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+
+.m-field textarea{resize:vertical;min-height:84px;line-height:1.45}

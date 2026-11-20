@@ -123,6 +123,7 @@
       </div>
       <div class="body">
         <h3>Room {{ r.number }}</h3>
+        {% if r.description %}<p class="rc-desc">{{ r.description }}</p>{% endif %}
         <ul class="rc-meta"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></svg>{{ r.get_floor_display }}</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.6"/></svg>{{ r.room_type }}</li>{% if r.card_feats %}<li class="rc-feat"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.3 2.4 2.4 4.6-5"/></svg>{{ r.card_feats }}</li>{% endif %}</ul>
         <div class="row">
           <div class="price">₱{{ r.rent|floatformat:"0g" }} <small>/ month</small></div>
