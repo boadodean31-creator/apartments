@@ -4,28 +4,27 @@
 /* ---------- Floating buttons ---------- */
 .dock { position: fixed; right: clamp(16px, 2vw, 28px); bottom: clamp(16px, 2.4vw, 28px); z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
 .dock-btn {
-  position: relative; display: inline-flex; align-items: center; justify-content: flex-end; gap: 0; height: 56px; padding: 0; border: 0; background: none; cursor: pointer; color: var(--ink);
+  position: relative; display: inline-flex; align-items: center; justify-content: flex-end; gap: 0; height: 68px; padding: 0; border: 0; background: none; cursor: pointer; color: var(--ink);
   animation: dock-in .5s cubic-bezier(.2, .9, .3, 1.2) both;
 }
 .dock-ct { animation-delay: .08s; }
 @keyframes dock-in { from { opacity: 0; transform: translateY(14px) scale(.9); } }
 .dock-ico {
-  flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; position: relative; z-index: 1;
-  background: var(--bg); color: var(--accent); border: 1.5px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  flex: none; width: 68px; height: 68px; display: grid; place-items: center; border-radius: 50%; position: relative; z-index: 1;
+  background: #fff; color: var(--accent); border: 1px solid rgba(15,23,42,.08);
   box-shadow: 0 10px 24px -10px rgba(15, 23, 42, .45), 0 2px 6px rgba(15, 23, 42, .08);
   transition: transform .25s cubic-bezier(.3, 1.4, .5, 1), box-shadow .25s, background .25s, color .25s;
 }
-.dock-ico svg { width: 26px; height: 26px; }
-.dock-ct .dock-ico { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.dock-ico svg { width: 52px; height: 52px; overflow: visible; filter: drop-shadow(0 3px 3px rgba(15,23,42,.18)); }
+.dock-ct .dock-ico { background: #fff; }
 .dock-tip {
-  order: -1; margin-right: -28px; padding: 0 40px 0 0; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; height: 44px; line-height: 44px; border-radius: 999px 0 0 999px;
+  order: -1; margin-right: -34px; padding: 0 46px 0 0; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; height: 44px; line-height: 44px; border-radius: 999px 0 0 999px;
   padding-left: 0; font-size: 14.5px; font-weight: 600; letter-spacing: .005em; background: var(--ink); color: var(--bg);
   box-shadow: 0 10px 24px -12px rgba(15, 23, 42, .5);
   transition: max-width .32s cubic-bezier(.3, 1, .4, 1), opacity .2s, padding-left .32s cubic-bezier(.3, 1, .4, 1);
 }
 .dock-btn:hover .dock-tip, .dock-btn:focus-visible .dock-tip { max-width: 190px; opacity: 1; padding-left: 20px; }
-.dock-btn:hover .dock-ico, .dock-btn:focus-visible .dock-ico { transform: scale(1.06); box-shadow: 0 14px 28px -10px rgba(15, 23, 42, .5); }
-.dock-bld:hover .dock-ico, .dock-bld:focus-visible .dock-ico { background: var(--accent); color: var(--accent-ink); }
+.dock-btn:hover .dock-ico, .dock-btn:focus-visible .dock-ico { transform: translateY(-3px) scale(1.06) rotate(-3deg); box-shadow: 0 14px 28px -10px rgba(15, 23, 42, .5); }
 .dock-btn:active .dock-ico { transform: scale(.94); }
 .dock-btn:focus-visible { outline: none; }
 .dock-btn:focus-visible .dock-ico { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 3px; }
