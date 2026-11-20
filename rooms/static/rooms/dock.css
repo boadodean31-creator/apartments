@@ -250,3 +250,8 @@ dialog.pg, dialog.pg:focus, dialog.pg:focus-visible, .pg-card:focus-visible { ou
 /* chat buttons inside the contact window */
 .pg .chat-row { margin: 12px 0 4px; }
 .pg .chat-btn { padding: 9px 15px 9px 12px; font-size: 13.5px; }
+
+/* Hidden while the banner is in view (home page); shown after you scroll past it */
+.dock { transition: opacity .3s ease, transform .35s cubic-bezier(.2, .9, .3, 1.1), visibility 0s linear 0s; }
+body:has(.herowrap) .dock:not(.dock-on) { opacity: 0; transform: translateY(18px); visibility: hidden; pointer-events: none; transition: opacity .25s ease, transform .3s ease, visibility 0s linear .3s; }
+@media (prefers-reduced-motion: reduce) { .dock, body:has(.herowrap) .dock:not(.dock-on) { transition: none; } }

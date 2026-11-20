@@ -139,3 +139,19 @@
   var q = location.search;
   if (/[?&]building=1/.test(q)) open("building"); else if (/[?&]contact=1/.test(q)) open("contact");
 })();
+
+/* The two floating buttons stay out of the way while the big banner is on screen,
+   and slide in once you have scrolled past it. Back at the top they slide away again. */
+(function () {
+  var dock = document.querySelector(".dock"), hero = document.querySelector(".herowrap");
+  if (!dock || !hero) return;
+  function set(on) { dock.classList.toggle("dock-on", on); }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { set(!e.isIntersecting); });
+    }, { rootMargin: "-80px 0px 0px 0px", threshold: 0 }).observe(hero);
+  } else {
+    var tick = function () { set(hero.getBoundingClientRect().bottom < 80); };
+    addEventListener("scroll", tick, { passive: true }); tick();
+  }
+})();
