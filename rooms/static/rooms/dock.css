@@ -15,7 +15,7 @@
   box-shadow: 0 10px 24px -10px rgba(15, 23, 42, .45), 0 2px 6px rgba(15, 23, 42, .08);
   transition: transform .25s cubic-bezier(.3, 1.4, .5, 1), box-shadow .25s, background .25s, color .25s;
 }
-.dock-ico svg { width: 50px; height: 50px; overflow: visible; filter: drop-shadow(0 3px 3px rgba(15,23,42,.18)); }
+.dock-ico svg { width: 58px; height: 58px; overflow: visible; }
 .dock-ct .dock-ico { background: #fff; }
 .dock-tip {
   order: -1; margin-right: -34px; padding: 0 46px 0 0; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; height: 44px; line-height: 44px; border-radius: 999px 0 0 999px;
