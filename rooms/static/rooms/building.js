@@ -50,6 +50,7 @@
   var view = root.querySelector(".bd-view");
   var list = root.querySelector(".bd-list");
   var next = root.querySelector(".bd-next");
+  var feats = root.querySelector(".bd-feats");
   var current = null, show = null;
 
   /* 1. Windows switch on from the ground floor up */
@@ -80,6 +81,13 @@
     badge.className = "bd-badge" + (open ? "" : " busy");
     meta.textContent = d.floorName + (d.type ? " · " + d.type : "");
     rent.textContent = "₱" + d.rent;
+
+    if (feats) {   // up to three highlights: the room's own, otherwise what every room includes
+      var items = (d.feats ? d.feats.split(", ") : []).filter(Boolean);
+      if (!items.length) items = ["Wi-Fi included", "Water included", "24/7 CCTV"];
+      feats.textContent = "";
+      items.slice(0, 3).forEach(function (t) { var li = document.createElement("li"); li.textContent = t; feats.appendChild(li); });
+    }
 
     if (d.photo) {
       img.onerror = function () { thumb.classList.remove("has"); };
