@@ -1,11 +1,19 @@
 /* Home hero, round 3 (desktop only), two small things:
    1. a wider "Pick a room" card (text column a little narrower, headline sized to still fit on two lines)
-   2. dark mode: the slim menu bar that appears after scrolling no longer leaves a gap above it
+   2. the detail photo is a little shorter and the tiles a little taller (never taller than wide), so both sides end together
+   3. dark mode: the slim menu bar that appears after scrolling no longer leaves a gap above it
    To undo: delete this file and its <link> in base.html. */
 
 @media (min-width: 1000px) {
   html body .has-banner .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.42fr); gap: 36px; }
   html body .hero h1 { font-size: clamp(40px, 3.3vw, 58px); }
+
+  /* tiles fill the column (the detail card on the right is taller than the grid) */
+  html body .has-banner .hero .bd .bd-building { background: transparent; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+  html body .hero .bd .bd-floor { flex: 1 1 0; max-height: 88px; }
+  html body .hero .bd .bd-rooms { align-self: stretch; }
+  html body .hero .bd .bd-thumb { height: clamp(150px, 19vh, 200px); }   /* a slightly shorter photo, so the card and the grid end together */
+  html body .hero .bd .bd-rm { min-height: 68px; border-radius: 14px; }
 }
 
 /* dark mode used a more specific rule that kept the 12px top gap on the slim bar */
