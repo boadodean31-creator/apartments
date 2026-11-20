@@ -1,0 +1,66 @@
+/* Home hero, closer to the reference design (desktop only; phones are unchanged):
+   a clearer banner photo, a floating capsule menu bar, a wider "Pick a room" card and smaller capsule buttons.
+   Loaded last and scoped to the home page with a banner. To undo: delete this file and its <link> in base.html. */
+
+@media (min-width: 1000px) {
+
+  /* ---------- 1. Banner: the photo is no longer covered by a white fade ----------
+     Only a thin light wash behind the left text and a soft fade into the page at the bottom.
+     Want it clearer still? Lower the three percentages (28% / 14%). Want more white? Raise them. */
+  html body .herowrap .herotint {
+    background:
+      linear-gradient(0deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 8%),
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--bg) 28%, transparent) 0%,
+        color-mix(in srgb, var(--bg) 14%, transparent) 30%,
+        color-mix(in srgb, var(--bg) 0%, transparent) 50%);
+  }
+
+  /* ---------- 3. Wider "Pick a room" card, slightly smaller headline so both fit ---------- */
+  html body .has-banner .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 40px; }
+  html body .hero h1 { font-size: clamp(44px, 3.8vw, 66px); }
+
+  /* ---------- 4. Buttons: smaller capsules ---------- */
+  html body .has-banner .hero .cta .btn {
+    border-radius: 999px; min-height: 46px; padding: 11px 24px; font-size: 15px; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  html body .has-banner .hero .cta .btn .arr { width: 1.1em; height: 1.1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  html body .has-banner .hero .cta .btn.pri { box-shadow: 0 8px 18px -10px var(--accent); }
+}
+
+/* roomier "Pick a room" tiles on larger screens (kept tighter on small laptops so prices never wrap) */
+@media (min-width: 1280px) {
+  html body .hero .bd { padding: 28px; column-gap: 26px; }
+  html body .bd-rooms { gap: 12px; }
+  html body .bd-rm { min-height: 66px; }
+}
+
+/* ---------- 2. Menu bar: a floating capsule over the photo (from 1100px wide; narrower screens keep the normal bar) ---------- */
+@media (min-width: 1100px) {
+  /* ---------- 2. Menu bar: a floating capsule over the photo ---------- */
+  html body:has(.herowrap.has-banner) header,
+  html body:has(.herowrap.has-banner) header:not(.scrolled),
+  html:root[data-theme="dark"] body:has(.herowrap.has-banner) header {
+    background: transparent !important; border-bottom: 0 !important; box-shadow: none !important;
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important; padding: 12px 0 0;
+  }
+  html body:has(.herowrap.has-banner) header .nav-flora { display: none; }
+  html body:has(.herowrap.has-banner) header .wrap.nav {
+    width: calc(100% - 64px); max-width: 1296px; margin-left: auto; margin-right: auto; height: 60px; padding: 0 14px 0 18px; border-radius: 22px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3);
+    border: 1px solid color-mix(in srgb, #fff 65%, transparent);
+    box-shadow: 0 14px 34px -22px rgba(15, 30, 25, .5);
+    transition: background-color .3s, box-shadow .3s;
+  }
+  html body:has(.herowrap.has-banner) header.scrolled .wrap.nav { background: color-mix(in srgb, var(--bg) 94%, transparent); box-shadow: 0 16px 36px -20px rgba(15, 30, 25, .5); }
+  html body:has(.herowrap.has-banner) header .nav nav { margin-left: auto; margin-right: auto; }
+  html body:has(.herowrap.has-banner) header .nav .btn.icon { border-radius: 50%; }
+  /* the photo now runs behind the bar (the bar is 12px + 60px tall) */
+  html body:has(.herowrap.has-banner) .herowrap.has-banner { margin-top: -72px !important; }
+  html body .has-banner .hero {
+    padding-top: calc(clamp(84px, 10vh, 104px) + 72px);
+    min-height: calc(clamp(540px, calc(100svh - 150px), 760px) + 72px);
+  }
+}
