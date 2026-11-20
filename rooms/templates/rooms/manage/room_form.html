@@ -42,12 +42,12 @@
       <h2>Preview <small>how this room looks on the website</small></h2>
       <article class="card m-prevcard" aria-hidden="true">
         <div class="thumb">{% if photos %}<img src="{{ photos.0.image.url }}" alt="">{% else %}<div class="ph"></div>{% endif %}<span class="badge" id="pvBadge">Available</span></div>
-        <div class="rc-body">
-          <p class="rc-price"><b id="pvPrice">₱0</b> <span>per month</span></p>
-          <h3 class="rc-title" id="pvTitle">Room</h3>
+        <div class="body">
+          <h3 id="pvTitle">Room</h3>
           <p class="rc-desc" id="pvDesc"></p>
           <p class="rc-specs" id="pvSpecs"></p>
-          <div class="rc-foot"><div class="rc-tags"><span class="rc-tag" id="pvType">Type</span><span class="rc-tag ok" id="pvTag">Available now</span></div><span class="rc-go">View room<svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span></div>
+          <div class="rc-tags"><span class="rc-tag" id="pvType">Type</span><span class="rc-tag ok" id="pvTag">Available now</span></div>
+          <div class="row"><div class="price"><span id="pvPrice">₱0</span> <small>/ month</small></div><span class="btn">View room</span></div>
         </div>
       </article>
     </div>

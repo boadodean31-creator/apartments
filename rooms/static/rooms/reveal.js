@@ -16,6 +16,6 @@
 document.addEventListener('click', function (e) {
   var card = e.target.closest && e.target.closest('#grid .card[data-avail="1"]');
   if (!card || e.target.closest('a, button')) return;
-  var link = card.querySelector('a.rc-go, a.btn');
+  var link = card.querySelector('a.btn');
   if (link) location.href = link.href;
 });

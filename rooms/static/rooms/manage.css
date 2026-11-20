@@ -214,7 +214,13 @@ label.btn{cursor:pointer;display:inline-block}
 .m-full{margin-bottom:2px}
 .m-count{display:block;margin:-6px 0 12px;color:var(--muted);font-size:12.5px;text-align:right}
 .m-prev h2{margin-bottom:14px}
-.m-prevcard{max-width:420px;margin:0 auto;pointer-events:none}
-.m-prevcard .thumb img,.m-prevcard .thumb .ph{aspect-ratio:16/11;width:100%;object-fit:cover;display:block;background:var(--surface)}
-.m-prevcard .badge{position:absolute;top:14px;left:14px}
+.m-prevcard{max-width:420px;margin:0 auto;pointer-events:none;border:1px solid var(--line);border-radius:22px;padding:10px;background:var(--bg);overflow:hidden}
+.m-prevcard .thumb{position:relative;border-radius:14px;overflow:hidden}
+.m-prevcard .thumb img,.m-prevcard .thumb .ph{aspect-ratio:4/3;width:100%;object-fit:cover;display:block;background:var(--surface)}
+.m-prevcard .badge{position:absolute;top:12px;left:12px;padding:5px 12px;border-radius:999px;background:var(--bg);font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.m-prevcard .body{padding:16px 8px 6px}
+.m-prevcard h3{font-size:21px;margin:0}
+.m-prevcard .rc-desc{margin:6px 0 0;color:var(--muted);font-size:15px;line-height:1.5}
+.m-prevcard .row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.m-prevcard .price{font-size:24px;font-weight:800}.m-prevcard .price small{font-size:14px;font-weight:500;color:var(--muted)}
 @media(min-width:1000px){.m-prev{position:sticky;top:16px;z-index:2}}
