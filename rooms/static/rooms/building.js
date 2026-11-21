@@ -52,6 +52,13 @@
   var next = root.querySelector(".bd-next");
   var feats = root.querySelector(".bd-feats");
   var current = null, show = null;
+  var wide = window.matchMedia("(min-width: 1000px)");
+
+  /* "3 open" next to each floor name */
+  Array.prototype.forEach.call(root.querySelectorAll(".bd-floor"), function (f) {
+    var n = f.querySelectorAll('.bd-rm[data-open="1"]').length, c = f.querySelector(".bd-fc");
+    if (c) c.textContent = n + " open";
+  });
 
   /* 1. Windows switch on from the ground floor up */
   floors.forEach(function (f, fi) {
@@ -72,6 +79,7 @@
   function select(t, quiet) {
     if (current) current.setAttribute("aria-pressed", "false");
     current = t;
+    root.classList.toggle("has-sel", !!t);
     if (!t) { showHint(); return; }
     t.setAttribute("aria-pressed", "true");
     var d = t.dataset, open = d.open === "1";
@@ -139,7 +147,19 @@
 
   root.addEventListener("click", function (e) {
     var t = e.target.closest(".bd-rm");
-    if (t) { if (t.getAttribute("aria-disabled") !== "true") select(t); return; }
+    if (t) {
+      if (t.getAttribute("aria-disabled") === "true") return;
+      if (t === current && wide.matches) { select(null); return; }
+      select(t); return;
+    }
+    var x = e.target.closest(".bd-close");
+    if (x && current) { var c0 = current; select(null); c0.focus({ preventScroll: true }); return; }
+    var g = e.target.closest(".bd-fgo");
+    if (g) {   // jump to that floor in the list below
+      var chip = document.querySelector('.chip[data-f="' + g.getAttribute("data-floor") + '"]');
+      if (chip) chip.click();
+      return;
+    }
     var f = e.target.closest("[data-bd-filter]");
     if (f) { setFilter(f.getAttribute("data-bd-filter")); return; }
     if (e.target.closest(".bd-next") && current) {
@@ -152,7 +172,7 @@
 
   /* Start on the first open room, so the panel always matches the highlighted window */
   var firstOpen = tiles.filter(function (x) { return x.dataset.open === "1"; })[0];
-  if (firstOpen) select(firstOpen, true);
+  if (firstOpen && !wide.matches) select(firstOpen, true);
 
   /* 5. Keyboard: arrow keys move between windows, Escape clears */
   root.addEventListener("keydown", function (e) {
