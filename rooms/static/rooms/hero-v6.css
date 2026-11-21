@@ -1,0 +1,18 @@
+/* Home hero, text shade (desktop only).
+   A soft dark glow sits behind the left-hand text, so the white words stay easy to read on a bright photo,
+   while the rest of the banner stays bright. Tune the strength with --text-shade (0 = none, 1 = strong).
+   To undo: delete this file and its <link> in base.html. */
+@media (min-width: 1000px) {
+  html body .has-banner .hero > div:first-child { --text-shade: .44; position: relative; isolation: isolate; }
+  html body .has-banner .hero > div:first-child::before {
+    content: ""; position: absolute; z-index: -1; pointer-events: none;
+    inset: -90px -150px -90px -190px;
+    background: radial-gradient(ellipse 50% 50% at 50% 50%,
+      rgba(6, 18, 12, var(--text-shade)) 0%,
+      rgba(6, 18, 12, calc(var(--text-shade) * .87)) 40%,
+      rgba(6, 18, 12, calc(var(--text-shade) * .48)) 72%,
+      rgba(6, 18, 12, 0) 100%);
+  }
+  /* the green second line was too pale on the photo: a clearer mint */
+  html body .has-banner .hero .roll-track .l2 { color: #a6f0c8; }
+}
